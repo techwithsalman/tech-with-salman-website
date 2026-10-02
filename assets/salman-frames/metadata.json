@@ -1,0 +1,15 @@
+{
+  "duration": 13.885011,
+  "sourceWidth": 1920,
+  "sourceHeight": 1080,
+  "fps": 24,
+  "totalFrames": 333,
+  "frameWidth": 1440,
+  "frameHeight": 810,
+  "totalSizeMB": 7.62,
+  "generatedAt": "2026-09-03T13:42:38.953Z",
+  "cleaned": true,
+  "alpha": true,
+  "cleanupMethod": "soft transparent feathered vignette around subject to remove black side/background patches",
+  "outputFormat": "webp"
+}

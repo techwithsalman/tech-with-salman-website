@@ -84,7 +84,7 @@ canvas {
 .nav-links a {
   position: relative;
   z-index: 2;
-  font-size: clamp(11.5px, 0.74vw, 13.5px);
+  font-size: clamp(10px, 0.7vw, 12px);
   font-weight: 700;
   letter-spacing: 0.06em;
   padding: clamp(6px, 0.5vw, 9px) clamp(7px, 0.62vw, 13px);
@@ -676,7 +676,7 @@ a.view-all-link:visited {
 
   .nav-links a {
     font-size: 11px;
-    padding: 5px 6px;
+    padding: 4px 5px;
     letter-spacing: 0.03em;
   }
 
@@ -687,7 +687,7 @@ a.view-all-link:visited {
   }
 }
 
-@media (min-width: 1221px) {
+@media (min-width: 1351px) {
   .nav-desktop {
     display: flex !important;
   }
@@ -701,7 +701,7 @@ a.view-all-link:visited {
   }
 }
 
-@media (max-width: 1220px) {
+@media (max-width: 1350px) {
   .nav-desktop {
     display: none !important;
   }
@@ -711,7 +711,7 @@ a.view-all-link:visited {
   }
 
   .site-header {
-    width: min(calc(100% - 24px), 1220px);
+    width: min(calc(100% - 24px), 1350px);
     padding: 10px 18px;
   }
 }
@@ -1337,3 +1337,4 @@ a.view-all-link:visited {
   line-height: 1 !important;
   display: block !important;
 }
+

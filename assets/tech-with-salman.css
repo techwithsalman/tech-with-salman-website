@@ -1122,11 +1122,11 @@ a.view-all-link:visited {
 }
 
 /* ==================================================
-   BALANCED, GENEROUS & EQUAL SECTION SPACING SYSTEM
+   CONSISTENT 100PX HOMEPAGE SECTION SPACING SYSTEM
    ================================================== */
 .section-wrapper:not(.hero-section) {
-  padding-top: clamp(90px, 9.5vh, 120px) !important;
-  padding-bottom: clamp(90px, 9.5vh, 120px) !important;
+  padding-top: 50px !important;
+  padding-bottom: 50px !important;
   padding-left: clamp(24px, 4.5vw, 64px) !important;
   padding-right: clamp(24px, 4.5vw, 64px) !important;
   margin-bottom: 0 !important;
@@ -1136,8 +1136,8 @@ a.view-all-link:visited {
 
 @media (max-width: 1024px) {
   .section-wrapper:not(.hero-section) {
-    padding-top: clamp(55px, 6vh, 75px) !important;
-    padding-bottom: clamp(55px, 6vh, 75px) !important;
+    padding-top: 40px !important;
+    padding-bottom: 40px !important;
     padding-left: clamp(20px, 3.5vw, 36px) !important;
     padding-right: clamp(20px, 3.5vw, 36px) !important;
   }
@@ -1145,8 +1145,8 @@ a.view-all-link:visited {
 
 @media (max-width: 768px) {
   .section-wrapper:not(.hero-section) {
-    padding-top: clamp(38px, 4.5vh, 48px) !important;
-    padding-bottom: clamp(38px, 4.5vh, 48px) !important;
+    padding-top: 30px !important;
+    padding-bottom: 30px !important;
     padding-left: 18px !important;
     padding-right: 18px !important;
   }
@@ -1155,15 +1155,21 @@ a.view-all-link:visited {
 /* Hero Section Separation */
 .hero-section {
   padding-top: clamp(130px, 14.5vh, 172px);
-  padding-bottom: clamp(70px, 7.5vh, 95px) !important;
+  padding-bottom: 50px !important;
   min-height: 100vh;
   min-height: 100dvh;
+}
+
+@media (max-width: 1024px) {
+  .hero-section {
+    padding-bottom: 40px !important;
+  }
 }
 
 @media (max-width: 768px) {
   .hero-section {
     padding-top: clamp(100px, 13vh, 125px) !important;
-    padding-bottom: clamp(32px, 4vh, 42px) !important;
+    padding-bottom: 30px !important;
     min-height: auto;
   }
 }
@@ -1174,11 +1180,11 @@ a.view-all-link:visited {
 .certs-grid,
 .certs-grid-4,
 .gallery-grid {
-  margin-top: clamp(32px, 3.5vh, 46px) !important;
+  margin-top: clamp(24px, 2.5vh, 32px) !important;
 }
 
 .projects-grid {
-  margin-top: clamp(32px, 3.5vh, 46px) !important;
+  margin-top: clamp(24px, 2.5vh, 32px) !important;
 }
 
 .tools-testimonial-grid,
@@ -1190,26 +1196,26 @@ a.view-all-link:visited {
 /* Section Header spacing */
 .section-header {
   margin-bottom: 0 !important;
-  padding-bottom: clamp(10px, 1vh, 16px);
+  padding-bottom: clamp(6px, 0.8vh, 10px);
 }
 
 /* Footer Separation */
 .site-footer,
 #contact footer {
-  margin-top: clamp(120px, 12vh, 160px) !important;
+  margin-top: 100px !important;
 }
 
 @media (max-width: 1024px) {
   .site-footer,
   #contact footer {
-    margin-top: clamp(80px, 8vh, 110px) !important;
+    margin-top: 80px !important;
   }
 }
 
 @media (max-width: 768px) {
   .site-footer,
   #contact footer {
-    margin-top: clamp(50px, 5.5vh, 75px) !important;
+    margin-top: 60px !important;
   }
 }
 
@@ -1473,7 +1479,7 @@ a.view-all-link:visited {
 
 /* Compact Service Cards */
 .services-grid {
-  margin-top: clamp(32px, 3.5vh, 46px) !important;
+  margin-top: clamp(24px, 2.5vh, 32px) !important;
   gap: clamp(14px, 1.2vw, 20px) !important;
 }
 .service-card {

@@ -1364,3 +1364,31 @@ a.view-all-link:visited {
     border: 1px solid rgba(232,0,26,0.2);
     display: block;
 }
+
+/* 3D Icons sizing and integration */
+.tool-icon-img {
+  width: clamp(46px, 3.6vw, 54px) !important;
+  height: clamp(46px, 3.6vw, 54px) !important;
+  object-fit: contain;
+  display: block;
+}
+.service-icon-img {
+  width: clamp(48px, 3.8vw, 56px);
+  height: clamp(48px, 3.8vw, 56px);
+  object-fit: contain;
+  display: block;
+  margin-bottom: 16px;
+}
+.cert-icon-img {
+  width: clamp(44px, 3.5vw, 52px);
+  height: clamp(44px, 3.5vw, 52px);
+  object-fit: contain;
+  display: block;
+  margin-bottom: 14px;
+}
+.contact-icon-img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  display: block;
+}

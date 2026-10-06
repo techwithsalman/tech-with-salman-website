@@ -1121,11 +1121,11 @@ a.view-all-link:visited {
   -webkit-backdrop-filter: blur(12px) !important;
 }
 
-/* Generous luxury section spacing for long cinematic scroll travel (13,000px - 15,000px) */
+/* Clean compact section spacing */
 .section-wrapper:not(.hero-section) {
-  padding: clamp(200px, 22vh, 320px) 5vw clamp(180px, 20vh, 280px);
-  margin-bottom: clamp(90px, 11vh, 160px);
-  min-height: 115vh;
+  padding: clamp(50px, 5.5vh, 80px) 5vw;
+  margin-bottom: 0;
+  min-height: auto !important;
 }
 
 .pillars-grid,
@@ -1405,4 +1405,72 @@ a.view-all-link:visited {
     width: 46px;
     height: 46px;
   }
+}
+
+/* Compact Service Cards */
+.services-grid {
+  margin-top: clamp(24px, 3vh, 36px) !important;
+  gap: clamp(14px, 1.2vw, 20px) !important;
+}
+.service-card {
+  padding: clamp(18px, 1.5vw, 22px) clamp(16px, 1.2vw, 20px) !important;
+  gap: 8px !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 220px;
+}
+.service-icon-img {
+  width: 44px !important;
+  height: 44px !important;
+  margin-bottom: 10px !important;
+}
+.service-title {
+  font-size: clamp(14px, 0.95vw, 16px) !important;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+.service-desc {
+  font-size: clamp(12.5px, 0.8vw, 13.5px) !important;
+  line-height: 1.5 !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+/* Skills & Quote 2-column Layout */
+.tools-testimonial-grid {
+  display: grid !important;
+  grid-template-columns: 1.7fr 1fr !important;
+  gap: clamp(24px, 2.2vw, 36px) !important;
+  align-items: stretch !important;
+  margin-top: clamp(24px, 3vh, 36px) !important;
+}
+@media (max-width: 992px) {
+  .tools-testimonial-grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+}
+.tools-box {
+  padding: clamp(20px, 1.8vw, 28px);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.testimonial-box {
+  padding: clamp(24px, 2vw, 32px);
+  border-radius: 14px;
+  border: 1px solid rgba(232, 0, 26, 0.35);
+  background: linear-gradient(150deg, rgba(200, 20, 35, 0.22) 0%, rgba(35, 8, 10, 0.85) 100%) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+.testimonial-quote {
+  font-size: clamp(15px, 1vw, 17px) !important;
+  line-height: 1.6 !important;
+  color: #ffffff !important;
+  margin-bottom: 24px;
 }

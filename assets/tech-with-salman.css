@@ -1122,11 +1122,11 @@ a.view-all-link:visited {
 }
 
 /* ==================================================
-   CONSISTENT 100PX HOMEPAGE SECTION SPACING SYSTEM
+   EXACT 700PX HOMEPAGE SECTION SPACING SYSTEM
    ================================================== */
 .section-wrapper:not(.hero-section) {
-  padding-top: 50px !important;
-  padding-bottom: 50px !important;
+  padding-top: 350px !important;
+  padding-bottom: 350px !important;
   padding-left: clamp(24px, 4.5vw, 64px) !important;
   padding-right: clamp(24px, 4.5vw, 64px) !important;
   margin-bottom: 0 !important;
@@ -1136,8 +1136,8 @@ a.view-all-link:visited {
 
 @media (max-width: 1024px) {
   .section-wrapper:not(.hero-section) {
-    padding-top: 40px !important;
-    padding-bottom: 40px !important;
+    padding-top: 150px !important;
+    padding-bottom: 150px !important;
     padding-left: clamp(20px, 3.5vw, 36px) !important;
     padding-right: clamp(20px, 3.5vw, 36px) !important;
   }
@@ -1145,8 +1145,8 @@ a.view-all-link:visited {
 
 @media (max-width: 768px) {
   .section-wrapper:not(.hero-section) {
-    padding-top: 30px !important;
-    padding-bottom: 30px !important;
+    padding-top: 80px !important;
+    padding-bottom: 80px !important;
     padding-left: 18px !important;
     padding-right: 18px !important;
   }
@@ -1155,21 +1155,21 @@ a.view-all-link:visited {
 /* Hero Section Separation */
 .hero-section {
   padding-top: clamp(130px, 14.5vh, 172px);
-  padding-bottom: 50px !important;
+  padding-bottom: 350px !important;
   min-height: 100vh;
   min-height: 100dvh;
 }
 
 @media (max-width: 1024px) {
   .hero-section {
-    padding-bottom: 40px !important;
+    padding-bottom: 150px !important;
   }
 }
 
 @media (max-width: 768px) {
   .hero-section {
     padding-top: clamp(100px, 13vh, 125px) !important;
-    padding-bottom: 30px !important;
+    padding-bottom: 80px !important;
     min-height: auto;
   }
 }
@@ -1202,20 +1202,37 @@ a.view-all-link:visited {
 /* Footer Separation */
 .site-footer,
 #contact footer {
-  margin-top: 100px !important;
+  margin-top: 700px !important;
 }
 
 @media (max-width: 1024px) {
   .site-footer,
   #contact footer {
-    margin-top: 80px !important;
+    margin-top: 300px !important;
   }
 }
 
 @media (max-width: 768px) {
   .site-footer,
   #contact footer {
-    margin-top: 60px !important;
+    margin-top: 160px !important;
+  }
+}
+
+/* Clean spacing after footer */
+#contact {
+  padding-bottom: 40px !important;
+}
+
+@media (max-width: 1024px) {
+  #contact {
+    padding-bottom: 30px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  #contact {
+    padding-bottom: 20px !important;
   }
 }
 

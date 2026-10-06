@@ -81,7 +81,8 @@
   }
 
   function qrItem(item) {
-    return '<a href="' + item.url + '"' + externalAttrs(item.label + " - " + item.text) + ' class="qr-card" data-social="' + item.key + '"><div class="qr-placeholder" style="background:var(--accent-red);width:44px;height:44px;border-radius:8px;display:flex;align-items:center;justify-content:center">' + iconMarkup(item, 24) + '</div><div class="qr-text"><h4>' + item.label.toUpperCase() + "</h4><p>" + item.text + "</p></div></a>";
+    var iconSrc = "/assets/images/icons/social/" + item.key + ".png";
+    return '<a href="' + item.url + '"' + externalAttrs(item.label + " - " + item.text) + ' class="qr-card" data-social="' + item.key + '"><img src="' + iconSrc + '" alt="' + item.label + '" class="qr-icon-img" style="width:52px;height:52px;object-fit:contain;flex-shrink:0;"><div class="qr-text"><h4>' + item.label.toUpperCase() + "</h4><p>" + item.text + "</p></div></a>";
   }
 
   function contactItem(item) {

@@ -119,7 +119,9 @@
       nav.appendChild(link);
     });
     var aiLink = document.createElement("a");
-    aiLink.href = "#social-media-os";
+    aiLink.href = "https://app.techwithsalman.online/";
+    aiLink.target = "_blank";
+    aiLink.rel = "noopener noreferrer";
     aiLink.className = "nav-ai-cta";
     aiLink.innerHTML = '<span>EXPLORE SOCIAL MEDIA OS</span><span class="nav-cta-arrow">-&gt;</span>';
     aiLink.addEventListener("click", function () {
@@ -657,22 +659,26 @@
 
   function ensureAiNavLink() {
     var desktopNav = document.querySelector(".nav-desktop");
-    if (desktopNav && !desktopNav.querySelector('a[href="#social-media-os"]')) {
+    if (desktopNav && !desktopNav.querySelector('.nav-ai-cta')) {
       var oldLink = desktopNav.querySelector('.nav-ai-cta');
       if (oldLink) oldLink.remove();
       var link = document.createElement("a");
-      link.href = "#social-media-os";
+      link.href = "https://app.techwithsalman.online/";
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
       link.className = "nav-ai-cta";
       link.innerHTML = '<span>EXPLORE SOCIAL MEDIA OS</span><span class="nav-cta-arrow">-&gt;</span>';
       desktopNav.appendChild(link);
     }
 
     var mobileNav = document.querySelector(".mobile-menu-dropdown");
-    if (mobileNav && !mobileNav.querySelector('a[href="#social-media-os"]')) {
+    if (mobileNav && !mobileNav.querySelector('.nav-ai-cta')) {
       var oldMobile = mobileNav.querySelector('.nav-ai-cta');
       if (oldMobile) oldMobile.remove();
       var mobileLink = document.createElement("a");
-      mobileLink.href = "#social-media-os";
+      mobileLink.href = "https://app.techwithsalman.online/";
+      mobileLink.target = "_blank";
+      mobileLink.rel = "noopener noreferrer";
       mobileLink.className = "nav-ai-cta";
       mobileLink.innerHTML = '<span>EXPLORE SOCIAL MEDIA OS</span><span class="nav-cta-arrow">-&gt;</span>';
       mobileLink.addEventListener("click", function () {

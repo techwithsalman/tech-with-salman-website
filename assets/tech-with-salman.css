@@ -173,7 +173,7 @@ canvas {
 }
 
 .section-wrapper {
-  max-width: 1650px;
+  max-width: 1640px;
   padding: clamp(92px, 7rem, 140px) clamp(50px, 4rem, 70px) clamp(72px, 5.5rem, 110px);
 }
 

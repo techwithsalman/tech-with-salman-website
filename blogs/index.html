@@ -46,16 +46,13 @@
     <link rel="preload" as="image" href="assets/content_scheduling_feature.png">
     <link rel="preload" as="image" href="assets/instagram_automation_feature.png">
     
-    
-    
-    
     <title>Blogs &amp; Insights | Tech With Salman</title>
-    <meta name="description" content="Articles on automation and digital workflows.">
+    <meta name="description" content="Articles on automation, software development, AI video systems, and digital workflows by Tech With Salman.">
     <meta name="author" content="Salman Khan">
-    <meta name="keywords" content="Tech With Salman,Salman Khan,Developer,Web Developer Karachi,AI Projects,Portfolio">
-    <meta property="og:title" content="Tech With Salman - Salman Khan Developer">
-    <meta property="og:description" content="Premium developer portfolio for Salman Khan, focused on web experiences, WordPress builds, UI systems, and AI projects.">
-    <meta property="og:url" content="https://techwithsalman.online/">
+    <meta name="keywords" content="Tech With Salman,Salman Khan,Developer,Web Developer Karachi,AI Projects,Portfolio,Blogs">
+    <meta property="og:title" content="Blogs &amp; Insights | Tech With Salman">
+    <meta property="og:description" content="Articles on automation, software development, AI video systems, and digital workflows.">
+    <meta property="og:url" content="https://techwithsalman.online/blogs/">
     <meta property="og:site_name" content="Tech With Salman">
     <meta property="og:locale" content="en_PK">
     <meta property="og:image" content="assets/spider-logo.svg">
@@ -64,27 +61,134 @@
     <meta property="og:image:alt" content="Spider-Man Logo Favicon">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Tech With Salman - Salman Khan Developer">
-    <meta name="twitter:description" content="Premium developer portfolio for Salman Khan, focused on web experiences, WordPress builds, UI systems, and AI projects.">
+    <meta name="twitter:title" content="Blogs &amp; Insights | Tech With Salman">
+    <meta name="twitter:description" content="Articles on automation, software development, AI video systems, and digital workflows.">
     <meta name="twitter:image" content="assets/spider-logo.svg">
     <meta name="twitter:image:alt" content="Spider-Man Logo Favicon">
     <meta name="twitter:image:width" content="1200">
     <meta name="twitter:image:height" content="630">
     
     <link rel="icon" href="/assets/images/favicon.png?v=2" sizes="1024x1024" type="image/x-icon">
-    
-    
     <script src="_next/static/chunks/0cz1d0mv5g_q7.js" nomodule=""></script>
     <link rel="stylesheet" href="assets/tech-with-salman.css?v=tws-20260907-hero-card-fix">
   
-<style>
-#scroll-container { min-height: auto !important; padding-bottom: 0 !important; margin-bottom: 0 !important; }
-</style>
+    <style>
+    /* Scoped styles for Blogs overview page */
+    .blogs-page-wrapper {
+      position: relative;
+      width: 100%;
+    }
+    .blogs-container-1600 {
+      max-width: 1600px;
+      width: calc(100% - 48px);
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+    @media (max-width: 1280px) {
+      .blogs-container-1600 {
+        width: calc(100% - 32px);
+      }
+    }
+    @media (max-width: 768px) {
+      .blogs-container-1600 {
+        width: calc(100% - 20px);
+      }
+    }
+    @media (max-width: 430px) {
+      .blogs-container-1600 {
+        width: calc(100% - 16px);
+      }
+    }
+    .page-hero-spaced {
+      padding-top: 140px !important;
+      padding-bottom: 350px !important;
+      min-height: auto !important;
+    }
+    .blogs-section-gap {
+      padding-top: 350px !important;
+      padding-bottom: 350px !important;
+      margin-bottom: 0 !important;
+      min-height: auto !important;
+    }
+    .page-footer-spaced {
+      margin-top: 350px !important;
+      padding: 48px 0 24px !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    @media (max-width: 1024px) {
+      .page-hero-spaced {
+        padding-top: 120px !important;
+        padding-bottom: 150px !important;
+      }
+      .blogs-section-gap {
+        padding-top: 150px !important;
+        padding-bottom: 150px !important;
+      }
+      .page-footer-spaced {
+        margin-top: 150px !important;
+      }
+    }
+    @media (max-width: 768px) {
+      .page-hero-spaced {
+        padding-top: 100px !important;
+        padding-bottom: 75px !important;
+      }
+      .blogs-section-gap {
+        padding-top: 75px !important;
+        padding-bottom: 75px !important;
+      }
+      .page-footer-spaced {
+        margin-top: 75px !important;
+        padding: 36px 0 20px !important;
+      }
+    }
+    .blogs-grid-3col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+    @media (max-width: 1024px) {
+      .blogs-grid-3col {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+      }
+    }
+    @media (max-width: 640px) {
+      .blogs-grid-3col {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+    }
+    .blog-card {
+      display: flex;
+      flex-direction: column;
+      background: rgba(20, 20, 20, 0.8);
+      border: 1px solid rgba(232, 0, 26, 0.15);
+      border-radius: 12px;
+      overflow: hidden;
+      text-decoration: none;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+    .blog-card:hover {
+      border-color: rgba(232, 0, 26, 0.5) !important;
+      transform: translateY(-5px);
+    }
+    .blog-card:hover .blog-img {
+      transform: scale(1.05);
+    }
+    .blog-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    </style>
 
-<link rel="icon" type="image/png" href="/assets/images/favicon.png?v=2">
-<link rel="apple-touch-icon" href="/assets/images/favicon.png?v=2">
+    <link rel="icon" type="image/png" href="/assets/images/favicon.png?v=2">
+    <link rel="apple-touch-icon" href="/assets/images/favicon.png?v=2">
 </head>
-  <body>
+<body>
     <div hidden=""><!--$--><!--/$--></div>
     <div class="cursor-dot"></div>
     <div class="cursor-ring"></div>
@@ -104,13 +208,12 @@
       <nav class="nav-links nav-desktop" id="vengence-nav-links">
         <div class="nav-spotlight-pill" id="nav-spotlight-pill"></div>
         <a href="/">HOME</a>
-        <a href="/about/" class="active">ABOUT</a>
+        <a href="/about/">ABOUT</a>
         <a href="/#services">SERVICES</a>
-        
         <a href="/products/">PRODUCTS</a>
         <a href="/#skills">SKILLS</a>
         <a href="/#experience">EXPERIENCE</a>
-        <a href="/blogs/">BLOGS</a>
+        <a href="/blogs/" class="active">BLOGS</a>
         <a href="/privacy-policy">PRIVACY POLICY</a>
         <a href="/terms.html">TERMS &amp; CONDITIONS</a>
         <a href="/contact/">CONTACT</a>
@@ -121,122 +224,131 @@
     </header>
     
     <div class="scroll-container" id="scroll-container">
-    <style>
-      .blog-card:hover { border-color: rgba(232,0,26,0.5) !important; transform: translateY(-5px); }
-      .blog-card:hover .blog-img { transform: scale(1.05); }
-      .blogs-grid-wrapper { min-height: auto !important; padding-bottom: 80px !important; margin-bottom: 0 !important; }
-      body, html { height: auto !important; min-height: 100vh !important; }
-    </style>
-    <section class="blogs-page-hero" style="position:relative; padding:120px 20px 60px; text-align:center; overflow:hidden;">
-        <div style="position:absolute; inset:0; background:radial-gradient(circle at center, rgba(232,0,26,0.1) 0%, transparent 60%); pointer-events:none; z-index:0;"></div>
-        <div style="position:absolute; inset:0; background-image:linear-gradient(rgba(232,0,26,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(232,0,26,0.05) 1px, transparent 1px); background-size:30px 30px; pointer-events:none; z-index:0;"></div>
-        <div style="position:relative; z-index:1; max-width:800px; margin:0 auto; display:flex; flex-direction:column; align-items:center;">
-            <div style="color:#e8001a; font-weight:800; letter-spacing:2px; font-size:13px; border:1px solid rgba(232,0,26,0.3); padding:6px 14px; border-radius:4px; background:rgba(232,0,26,0.05); margin-bottom:20px;">TECH WITH SALMAN</div>
+    <div class="blogs-page-wrapper">
+
+    <!-- 1. BLOGS HERO -->
+    <section class="section-wrapper hero-section page-hero-spaced">
+        <div style="max-width:800px; margin:0 auto; text-align:center; position:relative; z-index:1;">
+            <div style="color:#e8001a; font-weight:800; letter-spacing:2px; font-size:13px; border:1px solid rgba(232,0,26,0.3); padding:6px 14px; border-radius:4px; background:rgba(232,0,26,0.05); display:inline-block; margin-bottom:20px;">TECH WITH SALMAN</div>
             <h1 style="font-family:'Bebas Neue',sans-serif; font-size:clamp(40px, 6vw, 64px); letter-spacing:1px; color:#fff; margin:0 0 20px 0; line-height:1.1;">BLOGS &amp; INSIGHTS</h1>
             <p style="font-size:clamp(16px, 2vw, 18px); color:rgba(255,255,255,0.7); line-height:1.6; margin:0;">Articles about automation, software development, social media workflows, AI video systems and practical digital products.</p>
         </div>
     </section>
 
-    <section class="section-wrapper blogs-grid-wrapper" style="padding: 0 20px 60px; width:100%; max-width:1240px; margin:0 auto; box-sizing:border-box; background:transparent;">
-        <div class="blogs-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:30px;">
-            
-    <a href="/blogs/how-automation-is-changing-social-media-management/" class="blog-card" style="display:flex; flex-direction:column; background:rgba(20,20,20,0.8); border:1px solid rgba(232,0,26,0.15); border-radius:12px; overflow:hidden; text-decoration:none; transition:transform 0.3s ease, border-color 0.3s ease;">
-        <div style="width:100%; aspect-ratio:16/9; overflow:hidden;">
-            <img src="/assets/images/blogs/blog-automation-social-media.png" alt="How Automation Is Changing Social Media Management" style="width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.5s ease;" class="blog-img">
-        </div>
-        <div style="padding:24px; display:flex; flex-direction:column; flex:1;">
-            <div style="font-size:12px; font-weight:700; color:#e8001a; letter-spacing:1px; margin-bottom:8px;">AI &amp; AUTOMATION</div>
-            <h3 style="font-family:'Bebas Neue',sans-serif; font-size:24px; color:#fff; letter-spacing:1px; margin:0 0 12px 0;">How Automation Is Changing Social Media Management</h3>
-            <p style="font-size:14px; color:rgba(255,255,255,0.7); line-height:1.6; margin:0 0 20px 0; flex:1;">How smart automation can reduce repetitive publishing work while keeping strategy and creative decisions in human hands.</p>
-            <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.1); padding-top:16px; margin-top:auto;">
-                <span style="font-size:11px; color:rgba(255,255,255,0.4); letter-spacing:1px;">OCTOBER 2026</span>
-                <span style="font-size:12px; font-weight:700; color:#e8001a; letter-spacing:1px;">READ ARTICLE →</span>
-            </div>
-        </div>
-    </a>
+    <!-- 2. 6 BLOG CARDS (3-COLUMN DESKTOP GRID, 1600PX CONTAINER) -->
+    <section class="section-wrapper blogs-section-gap">
+        <div class="blogs-container-1600">
+            <div class="blogs-grid-3col">
+                
+                <a href="/blogs/how-automation-is-changing-social-media-management/" class="blog-card">
+                    <div style="width:100%; aspect-ratio:16/9; overflow:hidden;">
+                        <img src="/assets/images/blogs/blog-automation-social-media.png" alt="How Automation Is Changing Social Media Management" class="blog-img">
+                    </div>
+                    <div style="padding:24px; display:flex; flex-direction:column; flex:1;">
+                        <div style="font-size:12px; font-weight:700; color:#e8001a; letter-spacing:1px; margin-bottom:8px;">AI &amp; AUTOMATION</div>
+                        <h3 style="font-family:'Bebas Neue',sans-serif; font-size:24px; color:#fff; letter-spacing:1px; margin:0 0 12px 0;">How Automation Is Changing Social Media Management</h3>
+                        <p style="font-size:14px; color:rgba(255,255,255,0.7); line-height:1.6; margin:0 0 20px 0; flex:1;">How smart automation can reduce repetitive publishing work while keeping strategy and creative decisions in human hands.</p>
+                        <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.1); padding-top:16px; margin-top:auto;">
+                            <span style="font-size:11px; color:rgba(255,255,255,0.4); letter-spacing:1px;">OCTOBER 2026</span>
+                            <span style="font-size:12px; font-weight:700; color:#e8001a; letter-spacing:1px;">READ ARTICLE →</span>
+                        </div>
+                    </div>
+                </a>
 
-    <a href="/blogs/multi-platform-content-workflow/" class="blog-card" style="display:flex; flex-direction:column; background:rgba(20,20,20,0.8); border:1px solid rgba(232,0,26,0.15); border-radius:12px; overflow:hidden; text-decoration:none; transition:transform 0.3s ease, border-color 0.3s ease;">
-        <div style="width:100%; aspect-ratio:16/9; overflow:hidden;">
-            <img src="/assets/images/blogs/blog-multi-platform-workflow.png" alt="How to Build a Multi-Platform Content Workflow" style="width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.5s ease;" class="blog-img">
-        </div>
-        <div style="padding:24px; display:flex; flex-direction:column; flex:1;">
-            <div style="font-size:12px; font-weight:700; color:#e8001a; letter-spacing:1px; margin-bottom:8px;">SOCIAL MEDIA</div>
-            <h3 style="font-family:'Bebas Neue',sans-serif; font-size:24px; color:#fff; letter-spacing:1px; margin:0 0 12px 0;">How to Build a Multi-Platform Content Workflow</h3>
-            <p style="font-size:14px; color:rgba(255,255,255,0.7); line-height:1.6; margin:0 0 20px 0; flex:1;">A practical system for planning, preparing, scheduling and tracking content across multiple platforms.</p>
-            <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.1); padding-top:16px; margin-top:auto;">
-                <span style="font-size:11px; color:rgba(255,255,255,0.4); letter-spacing:1px;">OCTOBER 2026</span>
-                <span style="font-size:12px; font-weight:700; color:#e8001a; letter-spacing:1px;">READ ARTICLE →</span>
-            </div>
-        </div>
-    </a>
+                <a href="/blogs/multi-platform-content-workflow/" class="blog-card">
+                    <div style="width:100%; aspect-ratio:16/9; overflow:hidden;">
+                        <img src="/assets/images/blogs/blog-multi-platform-workflow.png" alt="How to Build a Multi-Platform Content Workflow" class="blog-img">
+                    </div>
+                    <div style="padding:24px; display:flex; flex-direction:column; flex:1;">
+                        <div style="font-size:12px; font-weight:700; color:#e8001a; letter-spacing:1px; margin-bottom:8px;">SOCIAL MEDIA</div>
+                        <h3 style="font-family:'Bebas Neue',sans-serif; font-size:24px; color:#fff; letter-spacing:1px; margin:0 0 12px 0;">How to Build a Multi-Platform Content Workflow</h3>
+                        <p style="font-size:14px; color:rgba(255,255,255,0.7); line-height:1.6; margin:0 0 20px 0; flex:1;">A practical system for planning, preparing, scheduling and tracking content across multiple platforms.</p>
+                        <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.1); padding-top:16px; margin-top:auto;">
+                            <span style="font-size:11px; color:rgba(255,255,255,0.4); letter-spacing:1px;">OCTOBER 2026</span>
+                            <span style="font-size:12px; font-weight:700; color:#e8001a; letter-spacing:1px;">READ ARTICLE →</span>
+                        </div>
+                    </div>
+                </a>
 
-    <a href="/blogs/why-i-build-desktop-automation-tools/" class="blog-card" style="display:flex; flex-direction:column; background:rgba(20,20,20,0.8); border:1px solid rgba(232,0,26,0.15); border-radius:12px; overflow:hidden; text-decoration:none; transition:transform 0.3s ease, border-color 0.3s ease;">
-        <div style="width:100%; aspect-ratio:16/9; overflow:hidden;">
-            <img src="/assets/images/blogs/blog-desktop-automation-tools.png" alt="Why I Build Desktop Automation Tools" style="width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.5s ease;" class="blog-img">
-        </div>
-        <div style="padding:24px; display:flex; flex-direction:column; flex:1;">
-            <div style="font-size:12px; font-weight:700; color:#e8001a; letter-spacing:1px; margin-bottom:8px;">DEVELOPMENT</div>
-            <h3 style="font-family:'Bebas Neue',sans-serif; font-size:24px; color:#fff; letter-spacing:1px; margin:0 0 12px 0;">Why I Build Desktop Automation Tools</h3>
-            <p style="font-size:14px; color:rgba(255,255,255,0.7); line-height:1.6; margin:0 0 20px 0; flex:1;">Why focused desktop software still matters for repetitive workflows, account sessions and controlled automation.</p>
-            <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.1); padding-top:16px; margin-top:auto;">
-                <span style="font-size:11px; color:rgba(255,255,255,0.4); letter-spacing:1px;">OCTOBER 2026</span>
-                <span style="font-size:12px; font-weight:700; color:#e8001a; letter-spacing:1px;">READ ARTICLE →</span>
-            </div>
-        </div>
-    </a>
+                <a href="/blogs/why-i-build-desktop-automation-tools/" class="blog-card">
+                    <div style="width:100%; aspect-ratio:16/9; overflow:hidden;">
+                        <img src="/assets/images/blogs/blog-desktop-automation-tools.png" alt="Why I Build Desktop Automation Tools" class="blog-img">
+                    </div>
+                    <div style="padding:24px; display:flex; flex-direction:column; flex:1;">
+                        <div style="font-size:12px; font-weight:700; color:#e8001a; letter-spacing:1px; margin-bottom:8px;">DEVELOPMENT</div>
+                        <h3 style="font-family:'Bebas Neue',sans-serif; font-size:24px; color:#fff; letter-spacing:1px; margin:0 0 12px 0;">Why I Build Desktop Automation Tools</h3>
+                        <p style="font-size:14px; color:rgba(255,255,255,0.7); line-height:1.6; margin:0 0 20px 0; flex:1;">Why focused desktop software still matters for repetitive workflows, account sessions and controlled automation.</p>
+                        <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.1); padding-top:16px; margin-top:auto;">
+                            <span style="font-size:11px; color:rgba(255,255,255,0.4); letter-spacing:1px;">OCTOBER 2026</span>
+                            <span style="font-size:12px; font-weight:700; color:#e8001a; letter-spacing:1px;">READ ARTICLE →</span>
+                        </div>
+                    </div>
+                </a>
 
-    <a href="/blogs/how-i-design-simple-automation-software/" class="blog-card" style="display:flex; flex-direction:column; background:rgba(20,20,20,0.8); border:1px solid rgba(232,0,26,0.15); border-radius:12px; overflow:hidden; text-decoration:none; transition:transform 0.3s ease, border-color 0.3s ease;">
-        <div style="width:100%; aspect-ratio:16/9; overflow:hidden;">
-            <img src="/assets/images/blogs/blog-simple-automation-ui.png" alt="How I Design Automation Software That Feels Simple" style="width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.5s ease;" class="blog-img">
-        </div>
-        <div style="padding:24px; display:flex; flex-direction:column; flex:1;">
-            <div style="font-size:12px; font-weight:700; color:#e8001a; letter-spacing:1px; margin-bottom:8px;">PRODUCT DESIGN</div>
-            <h3 style="font-family:'Bebas Neue',sans-serif; font-size:24px; color:#fff; letter-spacing:1px; margin:0 0 12px 0;">How I Design Automation Software That Feels Simple</h3>
-            <p style="font-size:14px; color:rgba(255,255,255,0.7); line-height:1.6; margin:0 0 20px 0; flex:1;">The UI and workflow decisions that make complex automation tools easier to understand and operate.</p>
-            <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.1); padding-top:16px; margin-top:auto;">
-                <span style="font-size:11px; color:rgba(255,255,255,0.4); letter-spacing:1px;">OCTOBER 2026</span>
-                <span style="font-size:12px; font-weight:700; color:#e8001a; letter-spacing:1px;">READ ARTICLE →</span>
-            </div>
-        </div>
-    </a>
+                <a href="/blogs/how-i-design-simple-automation-software/" class="blog-card">
+                    <div style="width:100%; aspect-ratio:16/9; overflow:hidden;">
+                        <img src="/assets/images/blogs/blog-simple-automation-ui.png" alt="How I Design Automation Software That Feels Simple" class="blog-img">
+                    </div>
+                    <div style="padding:24px; display:flex; flex-direction:column; flex:1;">
+                        <div style="font-size:12px; font-weight:700; color:#e8001a; letter-spacing:1px; margin-bottom:8px;">PRODUCT DESIGN</div>
+                        <h3 style="font-family:'Bebas Neue',sans-serif; font-size:24px; color:#fff; letter-spacing:1px; margin:0 0 12px 0;">How I Design Automation Software That Feels Simple</h3>
+                        <p style="font-size:14px; color:rgba(255,255,255,0.7); line-height:1.6; margin:0 0 20px 0; flex:1;">The UI and workflow decisions that make complex automation tools easier to understand and operate.</p>
+                        <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.1); padding-top:16px; margin-top:auto;">
+                            <span style="font-size:11px; color:rgba(255,255,255,0.4); letter-spacing:1px;">OCTOBER 2026</span>
+                            <span style="font-size:12px; font-weight:700; color:#e8001a; letter-spacing:1px;">READ ARTICLE →</span>
+                        </div>
+                    </div>
+                </a>
 
-    <a href="/blogs/from-manual-tasks-to-automated-workflows/" class="blog-card" style="display:flex; flex-direction:column; background:rgba(20,20,20,0.8); border:1px solid rgba(232,0,26,0.15); border-radius:12px; overflow:hidden; text-decoration:none; transition:transform 0.3s ease, border-color 0.3s ease;">
-        <div style="width:100%; aspect-ratio:16/9; overflow:hidden;">
-            <img src="/assets/images/blogs/blog-manual-to-automation.png" alt="From Manual Tasks to Automated Workflows" style="width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.5s ease;" class="blog-img">
-        </div>
-        <div style="padding:24px; display:flex; flex-direction:column; flex:1;">
-            <div style="font-size:12px; font-weight:700; color:#e8001a; letter-spacing:1px; margin-bottom:8px;">WORKFLOW</div>
-            <h3 style="font-family:'Bebas Neue',sans-serif; font-size:24px; color:#fff; letter-spacing:1px; margin:0 0 12px 0;">From Manual Tasks to Automated Workflows</h3>
-            <p style="font-size:14px; color:rgba(255,255,255,0.7); line-height:1.6; margin:0 0 20px 0; flex:1;">A step-by-step look at turning repeated digital tasks into structured and trackable software processes.</p>
-            <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.1); padding-top:16px; margin-top:auto;">
-                <span style="font-size:11px; color:rgba(255,255,255,0.4); letter-spacing:1px;">OCTOBER 2026</span>
-                <span style="font-size:12px; font-weight:700; color:#e8001a; letter-spacing:1px;">READ ARTICLE →</span>
-            </div>
-        </div>
-    </a>
+                <a href="/blogs/from-manual-tasks-to-automated-workflows/" class="blog-card">
+                    <div style="width:100%; aspect-ratio:16/9; overflow:hidden;">
+                        <img src="/assets/images/blogs/blog-manual-to-automation.png" alt="From Manual Tasks to Automated Workflows" class="blog-img">
+                    </div>
+                    <div style="padding:24px; display:flex; flex-direction:column; flex:1;">
+                        <div style="font-size:12px; font-weight:700; color:#e8001a; letter-spacing:1px; margin-bottom:8px;">WORKFLOW</div>
+                        <h3 style="font-family:'Bebas Neue',sans-serif; font-size:24px; color:#fff; letter-spacing:1px; margin:0 0 12px 0;">From Manual Tasks to Automated Workflows</h3>
+                        <p style="font-size:14px; color:rgba(255,255,255,0.7); line-height:1.6; margin:0 0 20px 0; flex:1;">A step-by-step look at turning repeated digital tasks into structured and trackable software processes.</p>
+                        <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.1); padding-top:16px; margin-top:auto;">
+                            <span style="font-size:11px; color:rgba(255,255,255,0.4); letter-spacing:1px;">OCTOBER 2026</span>
+                            <span style="font-size:12px; font-weight:700; color:#e8001a; letter-spacing:1px;">READ ARTICLE →</span>
+                        </div>
+                    </div>
+                </a>
 
-    <a href="/blogs/building-better-ai-video-workflows/" class="blog-card" style="display:flex; flex-direction:column; background:rgba(20,20,20,0.8); border:1px solid rgba(232,0,26,0.15); border-radius:12px; overflow:hidden; text-decoration:none; transition:transform 0.3s ease, border-color 0.3s ease;">
-        <div style="width:100%; aspect-ratio:16/9; overflow:hidden;">
-            <img src="/assets/images/blogs/blog-ai-video-workflow.png" alt="Building Better AI Video Workflows" style="width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.5s ease;" class="blog-img">
-        </div>
-        <div style="padding:24px; display:flex; flex-direction:column; flex:1;">
-            <div style="font-size:12px; font-weight:700; color:#e8001a; letter-spacing:1px; margin-bottom:8px;">AI VIDEO</div>
-            <h3 style="font-family:'Bebas Neue',sans-serif; font-size:24px; color:#fff; letter-spacing:1px; margin:0 0 12px 0;">Building Better AI Video Workflows</h3>
-            <p style="font-size:14px; color:rgba(255,255,255,0.7); line-height:1.6; margin:0 0 20px 0; flex:1;">How to organize prompts, generation jobs, status tracking and outputs into a practical AI video workflow.</p>
-            <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.1); padding-top:16px; margin-top:auto;">
-                <span style="font-size:11px; color:rgba(255,255,255,0.4); letter-spacing:1px;">OCTOBER 2026</span>
-                <span style="font-size:12px; font-weight:700; color:#e8001a; letter-spacing:1px;">READ ARTICLE →</span>
-            </div>
-        </div>
-    </a>
+                <a href="/blogs/building-better-ai-video-workflows/" class="blog-card">
+                    <div style="width:100%; aspect-ratio:16/9; overflow:hidden;">
+                        <img src="/assets/images/blogs/blog-ai-video-workflow.png" alt="Building Better AI Video Workflows" class="blog-img">
+                    </div>
+                    <div style="padding:24px; display:flex; flex-direction:column; flex:1;">
+                        <div style="font-size:12px; font-weight:700; color:#e8001a; letter-spacing:1px; margin-bottom:8px;">AI VIDEO</div>
+                        <h3 style="font-family:'Bebas Neue',sans-serif; font-size:24px; color:#fff; letter-spacing:1px; margin:0 0 12px 0;">Building Better AI Video Workflows</h3>
+                        <p style="font-size:14px; color:rgba(255,255,255,0.7); line-height:1.6; margin:0 0 20px 0; flex:1;">How to organize prompts, generation jobs, status tracking and outputs into a practical AI video workflow.</p>
+                        <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.1); padding-top:16px; margin-top:auto;">
+                            <span style="font-size:11px; color:rgba(255,255,255,0.4); letter-spacing:1px;">OCTOBER 2026</span>
+                            <span style="font-size:12px; font-weight:700; color:#e8001a; letter-spacing:1px;">READ ARTICLE →</span>
+                        </div>
+                    </div>
+                </a>
 
+            </div>
         </div>
     </section>
-        <footer style="
-          padding: 48px 0 24px;
-          border-top: 1px solid rgba(255, 255, 255, 0.1);
-          margin-top: 50px;
-        ">
+
+    <!-- 3. BLOG CTA -->
+    <section class="section-wrapper blogs-section-gap">
+        <div class="blog-cta-box" style="max-width:1000px; margin:0 auto; width:100%; background:linear-gradient(145deg, rgba(35,8,10,0.9) 0%, rgba(18,8,8,0.95) 100%); border:1px solid rgba(232,0,26,0.3); border-radius:16px; padding:clamp(32px, 4vw, 48px); text-align:center; box-shadow:0 8px 32px rgba(232,0,26,0.08); box-sizing:border-box;">
+            <div style="color:var(--accent-red, #e8001a); font-weight:800; letter-spacing:2px; font-size:12px; margin-bottom:12px;">KEEP EXPLORING</div>
+            <h2 style="font-family:'Bebas Neue',sans-serif; font-size:clamp(30px, 4vw, 44px); color:#fff; letter-spacing:1px; margin:0 0 16px;">BUILD BETTER WORKFLOWS. SHIP BETTER DIGITAL PRODUCTS.</h2>
+            <p style="font-size:clamp(15px, 1.6vw, 17px); color:rgba(255,255,255,0.75); max-width:680px; margin:0 auto 28px; line-height:1.6;">Explore the software and automation tools I build to streamline publishing and content creation.</p>
+            <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+                <a href="/products/" class="shimmer-btn"><span>VIEW PRODUCTS</span><span>⟶</span></a>
+                <a href="/contact/" class="shimmer-btn secondary"><span>CONTACT ME</span><span>⟶</span></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. FOOTER -->
+    <footer class="site-footer page-footer-spaced">
         <div style="
             display: flex;
             flex-direction: column;
@@ -277,7 +389,6 @@
             <a href="/#services" style="color: rgba(255, 255, 255, 0.8); text-decoration: none">SERVICES</a>
             <a href="/products/" style="color: rgba(255, 255, 255, 0.8); text-decoration: none">PRODUCTS</a>
             <a href="/blogs/" style="color: rgba(255, 255, 255, 0.8); text-decoration: none">BLOGS</a>
-
             <a href="/contact/" style="color: rgba(255, 255, 255, 0.8); text-decoration: none">CONTACT</a>
           </div>
           <div style="
@@ -308,8 +419,11 @@
             LinkedIn, X, Pinterest, or Snapchat.
           </div>
         </div>
-      </footer>
-      </div>
+    </footer>
+
+    </div>
+    </div>
+    
     <div class="vengence-glass-dock" id="vengence-glass-dock">
       <a href="mailto:hello@salman.design" class="dock-item" aria-label="Email"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>

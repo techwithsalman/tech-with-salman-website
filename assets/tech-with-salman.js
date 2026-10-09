@@ -713,7 +713,7 @@
   function updateContactList() {
     var list = document.querySelector("#contact .contact-list");
     if (!list || list.getAttribute("data-tws-version") === VERSION) return;
-    var email = '<a href="mailto:hello@salman.design" class="contact-item"><span class="contact-icon-box"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></span>hello@salman.design</a>';
+    var email = '<a href="mailto:Salmandesigner@gmail.com" class="contact-item"><span class="contact-icon-box"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></span>Salmandesigner@gmail.com</a>';
     var location = '<div class="contact-item"><span class="contact-icon-box"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span>Karachi, Pakistan</div>';
     list.innerHTML = email + SOCIALS.map(contactItem).join("") + location;
     list.setAttribute("data-tws-version", VERSION);

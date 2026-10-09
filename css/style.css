@@ -480,6 +480,8 @@ button, input, select, textarea {
   width: 100%;
   padding-left: clamp(20px, 3.5vw, 48px);
   padding-right: clamp(20px, 3.5vw, 48px);
+  position: relative;
+  z-index: 2;
 }
 
 .hero-section {
@@ -490,7 +492,7 @@ button, input, select, textarea {
   overflow: hidden;
   padding-top: calc(var(--nav-height) + 30px);
   padding-bottom: 70px;
-  background-color: var(--bg-main);
+  background: #040406 url('../assets/section-backgrounds/01.png') no-repeat center center / cover;
 }
 
 .hero-grid {
@@ -716,21 +718,8 @@ button, input, select, textarea {
 .platforms-section {
   padding: 100px 0 110px;
   position: relative;
-  background: #040406;
+  background: #040406 url('../assets/section-backgrounds/02.png') no-repeat center center / cover;
   overflow: hidden;
-}
-
-.platforms-ambient-glow {
-  position: absolute;
-  top: 25%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 850px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(255, 31, 53, 0.15) 0%, rgba(255, 31, 53, 0.03) 45%, transparent 70%);
-  filter: blur(90px);
-  pointer-events: none;
-  z-index: 1;
 }
 
 .platforms-container {
@@ -850,72 +839,14 @@ button, input, select, textarea {
   transform: translateX(4px);
 }
 
-.platforms-neon-floor {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 100px;
-  background: radial-gradient(ellipse at 50% 100%, rgba(255, 31, 53, 0.32) 0%, rgba(255, 31, 53, 0.06) 50%, transparent 80%), linear-gradient(to top, rgba(255, 31, 53, 0.18) 0%, transparent 100%);
-  pointer-events: none;
-  border-bottom: 2px solid rgba(255, 31, 53, 0.85);
-  box-shadow: 0 0 35px rgba(255, 31, 53, 0.5);
-  z-index: 1;
-}
-
 /* ==========================================================================
    SECTION 03 — FEATURES GRID
    ========================================================================== */
 .features-section {
   padding: 110px 0 120px;
   position: relative;
-  background: #040406;
+  background: #040406 url('../assets/section-backgrounds/03.png') no-repeat center center / cover;
   overflow: hidden;
-}
-
-.features-ambient-glow {
-  position: absolute;
-  top: 20%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 950px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(255, 31, 53, 0.16) 0%, rgba(255, 31, 53, 0.03) 50%, transparent 75%);
-  filter: blur(95px);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.features-arc-left {
-  position: absolute;
-  top: -10%;
-  left: -180px;
-  width: 450px;
-  height: 950px;
-  border-radius: 50%;
-  border-right: 3px solid rgba(255, 31, 53, 0.7);
-  box-shadow: 15px 0 60px rgba(255, 31, 53, 0.45), inset -10px 0 40px rgba(255, 31, 53, 0.25);
-  filter: blur(1px);
-  transform: rotate(12deg);
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.85;
-}
-
-.features-arc-right {
-  position: absolute;
-  top: -10%;
-  right: -180px;
-  width: 450px;
-  height: 950px;
-  border-radius: 50%;
-  border-left: 3px solid rgba(255, 31, 53, 0.7);
-  box-shadow: -15px 0 60px rgba(255, 31, 53, 0.45), inset 10px 0 40px rgba(255, 31, 53, 0.25);
-  filter: blur(1px);
-  transform: rotate(-12deg);
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.85;
 }
 
 .features-container {
@@ -1055,72 +986,14 @@ button, input, select, textarea {
   transform: translateX(4px);
 }
 
-.features-neon-floor {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 110px;
-  background: radial-gradient(ellipse at 50% 100%, rgba(255, 31, 53, 0.35) 0%, rgba(255, 31, 53, 0.07) 50%, transparent 80%), linear-gradient(to top, rgba(255, 31, 53, 0.2) 0%, transparent 100%);
-  pointer-events: none;
-  border-bottom: 2px solid rgba(255, 31, 53, 0.85);
-  box-shadow: 0 0 35px rgba(255, 31, 53, 0.55);
-  z-index: 1;
-}
-
 /* ==========================================================================
    SECTION 04 — HOW IT WORKS
    ========================================================================== */
 .how-it-works-section {
   padding: 110px 0 120px;
   position: relative;
-  background: #040406;
+  background: #040406 url('../assets/section-backgrounds/04.png') no-repeat center center / cover;
   overflow: hidden;
-}
-
-.how-ambient-glow {
-  position: absolute;
-  top: 20%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 950px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(255, 31, 53, 0.16) 0%, rgba(255, 31, 53, 0.03) 50%, transparent 75%);
-  filter: blur(95px);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.how-arc-left {
-  position: absolute;
-  top: -10%;
-  left: -180px;
-  width: 450px;
-  height: 950px;
-  border-radius: 50%;
-  border-right: 3px solid rgba(255, 31, 53, 0.7);
-  box-shadow: 15px 0 60px rgba(255, 31, 53, 0.45), inset -10px 0 40px rgba(255, 31, 53, 0.25);
-  filter: blur(1px);
-  transform: rotate(12deg);
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.85;
-}
-
-.how-arc-right {
-  position: absolute;
-  top: -10%;
-  right: -180px;
-  width: 450px;
-  height: 950px;
-  border-radius: 50%;
-  border-left: 3px solid rgba(255, 31, 53, 0.7);
-  box-shadow: -15px 0 60px rgba(255, 31, 53, 0.45), inset 10px 0 40px rgba(255, 31, 53, 0.25);
-  filter: blur(1px);
-  transform: rotate(-12deg);
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.85;
 }
 
 .how-container {
@@ -1248,72 +1121,14 @@ button, input, select, textarea {
   }
 }
 
-.how-neon-floor {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 110px;
-  background: radial-gradient(ellipse at 50% 100%, rgba(255, 31, 53, 0.35) 0%, rgba(255, 31, 53, 0.07) 50%, transparent 80%), linear-gradient(to top, rgba(255, 31, 53, 0.2) 0%, transparent 100%);
-  pointer-events: none;
-  border-bottom: 2px solid rgba(255, 31, 53, 0.85);
-  box-shadow: 0 0 35px rgba(255, 31, 53, 0.55);
-  z-index: 1;
-}
-
 /* ==========================================================================
    SECTION 05 — PRODUCT SHOWCASE
    ========================================================================== */
 .showcase-section {
   padding: 110px 0 120px;
   position: relative;
-  background: #040406;
+  background: #040406 url('../assets/section-backgrounds/05.png') no-repeat center center / cover;
   overflow: hidden;
-}
-
-.showcase-ambient-glow {
-  position: absolute;
-  top: 20%;
-  left: 35%;
-  transform: translateX(-50%);
-  width: 950px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(255, 31, 53, 0.16) 0%, rgba(255, 31, 53, 0.03) 50%, transparent 75%);
-  filter: blur(95px);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.showcase-arc-left {
-  position: absolute;
-  top: -10%;
-  left: -180px;
-  width: 450px;
-  height: 950px;
-  border-radius: 50%;
-  border-right: 3px solid rgba(255, 31, 53, 0.7);
-  box-shadow: 15px 0 60px rgba(255, 31, 53, 0.45), inset -10px 0 40px rgba(255, 31, 53, 0.25);
-  filter: blur(1px);
-  transform: rotate(12deg);
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.85;
-}
-
-.showcase-arc-right {
-  position: absolute;
-  top: -10%;
-  right: -180px;
-  width: 450px;
-  height: 950px;
-  border-radius: 50%;
-  border-left: 3px solid rgba(255, 31, 53, 0.7);
-  box-shadow: -15px 0 60px rgba(255, 31, 53, 0.45), inset 10px 0 40px rgba(255, 31, 53, 0.25);
-  filter: blur(1px);
-  transform: rotate(-12deg);
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.85;
 }
 
 .showcase-container {
@@ -1636,72 +1451,14 @@ button, input, select, textarea {
   transform: translateX(4px);
 }
 
-.showcase-neon-floor {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 110px;
-  background: radial-gradient(ellipse at 50% 100%, rgba(255, 31, 53, 0.35) 0%, rgba(255, 31, 53, 0.07) 50%, transparent 80%), linear-gradient(to top, rgba(255, 31, 53, 0.2) 0%, transparent 100%);
-  pointer-events: none;
-  border-bottom: 2px solid rgba(255, 31, 53, 0.85);
-  box-shadow: 0 0 35px rgba(255, 31, 53, 0.55);
-  z-index: 1;
-}
-
 /* ==========================================================================
    SECTION 06 — TRUST & PRIVACY
    ========================================================================== */
 .trust-section {
   padding: 110px 0 120px;
   position: relative;
-  background: #040406;
+  background: #040406 url('../assets/section-backgrounds/06.png') no-repeat center center / cover;
   overflow: hidden;
-}
-
-.privacy-ambient-glow {
-  position: absolute;
-  top: 20%;
-  left: 45%;
-  transform: translateX(-50%);
-  width: 950px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(255, 31, 53, 0.16) 0%, rgba(255, 31, 53, 0.03) 50%, transparent 75%);
-  filter: blur(95px);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.privacy-arc-left {
-  position: absolute;
-  top: -10%;
-  left: -180px;
-  width: 450px;
-  height: 950px;
-  border-radius: 50%;
-  border-right: 3px solid rgba(255, 31, 53, 0.7);
-  box-shadow: 15px 0 60px rgba(255, 31, 53, 0.45), inset -10px 0 40px rgba(255, 31, 53, 0.25);
-  filter: blur(1px);
-  transform: rotate(12deg);
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.85;
-}
-
-.privacy-arc-right {
-  position: absolute;
-  top: -10%;
-  right: -180px;
-  width: 450px;
-  height: 950px;
-  border-radius: 50%;
-  border-left: 3px solid rgba(255, 31, 53, 0.7);
-  box-shadow: -15px 0 60px rgba(255, 31, 53, 0.45), inset 10px 0 40px rgba(255, 31, 53, 0.25);
-  filter: blur(1px);
-  transform: rotate(-12deg);
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.85;
 }
 
 .privacy-container {
@@ -1874,72 +1631,14 @@ button, input, select, textarea {
   transform: scale(1.03);
 }
 
-.privacy-neon-floor {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 110px;
-  background: radial-gradient(ellipse at 50% 100%, rgba(255, 31, 53, 0.35) 0%, rgba(255, 31, 53, 0.07) 50%, transparent 80%), linear-gradient(to top, rgba(255, 31, 53, 0.2) 0%, transparent 100%);
-  pointer-events: none;
-  border-bottom: 2px solid rgba(255, 31, 53, 0.85);
-  box-shadow: 0 0 35px rgba(255, 31, 53, 0.55);
-  z-index: 1;
-}
-
 /* ==========================================================================
    SECTION 07 — FINAL CTA BANNER
    ========================================================================== */
 .final-cta-section {
   padding: 100px 0 120px;
   position: relative;
-  background: #040406;
+  background: #040406 url('../assets/section-backgrounds/07.png') no-repeat center center / cover;
   overflow: hidden;
-}
-
-.cta-ambient-glow {
-  position: absolute;
-  top: 30%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 1100px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(255, 31, 53, 0.16) 0%, rgba(255, 31, 53, 0.03) 50%, transparent 75%);
-  filter: blur(100px);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.cta-arc-left {
-  position: absolute;
-  top: -10%;
-  left: -180px;
-  width: 450px;
-  height: 950px;
-  border-radius: 50%;
-  border-right: 3px solid rgba(255, 31, 53, 0.7);
-  box-shadow: 15px 0 60px rgba(255, 31, 53, 0.45), inset -10px 0 40px rgba(255, 31, 53, 0.25);
-  filter: blur(1px);
-  transform: rotate(12deg);
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.85;
-}
-
-.cta-arc-right {
-  position: absolute;
-  top: -10%;
-  right: -180px;
-  width: 450px;
-  height: 950px;
-  border-radius: 50%;
-  border-left: 3px solid rgba(255, 31, 53, 0.7);
-  box-shadow: -15px 0 60px rgba(255, 31, 53, 0.45), inset 10px 0 40px rgba(255, 31, 53, 0.25);
-  filter: blur(1px);
-  transform: rotate(-12deg);
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.85;
 }
 
 .cta-container {
@@ -2207,19 +1906,6 @@ button, input, select, textarea {
   box-shadow: 0 0 25px rgba(255, 31, 53, 0.6);
   border-radius: 50%;
   pointer-events: none;
-}
-
-.cta-neon-floor {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 110px;
-  background: radial-gradient(ellipse at 50% 100%, rgba(255, 31, 53, 0.35) 0%, rgba(255, 31, 53, 0.07) 50%, transparent 80%), linear-gradient(to top, rgba(255, 31, 53, 0.2) 0%, transparent 100%);
-  pointer-events: none;
-  border-bottom: 2px solid rgba(255, 31, 53, 0.85);
-  box-shadow: 0 0 35px rgba(255, 31, 53, 0.55);
-  z-index: 1;
 }
 
 /* ==========================================================================
@@ -2665,11 +2351,6 @@ a.footer-contact-item:hover .contact-icon-box {
     gap: 20px;
   }
 
-  .features-arc-left,
-  .features-arc-right {
-    opacity: 0.35;
-  }
-
   .steps-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -2680,19 +2361,9 @@ a.footer-contact-item:hover .contact-icon-box {
     display: none;
   }
 
-  .how-arc-left,
-  .how-arc-right {
-    opacity: 0.35;
-  }
-
   .privacy-grid-layout {
     grid-template-columns: 1fr;
     gap: 48px;
-  }
-
-  .privacy-arc-left,
-  .privacy-arc-right {
-    opacity: 0.35;
   }
 
   .cta-grid-layout {
@@ -2724,11 +2395,6 @@ a.footer-contact-item:hover .contact-icon-box {
     transform: rotateY(-3deg) rotateX(2deg);
   }
 
-  .cta-arc-left,
-  .cta-arc-right {
-    opacity: 0.35;
-  }
-
   .footer-top-grid {
     grid-template-columns: 1fr 1fr;
     gap: 36px;
@@ -2737,11 +2403,6 @@ a.footer-contact-item:hover .contact-icon-box {
   .showcase-grid-layout {
     grid-template-columns: 1fr;
     gap: 48px;
-  }
-
-  .showcase-arc-left,
-  .showcase-arc-right {
-    opacity: 0.35;
   }
 
   .showcase-display-frame {
@@ -2810,11 +2471,6 @@ a.footer-contact-item:hover .contact-icon-box {
     display: inline;
   }
 
-  .features-arc-left,
-  .features-arc-right {
-    display: none;
-  }
-
   .feature-desc {
     min-height: auto;
   }
@@ -2823,11 +2479,6 @@ a.footer-contact-item:hover .contact-icon-box {
     display: grid;
     grid-template-columns: 1fr;
     gap: 16px;
-  }
-
-  .how-arc-left,
-  .how-arc-right {
-    display: none;
   }
 
   .showcase-grid-layout {
@@ -2906,11 +2557,6 @@ a.footer-contact-item:hover .contact-icon-box {
     padding: 8px 10px;
   }
 
-  .showcase-arc-left,
-  .showcase-arc-right {
-    display: none;
-  }
-
   .privacy-grid-layout {
     display: flex;
     flex-direction: column;
@@ -2961,11 +2607,6 @@ a.footer-contact-item:hover .contact-icon-box {
   .legal-action-link {
     width: 100%;
     justify-content: center;
-  }
-
-  .privacy-arc-left,
-  .privacy-arc-right {
-    display: none;
   }
 
   .final-cta-panel {
@@ -3058,11 +2699,6 @@ a.footer-contact-item:hover .contact-icon-box {
 
   .cta-display-frame {
     transform: none;
-  }
-
-  .cta-arc-left,
-  .cta-arc-right {
-    display: none;
   }
 
   .footer-top-grid {

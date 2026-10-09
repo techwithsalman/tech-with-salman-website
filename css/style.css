@@ -473,129 +473,39 @@ button, input, select, textarea {
 }
 
 /* ==========================================================================
-   SECTION 01 — HERO SECTION (CINEMATIC INTEGRATED BANNER)
+   SECTION 01 — HERO SECTION
    ========================================================================== */
-.hero-section {
-  position: relative;
-  min-height: clamp(760px, 92vh, 920px);
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  padding-top: calc(var(--nav-height) + 20px);
-  padding-bottom: 70px;
-  background-color: var(--bg-main);
-}
-
-/* Background Ambient Lighting Layer */
-.hero-cinematic-bg-layer {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
-  overflow: hidden;
-}
-
-.hero-bg-ambient-bloom {
-  position: absolute;
-  top: 50%;
-  right: 18%;
-  transform: translateY(-50%);
-  width: 780px;
-  height: 680px;
-  background: radial-gradient(circle, rgba(255, 31, 53, 0.24) 0%, rgba(139, 0, 16, 0.08) 50%, transparent 72%);
-  filter: blur(80px);
-}
-
-/* Integrated Artwork Canvas (Right Side Cinematic Background Artwork) */
-.hero-bg-artwork-canvas {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 64%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  pointer-events: none;
-}
-
-.hero-cinematic-artwork-img {
-  height: 90%;
-  max-height: 720px;
-  width: auto;
-  max-width: 100%;
-  object-fit: contain;
-  object-position: right center;
-  display: block;
-  filter: drop-shadow(0 0 50px rgba(255, 31, 53, 0.28));
-  /* Smooth edge feathering to seamlessly blend into dark background */
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.8) 18%, #000 35%, #000 95%, transparent 100%),
-                      linear-gradient(to bottom, transparent 0%, #000 6%, #000 94%, transparent 100%);
-  -webkit-mask-composite: destination-in;
-  mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.8) 18%, #000 35%, #000 95%, transparent 100%),
-              linear-gradient(to bottom, transparent 0%, #000 6%, #000 94%, transparent 100%);
-  mask-composite: intersect;
-}
-
-/* Multi-Directional Gradient Blend Fades — 100% Invisible Boundary */
-.hero-fade-left {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 32%;
-  background: linear-gradient(to right, var(--bg-main) 0%, rgba(5, 5, 7, 0.85) 35%, rgba(5, 5, 7, 0) 100%);
-  pointer-events: none;
-}
-
-.hero-fade-bottom {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 90px;
-  background: linear-gradient(to bottom, rgba(5, 5, 7, 0) 0%, var(--bg-main) 100%);
-  pointer-events: none;
-}
-
-.hero-fade-top {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 70px;
-  background: linear-gradient(to top, rgba(5, 5, 7, 0) 0%, var(--bg-main) 100%);
-  pointer-events: none;
-}
-
-.hero-fade-right {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 4%;
-  background: linear-gradient(to right, rgba(5, 5, 7, 0) 0%, var(--bg-main) 100%);
-  pointer-events: none;
-}
-
-/* Foreground Container & Content */
 .hero-container {
-  position: relative;
-  z-index: 5;
   max-width: 1540px;
   width: 100%;
   padding-left: clamp(20px, 3.5vw, 48px);
   padding-right: clamp(20px, 3.5vw, 48px);
 }
 
+.hero-section {
+  position: relative;
+  min-height: clamp(740px, 90vh, 880px);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding-top: calc(var(--nav-height) + 30px);
+  padding-bottom: 70px;
+  background-color: var(--bg-main);
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 1.15fr;
+  gap: clamp(32px, 4vw, 64px);
+  align-items: center;
+  width: 100%;
+}
+
 .hero-content-col {
-  max-width: 610px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  z-index: 3;
 }
 
 .hero-badge-pill {
@@ -611,18 +521,24 @@ button, input, select, textarea {
   letter-spacing: 1.5px;
   color: #ff4d61;
   text-transform: uppercase;
-  margin-bottom: 22px;
+  margin-bottom: 20px;
   box-shadow: 0 0 16px rgba(255, 31, 53, 0.15);
 }
 
 .hero-heading {
   font-family: var(--font-heading);
-  font-size: clamp(2.5rem, 3.8vw, 4.3rem);
+  font-size: clamp(2.35rem, 3.2vw, 3.85rem);
   font-weight: 800;
-  line-height: 1.12;
+  line-height: 1.15;
   color: var(--text-white);
   letter-spacing: -0.025em;
   margin-bottom: 20px;
+  max-width: 630px;
+}
+
+.heading-line {
+  display: inline-block;
+  white-space: nowrap;
 }
 
 .gradient-red-text {
@@ -633,11 +549,11 @@ button, input, select, textarea {
 }
 
 .hero-lead {
-  font-size: clamp(0.95rem, 1.15vw, 1.1rem);
+  font-size: clamp(0.95rem, 1.05vw, 1.05rem);
   color: var(--text-muted);
-  line-height: 1.65;
+  line-height: 1.62;
   margin-bottom: 28px;
-  max-width: 530px;
+  max-width: 590px;
 }
 
 .hero-actions {
@@ -645,7 +561,7 @@ button, input, select, textarea {
   flex-wrap: wrap;
   gap: 14px;
   align-items: center;
-  margin-bottom: 28px;
+  margin-bottom: 22px;
 }
 
 .btn-primary.hero-btn-main {
@@ -707,57 +623,11 @@ button, input, select, textarea {
   justify-content: center;
 }
 
-/* Feature Chips Under CTAs */
-.hero-features-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 26px;
-  width: 100%;
-}
-
-.hero-feature-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  padding: 6px 14px 6px 8px;
-  background: rgba(16, 16, 22, 0.75);
-  border: 1px solid rgba(255, 31, 53, 0.22);
-  border-radius: var(--radius-pill);
-  font-size: 0.785rem;
-  font-weight: 600;
-  color: #e6e6f0;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
-  transition: all var(--transition-fast);
-}
-
-.hero-feature-chip:hover {
-  border-color: rgba(255, 31, 53, 0.45);
-  background: rgba(24, 20, 28, 0.9);
-  transform: translateY(-1px);
-}
-
-.chip-icon-circle {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #ff2a3f, #c70014);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  flex-shrink: 0;
-  box-shadow: 0 0 10px rgba(255, 31, 53, 0.4);
-}
-
 /* Social Proof Avatars */
 .hero-social-proof {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding-top: 6px;
 }
 
 .avatar-group {
@@ -802,6 +672,42 @@ button, input, select, textarea {
   font-size: 0.8rem;
   color: #8e8e9f;
   font-weight: 500;
+}
+
+/* Right Column: Transparent Showcase Mockup */
+.hero-visual-col {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  z-index: 2;
+}
+
+.hero-visual-glow {
+  position: absolute;
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 31, 53, 0.2) 0%, rgba(139, 0, 16, 0.05) 50%, transparent 70%);
+  filter: blur(60px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-showcase-img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: auto;
+  max-width: 740px;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 20px 45px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 35px rgba(255, 31, 53, 0.22));
+  transition: transform var(--transition-smooth);
+}
+
+.hero-showcase-img:hover {
+  transform: scale(1.02);
 }
 
 /* ==========================================================================
@@ -1413,17 +1319,18 @@ button, input, select, textarea {
 /* ==========================================================================
    RESPONSIVE MEDIA QUERIES
    ========================================================================== */
-@media (max-width: 1280px) {
-  .hero-bg-artwork-canvas {
-    width: 60%;
-  }
-
-  .hero-content-col {
-    max-width: 540px;
+@media (max-width: 1200px) {
+  .hero-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
   }
 
   .hero-heading {
-    font-size: clamp(2.3rem, 3.4vw, 3.6rem);
+    font-size: clamp(2.2rem, 3.2vw, 3.4rem);
+  }
+
+  .hero-lead {
+    max-width: 100%;
   }
 }
 
@@ -1431,57 +1338,24 @@ button, input, select, textarea {
   .hero-section {
     min-height: auto;
     padding-top: calc(var(--nav-height) + 24px);
-    padding-bottom: 50px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    padding-bottom: 60px;
   }
 
-  .hero-cinematic-bg-layer {
-    position: relative;
-    inset: auto;
-    width: 100%;
-    height: auto;
-    margin-top: 36px;
-    display: flex;
-    justify-content: center;
-  }
-
-  .hero-bg-ambient-bloom {
-    top: 50%;
-    right: 50%;
-    transform: translate(50%, -50%);
-    width: 550px;
-    height: 450px;
-  }
-
-  .hero-bg-artwork-canvas {
-    position: relative;
-    top: auto;
-    right: auto;
-    bottom: auto;
-    width: 100%;
-    max-width: 720px;
-    height: auto;
-    justify-content: center;
-  }
-
-  .hero-cinematic-artwork-img {
-    width: 100%;
-    height: auto;
-    max-height: 480px;
-    object-position: center;
-  }
-
-  .hero-fade-left {
-    width: 15%;
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
   }
 
   .hero-content-col {
-    max-width: 680px;
-    margin: 0 auto;
     align-items: center;
     text-align: center;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .heading-line {
+    white-space: normal;
   }
 
   .hero-lead {
@@ -1494,12 +1368,13 @@ button, input, select, textarea {
     justify-content: center;
   }
 
-  .hero-features-chips {
+  .hero-social-proof {
     justify-content: center;
   }
 
-  .hero-social-proof {
-    justify-content: center;
+  .hero-showcase-img {
+    max-width: 620px;
+    margin: 0 auto;
   }
 
   .platforms-grid {
@@ -1542,12 +1417,17 @@ button, input, select, textarea {
 @media (max-width: 640px) {
   .hero-section {
     padding-top: calc(var(--nav-height) + 16px);
-    padding-bottom: 40px;
+    padding-bottom: 45px;
   }
 
   .hero-heading {
     font-size: 2.15rem;
-    line-height: 1.15;
+    line-height: 1.18;
+  }
+
+  .heading-line {
+    display: inline;
+    white-space: normal;
   }
 
   .hero-actions {
@@ -1563,34 +1443,14 @@ button, input, select, textarea {
     justify-content: center;
   }
 
-  .hero-features-chips {
-    flex-direction: column;
-    width: 100%;
-    gap: 8px;
-  }
-
-  .hero-feature-chip {
-    width: 100%;
-    justify-content: flex-start;
-  }
-
   .hero-social-proof {
     flex-direction: column;
     text-align: center;
     gap: 8px;
   }
 
-  .hero-cinematic-bg-layer {
-    margin-top: 24px;
-  }
-
-  .hero-cinematic-artwork-img {
-    max-height: 320px;
-  }
-
-  .hero-fade-left,
-  .hero-fade-right {
-    display: none;
+  .hero-showcase-img {
+    max-width: 100%;
   }
 
   .platforms-grid {

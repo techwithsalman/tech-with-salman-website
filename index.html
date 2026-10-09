@@ -601,57 +601,162 @@
          SECTION 05 — PRODUCT WORKFLOW / DASHBOARD SHOWCASE
          ========================================================================== -->
     <section class="showcase-section" id="showcase">
-      <div class="container">
+      <div class="showcase-ambient-glow" aria-hidden="true"></div>
+      <div class="showcase-arc-left" aria-hidden="true"></div>
+      <div class="showcase-arc-right" aria-hidden="true"></div>
+
+      <div class="container showcase-container">
         
-        <div class="showcase-card">
-          <div class="showcase-grid">
+        <div class="showcase-grid-layout">
+          
+          <!-- LEFT: Product Visual Composition -->
+          <div class="showcase-visual-col">
+            <div class="showcase-stage-wrapper">
+              
+              <!-- Main 3D Display Frame with real dashboard screenshot -->
+              <div class="showcase-display-frame">
+                <div class="showcase-screen-glow" aria-hidden="true"></div>
+                <img src="assets/social_media_os_dashboard.png" alt="Social Media OS Unified Dashboard" class="showcase-dashboard-screen" width="1280" height="720">
+              </div>
+
+              <!-- Floating Card 1: Content Calendar -->
+              <div class="showcase-floating-card card-calendar" aria-hidden="true">
+                <div class="floating-card-title">Content Calendar</div>
+                <div class="mini-cal-grid">
+                  <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+                  <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span>
+                  <span>8</span><span>9</span><span class="active-cal-day">10</span><span>11</span><span>12</span><span>13</span><span>14</span>
+                  <span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span>
+                </div>
+              </div>
+
+              <!-- Floating Card 2: Connected Accounts -->
+              <div class="showcase-floating-card card-accounts" aria-hidden="true">
+                <div class="floating-card-title">Connected Accounts</div>
+                <div class="mini-accounts-row">
+                  <span class="mini-acc-dot ig-dot">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#ffffff" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><circle cx="12" cy="12" r="4"></circle></svg>
+                  </span>
+                  <span class="mini-acc-dot tt-dot">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="#ffffff"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.32 0 .62.05.91.14V8.9a6.33 6.33 0 0 0-.91-.07 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V9.45a8.27 8.27 0 0 0 4.76 1.51V7.51a4.86 4.86 0 0 1-1-.82z"/></svg>
+                  </span>
+                  <span class="mini-acc-dot fb-dot">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="#ffffff"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                  </span>
+                  <span class="mini-acc-dot yt-dot">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="#ffffff"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="#0f0f15"></polygon></svg>
+                  </span>
+                  <span class="mini-acc-badge">+4</span>
+                </div>
+              </div>
+
+              <!-- Floating Card 3: Publishing Queue Status -->
+              <div class="showcase-floating-card card-queue" aria-hidden="true">
+                <div class="floating-queue-header">
+                  <span class="queue-status-dot"></span>
+                  <span class="queue-status-title">Publishing Queue</span>
+                </div>
+                <div class="queue-status-body">
+                  <div class="queue-main-val">3 Posts Queued</div>
+                  <div class="queue-sub-val">Next: 10:00 AM · Scheduled</div>
+                </div>
+              </div>
+
+              <!-- Stage Base / Reflected Floor under Display -->
+              <div class="showcase-base-pedestal" aria-hidden="true"></div>
+            </div>
+          </div>
+
+          <!-- RIGHT: Content & Feature Rows -->
+          <div class="showcase-content-col">
+            <div class="badge-pill">
+              <span class="badge-dot"></span>
+              <span>PRODUCT SHOWCASE</span>
+            </div>
             
-            <div class="showcase-preview-box">
-              <img src="assets/social_media_os_dashboard.png" alt="Social Media OS Application Preview" class="dashboard-screen-img" width="1280" height="720">
+            <h2 class="showcase-title">
+              One Workspace.<br>
+              <span class="gradient-red-text">Multiple Social Channels.</span>
+            </h2>
+            
+            <p class="showcase-desc">
+              Eliminate the friction of switching between multiple browser tabs and individual accounts. Social Media OS organizes content preparation, scheduling, publishing, and channel management into one focused workspace.
+            </p>
+
+            <div class="showcase-feature-rows">
+              
+              <!-- Feature 1 -->
+              <div class="showcase-feature-row">
+                <div class="showcase-feature-icon-box">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                  </svg>
+                </div>
+                <div class="showcase-feature-text">
+                  <h3 class="showcase-feature-title">Unified Multi-Platform Workspace</h3>
+                  <p class="showcase-feature-desc">Manage your supported social accounts and publishing workflow from one central dashboard.</p>
+                </div>
+              </div>
+
+              <!-- Feature 2 -->
+              <div class="showcase-feature-row">
+                <div class="showcase-feature-icon-box">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                  </svg>
+                </div>
+                <div class="showcase-feature-text">
+                  <h3 class="showcase-feature-title">Direct Media Upload &amp; Scheduling</h3>
+                  <p class="showcase-feature-desc">Upload media, prepare content, and schedule supported posts across connected channels.</p>
+                </div>
+              </div>
+
+              <!-- Feature 3 -->
+              <div class="showcase-feature-row">
+                <div class="showcase-feature-icon-box">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2.5" ry="2.5"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                </div>
+                <div class="showcase-feature-text">
+                  <h3 class="showcase-feature-title">Interactive Content Calendar</h3>
+                  <p class="showcase-feature-desc">Plan, organize and review upcoming scheduled content from one visual calendar.</p>
+                </div>
+              </div>
+
+              <!-- Feature 4 -->
+              <div class="showcase-feature-row">
+                <div class="showcase-feature-icon-box">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="9.5"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                </div>
+                <div class="showcase-feature-text">
+                  <h3 class="showcase-feature-title">Automated Post Queue &amp; Publishing</h3>
+                  <p class="showcase-feature-desc">Manage scheduled publishing queues and track completed publishing activity from one workspace.</p>
+                </div>
+              </div>
+
             </div>
 
-            <div class="showcase-info">
-              <div class="badge-pill">
-                <span class="badge-dot"></span>
-                <span>PRODUCT SHOWCASE</span>
-              </div>
-              <h2>
-                One Workspace.<br>
-                <span class="gradient-red-text">Multiple Social Channels.</span>
-              </h2>
-              <p>
-                Eliminate the friction of switching between multiple browser tabs and individual accounts. Social Media OS organizes content preparation, scheduling, and channel management into one focused interface.
-              </p>
-
-              <ul class="showcase-checklist">
-                <li>
-                  <span class="check-icon-box">✓</span>
-                  <span>Unified multi-platform publishing workspace</span>
-                </li>
-                <li>
-                  <span class="check-icon-box">✓</span>
-                  <span>Direct media upload and batch scheduling</span>
-                </li>
-                <li>
-                  <span class="check-icon-box">✓</span>
-                  <span>Interactive visual content calendar</span>
-                </li>
-                <li>
-                  <span class="check-icon-box">✓</span>
-                  <span>Automated post queue &amp; published archive</span>
-                </li>
-              </ul>
-
-              <a href="https://app.techwithsalman.online" class="btn-primary" target="_blank" rel="noopener noreferrer">
-                <span>Explore Social Media OS</span>
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            <div class="showcase-actions">
+              <a href="https://app.techwithsalman.online" class="showcase-cta-btn" target="_blank" rel="noopener noreferrer">
+                <span>Explore Social Media OS</span> <span class="btn-arrow">→</span>
               </a>
             </div>
 
           </div>
+
         </div>
 
       </div>
+      <div class="showcase-neon-floor" aria-hidden="true"></div>
     </section>
 
     <!-- ==========================================================================

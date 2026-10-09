@@ -879,43 +879,151 @@
          SECTION 07 — FINAL CTA BANNER
          ========================================================================== -->
     <section class="final-cta-section" id="cta">
-      <div class="container">
+      <div class="cta-ambient-glow" aria-hidden="true"></div>
+      <div class="cta-arc-left" aria-hidden="true"></div>
+      <div class="cta-arc-right" aria-hidden="true"></div>
+
+      <div class="container cta-container">
         
         <div class="final-cta-panel">
           <div class="cta-panel-glow" aria-hidden="true"></div>
           
-          <div class="cta-panel-content">
-            <div class="cta-logo-emblem">
-              <img src="assets/images/tws-logo.png" alt="Tech With Salman Emblem" width="68" height="68">
+          <div class="cta-grid-layout">
+            
+            <!-- LEFT: CTA Content & Benefits -->
+            <div class="cta-content-col">
+              
+              <div class="badge-pill">
+                <span class="badge-dot"></span>
+                <span>READY TO GET STARTED?</span>
+              </div>
+
+              <h2 class="cta-heading">
+                Take Control of Your<br>
+                <span class="gradient-red-text">Social Media Workflow</span>
+              </h2>
+
+              <p class="cta-desc">
+                Bring your supported social channels into one workspace and simplify how you prepare, schedule and manage content across all platforms.
+              </p>
+
+              <div class="cta-buttons-row">
+                <a href="https://app.techwithsalman.online" class="btn-primary cta-btn-main" target="_blank" rel="noopener noreferrer">
+                  <span>Open Social Media OS</span>
+                  <span class="btn-arrow">→</span>
+                </a>
+                <a href="#features" class="btn-secondary cta-btn-sub">
+                  <span>Explore Features</span>
+                  <span class="btn-arrow">→</span>
+                </a>
+              </div>
+
+              <!-- 4 Benefit Items Row -->
+              <div class="cta-benefits-grid">
+                
+                <!-- Benefit 1 -->
+                <div class="cta-benefit-item">
+                  <div class="cta-benefit-icon-box">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+                    </svg>
+                  </div>
+                  <div class="cta-benefit-content">
+                    <h3 class="cta-benefit-title">Save Time</h3>
+                    <p class="cta-benefit-desc">Reduce repetitive publishing tasks and keep your workflow focused.</p>
+                  </div>
+                </div>
+
+                <!-- Benefit 2 -->
+                <div class="cta-benefit-item">
+                  <div class="cta-benefit-icon-box">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="3" width="7" height="7"></rect>
+                      <rect x="14" y="3" width="7" height="7"></rect>
+                      <rect x="14" y="14" width="7" height="7"></rect>
+                      <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                  </div>
+                  <div class="cta-benefit-content">
+                    <h3 class="cta-benefit-title">Stay Organized</h3>
+                    <p class="cta-benefit-desc">Manage accounts, schedules and content from one central workspace.</p>
+                  </div>
+                </div>
+
+                <!-- Benefit 3 -->
+                <div class="cta-benefit-item">
+                  <div class="cta-benefit-icon-box">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                      <polyline points="17 6 23 6 23 12"></polyline>
+                    </svg>
+                  </div>
+                  <div class="cta-benefit-content">
+                    <h3 class="cta-benefit-title">Grow Faster</h3>
+                    <p class="cta-benefit-desc">Plan, publish and manage your content workflow more efficiently.</p>
+                  </div>
+                </div>
+
+                <!-- Benefit 4 -->
+                <div class="cta-benefit-item">
+                  <div class="cta-benefit-icon-box">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                  </div>
+                  <div class="cta-benefit-content">
+                    <h3 class="cta-benefit-title">Built for Creators</h3>
+                    <p class="cta-benefit-desc">Designed for creators, businesses and teams managing multiple social channels.</p>
+                  </div>
+                </div>
+
+              </div>
+
             </div>
 
-            <div class="badge-pill">
-              <span class="badge-dot"></span>
-              <span>READY TO GET STARTED?</span>
+            <!-- RIGHT: Real Social Media OS Dashboard Composition -->
+            <div class="cta-visual-col">
+              <div class="cta-stage-wrapper">
+                
+                <div class="cta-display-frame">
+                  <img src="assets/images/hero-showcase.png" alt="Social Media OS Real Dashboard Interface" class="cta-dashboard-screen" width="620" height="380">
+                </div>
+
+                <!-- Floating Side Platform Dock (Instagram, TikTok, Facebook, YouTube, Analytics) -->
+                <div class="cta-platform-dock" aria-hidden="true">
+                  <div class="dock-item">
+                    <img src="assets/images/icons/platforms/platform-instagram.png" alt="Instagram" width="22" height="22">
+                  </div>
+                  <div class="dock-item">
+                    <img src="assets/images/icons/platforms/platform-tiktok.png" alt="TikTok" width="22" height="22">
+                  </div>
+                  <div class="dock-item">
+                    <img src="assets/images/icons/platforms/platform-facebook.png" alt="Facebook" width="22" height="22">
+                  </div>
+                  <div class="dock-item">
+                    <img src="assets/images/icons/platforms/platform-youtube.png" alt="YouTube" width="22" height="22">
+                  </div>
+                  <div class="dock-item dock-item-analytics">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="20" x2="18" y2="10"></line>
+                      <line x1="12" y1="20" x2="12" y2="4"></line>
+                      <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                  </div>
+                </div>
+
+                <!-- Subtle Base Floor Glow -->
+                <div class="cta-visual-pedestal" aria-hidden="true"></div>
+
+              </div>
             </div>
 
-            <h2 class="cta-heading">
-              Take Control of Your <span class="gradient-red-text">Social Media Workflow</span>
-            </h2>
-
-            <p class="cta-desc">
-              Bring your supported social channels into one workspace and simplify how you prepare, schedule and manage content.
-            </p>
-
-            <div class="cta-buttons-row">
-              <a href="https://app.techwithsalman.online" class="btn-primary" target="_blank" rel="noopener noreferrer">
-                <span>Open Social Media OS</span>
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-              </a>
-              <a href="#features" class="btn-secondary">
-                <span>Explore Features</span>
-              </a>
-            </div>
           </div>
 
         </div>
 
       </div>
+      <div class="cta-neon-floor" aria-hidden="true"></div>
     </section>
   </main>
 

@@ -763,89 +763,116 @@
          SECTION 06 — TRUST / PRIVACY (CRITICAL FOR PLATFORM REVIEWERS)
          ========================================================================== -->
     <section class="trust-section" id="privacy">
-      <div class="container">
+      <div class="privacy-ambient-glow" aria-hidden="true"></div>
+      <div class="privacy-arc-left" aria-hidden="true"></div>
+      <div class="privacy-arc-right" aria-hidden="true"></div>
+
+      <div class="container privacy-container">
         
-        <div class="section-header">
-          <div class="badge-pill">
-            <span class="badge-dot"></span>
-            <span>PRIVACY &amp; CONTROL</span>
-          </div>
-          <h2 class="section-title">
-            Your Accounts. Your Content. <span class="gradient-red-text">Your Control.</span>
-          </h2>
-          <p class="section-subtitle">
-            Social Media OS is built with transparency and data protection at its core, utilizing official platform connection flows.
-          </p>
-        </div>
-
-        <div class="trust-cards-grid">
+        <div class="privacy-grid-layout">
           
-          <div class="trust-card">
-            <div class="trust-card-icon">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-              </svg>
+          <!-- LEFT: Content & 2x2 Privacy Cards -->
+          <div class="privacy-content-col">
+            <div class="badge-pill">
+              <span class="badge-dot"></span>
+              <span>PRIVACY &amp; CONTROL</span>
             </div>
-            <h3 class="trust-card-title">Secure Account Connections</h3>
-            <p class="trust-card-desc">
-              Accounts are connected using standard OAuth authentication flows provided by each platform. We never ask for or store your account passwords.
+            
+            <h2 class="privacy-title">
+              Your Accounts. Your Content.<br>
+              <span class="gradient-red-text">Your Control.</span>
+            </h2>
+            
+            <p class="privacy-desc">
+              Social Media OS is built with transparency and data protection at its core, utilizing official platform connection flows.
             </p>
+
+            <div class="privacy-cards-grid">
+              
+              <!-- Card 1 -->
+              <div class="privacy-card">
+                <div class="privacy-card-icon">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                </div>
+                <h3 class="privacy-card-title">Secure Account Connections</h3>
+                <p class="privacy-card-desc">
+                  Accounts are connected using standard OAuth authentication flows provided by each platform. We never ask for or store your account passwords.
+                </p>
+              </div>
+
+              <!-- Card 2 -->
+              <div class="privacy-card">
+                <div class="privacy-card-icon">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  </svg>
+                </div>
+                <h3 class="privacy-card-title">Transparent Permissions</h3>
+                <p class="privacy-card-desc">
+                  We only request permissions strictly necessary for publishing and content management features that you explicitly choose to configure.
+                </p>
+              </div>
+
+              <!-- Card 3 -->
+              <div class="privacy-card">
+                <div class="privacy-card-icon">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </div>
+                <h3 class="privacy-card-title">Privacy Controls</h3>
+                <p class="privacy-card-desc">
+                  Your media, captions, and account data remain your property. We do not sell your personal data or share it with third-party advertisers.
+                </p>
+              </div>
+
+              <!-- Card 4 -->
+              <div class="privacy-card">
+                <div class="privacy-card-icon">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                </div>
+                <h3 class="privacy-card-title">Data Deletion Support</h3>
+                <p class="privacy-card-desc">
+                  Disconnect your accounts anytime and access clear public instructions for requesting deletion of applicable stored data.
+                </p>
+              </div>
+
+            </div>
+
+            <!-- Legal Quick Action Links -->
+            <div class="legal-quick-actions">
+              <a href="/privacy-policy.html" class="legal-action-link">
+                <span>Read Privacy Policy</span> <span class="btn-arrow">→</span>
+              </a>
+              <a href="/terms.html" class="legal-action-link">
+                <span>Read Terms of Service</span> <span class="btn-arrow">→</span>
+              </a>
+              <a href="/data-deletion.html" class="legal-action-link">
+                <span>Data Deletion Instructions</span> <span class="btn-arrow">→</span>
+              </a>
+            </div>
+
           </div>
 
-          <div class="trust-card">
-            <div class="trust-card-icon">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-              </svg>
+          <!-- RIGHT: 3D Security Shield Visual -->
+          <div class="privacy-visual-col">
+            <div class="privacy-stage-wrapper">
+              <div class="privacy-shield-glow" aria-hidden="true"></div>
+              <img src="assets/images/icons/privacy/security-shield-visual.png" alt="Privacy and Data Protection Architecture" class="privacy-shield-img" width="440" height="475">
             </div>
-            <h3 class="trust-card-title">Transparent Permissions</h3>
-            <p class="trust-card-desc">
-              We only request permissions strictly necessary for publishing and content management features that you explicitly choose to configure.
-            </p>
           </div>
 
-          <div class="trust-card">
-            <div class="trust-card-icon">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                <circle cx="12" cy="12" r="3"></circle>
-              </svg>
-            </div>
-            <h3 class="trust-card-title">Privacy Controls</h3>
-            <p class="trust-card-desc">
-              Your media, captions, and account data remain your property. We do not sell your personal data or share it with third-party advertisers.
-            </p>
-          </div>
-
-          <div class="trust-card">
-            <div class="trust-card-icon">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="3 6 5 6 21 6"></polyline>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-              </svg>
-            </div>
-            <h3 class="trust-card-title">Data Deletion Support</h3>
-            <p class="trust-card-desc">
-              Disconnect your accounts anytime with one click. Clear data deletion instructions and mechanisms are readily accessible on our public website.
-            </p>
-          </div>
-
-        </div>
-
-        <div class="legal-quick-actions">
-          <a href="/privacy-policy.html" class="legal-action-link">
-            <span>Read Privacy Policy</span> <span>→</span>
-          </a>
-          <a href="/terms.html" class="legal-action-link">
-            <span>Read Terms of Service</span> <span>→</span>
-          </a>
-          <a href="/data-deletion.html" class="legal-action-link">
-            <span>Data Deletion Instructions</span> <span>→</span>
-          </a>
         </div>
 
       </div>
+      <div class="privacy-neon-floor" aria-hidden="true"></div>
     </section>
 
     <!-- ==========================================================================

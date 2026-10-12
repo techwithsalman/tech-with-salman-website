@@ -276,21 +276,22 @@ button, input, select, textarea {
   left: 0;
   right: 0;
   z-index: 1000;
-  padding: 16px 24px;
+  padding: 16px clamp(20px, 3.5vw, 48px);
   transition: all var(--transition-smooth);
 }
 
 .site-header.scrolled {
-  padding: 10px 24px;
+  padding: 10px clamp(20px, 3.5vw, 48px);
 }
 
 .nav-capsule {
-  max-width: var(--max-w-container);
+  max-width: 1444px;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 20px;
+  padding: 10px 24px;
   background: rgba(12, 12, 16, 0.82);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -357,8 +358,9 @@ button, input, select, textarea {
 .nav-menu-desktop {
   display: flex;
   align-items: center;
-  gap: 22px;
+  gap: clamp(16px, 1.5vw, 24px);
   list-style: none;
+  white-space: nowrap;
 }
 
 .nav-link {
@@ -434,8 +436,8 @@ button, input, select, textarea {
 .mobile-nav-drawer {
   position: fixed;
   top: 86px;
-  left: 20px;
-  right: 20px;
+  left: clamp(20px, 3.5vw, 48px);
+  right: clamp(20px, 3.5vw, 48px);
   background: rgba(12, 12, 18, 0.98);
   backdrop-filter: blur(25px);
   border: 1px solid rgba(255, 31, 53, 0.25);

@@ -1,5 +1,7 @@
 ownerdomain=techwithsalman.online
 managerdomain=revbid.net
+# Google AdSense
+google.com, pub-393969405255147, DIRECT, f08c47fec0942fa0
 revbid.net, 22721, DIRECT
 # RevBid + Adagio
 adagio.io, 1397, RESELLER

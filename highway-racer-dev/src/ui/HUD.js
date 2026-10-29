@@ -13,6 +13,12 @@ export class HUD {
     this.onResumeGame = null;
     this.onRestartGame = null;
     this.onMainMenu = null;
+    this.onGearToggle = null;
+    this.onSwitchCamera = null;
+
+    this.popupTimer = null;
+    this.levelUpTimer = null;
+    this.maxRecordedSpeed = 0;
 
     this.buildDOM();
     this.bindEvents();
@@ -25,6 +31,11 @@ export class HUD {
       <div id="hud-layer" class="hud-overlay hud-hidden">
         <!-- Top Stats Bar -->
         <div class="hud-top-bar">
+          <div class="hud-stat-box">
+            <span class="hud-stat-label">LEVEL</span>
+            <span class="hud-stat-val" id="hud-level">LV 1</span>
+          </div>
+
           <div class="hud-stat-box">
             <span class="hud-stat-label">DISTANCE</span>
             <span class="hud-stat-val" id="hud-distance">0 m</span>
@@ -54,7 +65,27 @@ export class HUD {
           </div>
         </div>
 
-        <div class="route-caption"><span>M-2 / NORTHBOUND</span><b>OPEN ROAD. FULL FOCUS.</b><small>WASD / ARROWS · DRIVE &nbsp; C · CAMERA &nbsp; R · RESTART</small></div>
+        <div class="route-caption">
+          <span>M-2 MOTORWAY · NORTHBOUND</span>
+          <b>CURVED HIGHWAY · DUAL CARRIAGEWAY</b>
+          <small>WASD / ARROWS · STEER &nbsp; SHIFT · NITRO &nbsp; SPACE · DRIFT &nbsp; G · GEAR &nbsp; C · CAMERA &nbsp; R · RESTART</small>
+        </div>
+
+        <!-- Wrong-Way Warning Banner -->
+        <div id="hud-wrong-way-banner" class="hud-wrong-way-banner hidden">
+          <span class="wrong-way-flash">⚠</span>
+          <div class="wrong-way-body">
+            <span class="wrong-way-title">WRONG WAY!</span>
+            <span class="wrong-way-sub">ONCOMING TRAFFIC · +2X DANGER BONUS</span>
+          </div>
+        </div>
+
+        <!-- Level-Up Notification Toast -->
+        <div id="hud-level-up-popup" class="hud-level-up-popup hidden">
+          <div class="level-up-eyebrow">HIGHWAY SECTION CLEARED</div>
+          <div class="level-up-title" id="hud-level-up-title">LEVEL 2</div>
+          <div class="level-up-sub" id="hud-level-up-desc">CURVES SHARPEN · TRAFFIC EXPANDS</div>
+        </div>
 
         <!-- Floating Near-Miss Alert Toast -->
         <div id="hud-near-miss-popup" class="hud-near-miss-popup hidden">
@@ -62,16 +93,37 @@ export class HUD {
           <span class="popup-pts" id="popup-pts">+250 PTS</span>
         </div>
 
-        <!-- Speedometer Gauge (Bottom Right) -->
-        <div class="hud-speedometer-box">
-          <div class="speedo-dial">
-            <svg class="speedo-svg" viewBox="0 0 160 160">
-              <circle class="speedo-bg-track" cx="80" cy="80" r="68" />
-              <circle class="speedo-fill-track" id="speedo-fill" cx="80" cy="80" r="68" />
-            </svg>
-            <div class="speedo-center">
-              <span class="speedo-number" id="hud-speed-num">0</span>
-              <span class="speedo-unit">KM/H</span>
+        <!-- Floating Drift Alert Toast -->
+        <div id="hud-drift-popup" class="hud-drift-popup hidden">
+          <span class="drift-title">DRIFT!</span>
+          <span class="drift-pts" id="hud-drift-pts">+120 PTS</span>
+        </div>
+
+        <!-- Speedometer, Nitro Gauge & Gear Cluster (Bottom Right) -->
+        <div class="hud-telemetry-cluster">
+          <div class="hud-gear-and-nos">
+            <button id="hud-gear" class="hud-gear-pill" title="Current Gear · Tap to shift (G)">D</button>
+            <div class="hud-nitro-gauge" title="Nitro Boost (Shift)">
+              <div class="nitro-header">
+                <span class="nitro-label">NOS</span>
+                <span class="nitro-pct" id="hud-nitro-pct">100%</span>
+              </div>
+              <div class="nitro-track">
+                <div id="hud-nitro-fill" class="nitro-fill" style="width: 100%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hud-speedometer-box">
+            <div class="speedo-dial">
+              <svg class="speedo-svg" viewBox="0 0 160 160">
+                <circle class="speedo-bg-track" cx="80" cy="80" r="68" />
+                <circle class="speedo-fill-track" id="speedo-fill" cx="80" cy="80" r="68" />
+              </svg>
+              <div class="speedo-center">
+                <span class="speedo-number" id="hud-speed-num">0</span>
+                <span class="speedo-unit">KM/H</span>
+              </div>
             </div>
           </div>
         </div>
@@ -92,36 +144,56 @@ export class HUD {
               </svg>
             </button>
           </div>
+
           <div class="mobile-right-cluster">
-            <button id="touch-brake" class="touch-btn pedal-btn pedal-brake" aria-label="Brake">
-              <svg viewBox="0 0 60 70" class="touch-icon pedal-icon pedal-brake-icon" aria-hidden="true">
-                <rect x="4" y="4" width="52" height="62" rx="9" fill="rgba(38,12,16,0.92)" stroke="#ef4050" stroke-width="1.8"/>
-                <rect x="8" y="8" width="44" height="54" rx="6" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
-                <rect x="12" y="15" width="36" height="4.5" rx="2.2" fill="#ef4050" opacity="0.95"/>
-                <rect x="12" y="24" width="36" height="4.5" rx="2.2" fill="#ef4050" opacity="0.95"/>
-                <rect x="12" y="33" width="36" height="4.5" rx="2.2" fill="#ef4050" opacity="0.95"/>
-                <rect x="12" y="42" width="36" height="4.5" rx="2.2" fill="#ef4050" opacity="0.95"/>
-                <circle cx="18" cy="54" r="2.5" fill="#ff6b7a"/>
-                <circle cx="30" cy="54" r="2.5" fill="#ff6b7a"/>
-                <circle cx="42" cy="54" r="2.5" fill="#ff6b7a"/>
-              </svg>
-              <span class="pedal-sub-label">BRAKE</span>
-            </button>
-            <button id="touch-throttle" class="touch-btn pedal-btn pedal-gas" aria-label="Accelerate">
-              <svg viewBox="0 0 50 80" class="touch-icon pedal-icon pedal-gas-icon" aria-hidden="true">
-                <path d="M 7 10 Q 7 5 12 5 L 38 5 Q 43 5 43 10 L 41 70 Q 41 75 36 75 L 14 75 Q 9 75 9 70 Z" fill="rgba(12,30,38,0.92)" stroke="#4deeea" stroke-width="1.8"/>
-                <line x1="16" y1="14" x2="16" y2="65" stroke="#4deeea" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
-                <line x1="25" y1="12" x2="25" y2="67" stroke="#4deeea" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
-                <line x1="34" y1="14" x2="34" y2="65" stroke="#4deeea" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
-                <circle cx="20.5" cy="22" r="1.6" fill="#ffffff" opacity="0.8"/>
-                <circle cx="29.5" cy="22" r="1.6" fill="#ffffff" opacity="0.8"/>
-                <circle cx="20.5" cy="38" r="1.6" fill="#ffffff" opacity="0.8"/>
-                <circle cx="29.5" cy="38" r="1.6" fill="#ffffff" opacity="0.8"/>
-                <circle cx="20.5" cy="54" r="1.6" fill="#ffffff" opacity="0.8"/>
-                <circle cx="29.5" cy="54" r="1.6" fill="#ffffff" opacity="0.8"/>
-              </svg>
-              <span class="pedal-sub-label">GAS</span>
-            </button>
+            <!-- Mobile Action Row (Nitro, Drift, Gear) -->
+            <div class="mobile-actions-row">
+              <button id="touch-gear" class="touch-action-btn gear-action-btn" aria-label="Shift Gear">
+                <span class="action-label">GEAR</span>
+                <span class="action-val" id="touch-gear-val">D</span>
+              </button>
+              <button id="touch-drift" class="touch-action-btn drift-action-btn" aria-label="Handbrake Drift">
+                <span class="action-icon">⚡</span>
+                <span class="action-label">DRIFT</span>
+              </button>
+              <button id="touch-nitro" class="touch-action-btn nitro-action-btn" aria-label="Nitro Boost">
+                <span class="action-icon">🔥</span>
+                <span class="action-label">NOS</span>
+              </button>
+            </div>
+
+            <!-- Pedals Row (Brake & Gas) -->
+            <div class="mobile-pedals-row">
+              <button id="touch-brake" class="touch-btn pedal-btn pedal-brake" aria-label="Brake / Reverse">
+                <svg viewBox="0 0 60 70" class="touch-icon pedal-icon pedal-brake-icon" aria-hidden="true">
+                  <rect x="4" y="4" width="52" height="62" rx="9" fill="rgba(38,12,16,0.92)" stroke="#ef4050" stroke-width="1.8"/>
+                  <rect x="8" y="8" width="44" height="54" rx="6" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                  <rect x="12" y="15" width="36" height="4.5" rx="2.2" fill="#ef4050" opacity="0.95"/>
+                  <rect x="12" y="24" width="36" height="4.5" rx="2.2" fill="#ef4050" opacity="0.95"/>
+                  <rect x="12" y="33" width="36" height="4.5" rx="2.2" fill="#ef4050" opacity="0.95"/>
+                  <rect x="12" y="42" width="36" height="4.5" rx="2.2" fill="#ef4050" opacity="0.95"/>
+                  <circle cx="18" cy="54" r="2.5" fill="#ff6b7a"/>
+                  <circle cx="30" cy="54" r="2.5" fill="#ff6b7a"/>
+                  <circle cx="42" cy="54" r="2.5" fill="#ff6b7a"/>
+                </svg>
+                <span class="pedal-sub-label">BRAKE</span>
+              </button>
+              <button id="touch-throttle" class="touch-btn pedal-btn pedal-gas" aria-label="Accelerate">
+                <svg viewBox="0 0 50 80" class="touch-icon pedal-icon pedal-gas-icon" aria-hidden="true">
+                  <path d="M 7 10 Q 7 5 12 5 L 38 5 Q 43 5 43 10 L 41 70 Q 41 75 36 75 L 14 75 Q 9 75 9 70 Z" fill="rgba(12,30,38,0.92)" stroke="#4deeea" stroke-width="1.8"/>
+                  <line x1="16" y1="14" x2="16" y2="65" stroke="#4deeea" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                  <line x1="25" y1="12" x2="25" y2="67" stroke="#4deeea" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                  <line x1="34" y1="14" x2="34" y2="65" stroke="#4deeea" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                  <circle cx="20.5" cy="22" r="1.6" fill="#ffffff" opacity="0.8"/>
+                  <circle cx="29.5" cy="22" r="1.6" fill="#ffffff" opacity="0.8"/>
+                  <circle cx="20.5" cy="38" r="1.6" fill="#ffffff" opacity="0.8"/>
+                  <circle cx="29.5" cy="38" r="1.6" fill="#ffffff" opacity="0.8"/>
+                  <circle cx="20.5" cy="54" r="1.6" fill="#ffffff" opacity="0.8"/>
+                  <circle cx="29.5" cy="54" r="1.6" fill="#ffffff" opacity="0.8"/>
+                </svg>
+                <span class="pedal-sub-label">GAS</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -132,7 +204,7 @@ export class HUD {
           <div class="menu-header">
             <div class="brand-tag">TECH WITH SALMAN / MOTORSPORT</div>
             <h1 class="game-title">HIGHWAY RACER <span class="accent-3d">3D</span></h1>
-            <p class="game-subtitle">The road is yours. Make every gap count.</p>
+            <p class="game-subtitle">Open road curved highway. Dual carriageway. Free steering physics.</p>
           </div>
 
           <div class="menu-stats-row">
@@ -157,22 +229,19 @@ export class HUD {
           <!-- Controls hint -->
           <div class="controls-guide">
             <div class="guide-col">
-              <span class="guide-title">DESKTOP</span>
-              <span class="guide-key"><b>W / ▲</b> Accelerate</span>
-              <span class="guide-key"><b>S / ▼</b> Brake</span>
-              <span class="guide-key"><b>A / D / ◄ / ►</b> Steer</span>
-              <span class="guide-key"><b>SPACE</b> Handbrake</span>
-              <span class="guide-key"><b>ESC</b> Pause</span>
-              <span class="guide-key"><b>C</b> Chase / Cockpit / Cinematic</span>
-              <span class="guide-key"><b>R</b> Restart</span>
+              <span class="guide-title">DESKTOP CONTROLS</span>
+              <span class="guide-key"><b>W / ▲</b> Accelerate &nbsp; <b>S / ▼</b> Brake / Reverse</span>
+              <span class="guide-key"><b>A / D / ◄ / ►</b> Free Steering (360° heading)</span>
+              <span class="guide-key"><b>SHIFT / N</b> Nitro Boost &nbsp; <b>SPACE</b> Handbrake Drift</span>
+              <span class="guide-key"><b>G</b> Shift Gear (D/R) &nbsp; <b>C</b> Camera &nbsp; <b>R</b> Restart</span>
             </div>
             <div class="guide-col">
               <span class="guide-title">MOBILE / TOUCH</span>
-              <span class="guide-key"><b>Left Cluster:</b> Steer</span>
-              <span class="guide-key"><b>Right Cluster:</b> Gas / Brake</span>
+              <span class="guide-key"><b>Left:</b> Steer Left / Right</span>
+              <span class="guide-key"><b>Right:</b> Gas, Brake, Nitro, Drift, Gear</span>
             </div>
           </div>
-          <div class="asset-credit">458 Italia by <a href="https://sketchfab.com/models/57bf6cc56931426e87494f554df1dab6" target="_blank" rel="noopener">vicent091036</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · <a href="./credits.html" target="_blank" rel="noopener">Asset credits</a></div>
+          <div class="asset-credit">Ferrari 458 Italia by <a href="https://sketchfab.com/models/57bf6cc56931426e87494f554df1dab6" target="_blank" rel="noopener">vicent091036</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · <a href="./credits.html" target="_blank" rel="noopener">Asset credits</a></div>
         </div>
       </div>
 
@@ -208,12 +277,20 @@ export class HUD {
               <span class="val" id="go-distance">0 m</span>
             </div>
             <div class="gameover-stat-item">
+              <span class="label">LEVEL REACHED</span>
+              <span class="val" id="go-level">LEVEL 1</span>
+            </div>
+            <div class="gameover-stat-item">
               <span class="label">NEAR MISSES</span>
               <span class="val" id="go-near-miss">0</span>
             </div>
             <div class="gameover-stat-item">
               <span class="label">TOP SPEED</span>
               <span class="val" id="go-top-speed">0 KM/H</span>
+            </div>
+            <div class="gameover-stat-item">
+              <span class="label">BONUS POINTS</span>
+              <span class="val" id="go-bonus-pts">0</span>
             </div>
           </div>
 
@@ -234,22 +311,38 @@ export class HUD {
     this.pauseModal = document.getElementById('pause-modal');
     this.gameoverModal = document.getElementById('gameover-modal');
 
+    this.hudLevel = document.getElementById('hud-level');
     this.hudDistance = document.getElementById('hud-distance');
     this.hudScore = document.getElementById('hud-score');
     this.hudBestScore = document.getElementById('hud-best-score');
     this.hudComboBadge = document.getElementById('hud-combo-badge');
     this.hudSpeedNum = document.getElementById('hud-speed-num');
     this.speedoFill = document.getElementById('speedo-fill');
+
+    this.hudGear = document.getElementById('hud-gear');
+    this.hudNitroFill = document.getElementById('hud-nitro-fill');
+    this.hudNitroPct = document.getElementById('hud-nitro-pct');
+    this.touchGearVal = document.getElementById('touch-gear-val');
+
+    this.wrongWayBanner = document.getElementById('hud-wrong-way-banner');
+    this.levelUpPopup = document.getElementById('hud-level-up-popup');
+    this.levelUpTitle = document.getElementById('hud-level-up-title');
+    this.levelUpDesc = document.getElementById('hud-level-up-desc');
+
     this.nearMissPopup = document.getElementById('hud-near-miss-popup');
     this.popupPts = document.getElementById('popup-pts');
+    this.driftPopup = document.getElementById('hud-drift-popup');
+    this.driftPts = document.getElementById('hud-drift-pts');
 
     this.menuHighScore = document.getElementById('menu-highscore-val');
     this.menuHighDist = document.getElementById('menu-highdist-val');
 
     this.goScore = document.getElementById('go-score');
     this.goDistance = document.getElementById('go-distance');
+    this.goLevel = document.getElementById('go-level');
     this.goNearMiss = document.getElementById('go-near-miss');
     this.goTopSpeed = document.getElementById('go-top-speed');
+    this.goBonusPts = document.getElementById('go-bonus-pts');
     this.newRecordBadge = document.getElementById('new-record-badge');
 
     this.soundIconOn = document.getElementById('sound-icon-on');
@@ -261,36 +354,51 @@ export class HUD {
 
   bindEvents() {
     document.getElementById('btn-hud-camera').addEventListener('click', () => this.onSwitchCamera?.());
+
+    // Gear Shift Buttons (HUD pill & Mobile button)
+    this.hudGear.addEventListener('click', () => this.onGearToggle?.());
+    const touchGear = document.getElementById('touch-gear');
+    if (touchGear) {
+      touchGear.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.onGearToggle?.();
+      });
+      touchGear.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        this.onGearToggle?.();
+      }, { passive: false });
+    }
+
     // Menu buttons
     document.getElementById('btn-start-game').addEventListener('click', () => {
       this.audio.ensureContext();
       this.audio.playButtonClick();
-      if (this.onStartGame) this.onStartGame();
+      this.onStartGame?.();
     });
 
     document.getElementById('btn-resume-game').addEventListener('click', () => {
       this.audio.playButtonClick();
-      if (this.onResumeGame) this.onResumeGame();
+      this.onResumeGame?.();
     });
 
     document.getElementById('btn-restart-from-pause').addEventListener('click', () => {
       this.audio.playButtonClick();
-      if (this.onRestartGame) this.onRestartGame();
+      this.onRestartGame?.();
     });
 
     document.getElementById('btn-menu-from-pause').addEventListener('click', () => {
       this.audio.playButtonClick();
-      if (this.onMainMenu) this.onMainMenu();
+      this.onMainMenu?.();
     });
 
     document.getElementById('btn-restart-game').addEventListener('click', () => {
       this.audio.playButtonClick();
-      if (this.onRestartGame) this.onRestartGame();
+      this.onRestartGame?.();
     });
 
     document.getElementById('btn-main-menu').addEventListener('click', () => {
       this.audio.playButtonClick();
-      if (this.onMainMenu) this.onMainMenu();
+      this.onMainMenu?.();
     });
 
     // In-game HUD buttons
@@ -334,17 +442,24 @@ export class HUD {
     bindTouch('touch-right', 'right');
     bindTouch('touch-throttle', 'throttle');
     bindTouch('touch-brake', 'brake');
+    bindTouch('touch-drift', 'handbrake');
+    bindTouch('touch-nitro', 'nitro');
   }
 
   subscribeGameState() {
     this.gameState.on('reset', () => {
       this.maxRecordedSpeed = 0;
       clearTimeout(this.popupTimer);
+      clearTimeout(this.levelUpTimer);
       this.nearMissPopup.classList.add('hidden');
       this.nearMissPopup.classList.remove('pop-anim');
+      this.driftPopup.classList.add('hidden');
+      this.levelUpPopup.classList.add('hidden');
+      this.wrongWayBanner.classList.add('hidden');
       this.hudComboBadge.classList.add('hidden');
       this.updateHighScores();
     });
+
     this.gameState.on('stateChanged', ({ to }) => {
       this.handleStateChange(to);
     });
@@ -353,13 +468,16 @@ export class HUD {
       this.showNearMissPopup(combo, earned);
     });
 
+    this.gameState.on('levelUp', ({ level }) => {
+      this.showLevelUpPopup(level);
+    });
+
     this.gameState.on('comboReset', () => {
       this.hudComboBadge.classList.add('hidden');
     });
   }
 
   handleStateChange(state) {
-    // Hide all modals by default
     this.menuModal.classList.add('hidden');
     this.pauseModal.classList.add('hidden');
     this.gameoverModal.classList.add('hidden');
@@ -412,8 +530,11 @@ export class HUD {
   showGameOverSummary() {
     this.goScore.textContent = Math.floor(this.gameState.score).toLocaleString();
     this.goDistance.textContent = `${Math.floor(this.gameState.distance).toLocaleString()} m`;
+    this.goLevel.textContent = `LEVEL ${this.gameState.difficultyLevel || 1}`;
     this.goNearMiss.textContent = this.gameState.nearMisses;
     this.goTopSpeed.textContent = `${Math.floor(this.maxRecordedSpeed || 0)} KM/H`;
+    const bonus = Math.floor((this.gameState.driftScore || 0) + (this.gameState.wrongWayScore || 0));
+    this.goBonusPts.textContent = `+${bonus.toLocaleString()} PTS`;
 
     const isNewRecord = this.gameState.score >= this.gameState.highScore && this.gameState.score > 0;
     if (isNewRecord) {
@@ -440,11 +561,35 @@ export class HUD {
     }, 1100);
   }
 
-  update(speedKmh) {
+  showLevelUpPopup(level) {
+    const descs = [
+      '',
+      'OPEN HIGHWAY · WARM UP',
+      'CURVES SHARPEN · TRAFFIC EXPANDS',
+      'SERPENTINE S-BENDS · HIGH DENSITY',
+      'MOUNTAIN PASS CURVES · FAST ONCOMING',
+      'EXTREME OVERDRIVE · HYPER TRAFFIC'
+    ];
+    this.levelUpTitle.textContent = `LEVEL ${level}`;
+    this.levelUpDesc.textContent = descs[level] || 'HIGH SPEED MASTERY';
+    this.levelUpPopup.classList.remove('hidden');
+    this.levelUpPopup.classList.add('pop-anim');
+
+    clearTimeout(this.levelUpTimer);
+    this.levelUpTimer = setTimeout(() => {
+      this.levelUpPopup.classList.add('hidden');
+      this.levelUpPopup.classList.remove('pop-anim');
+    }, 2400);
+  }
+
+  update(speedKmh, playerCar = null) {
     if (!this.gameState.isPlaying()) return;
 
     // Track top speed achieved
     this.maxRecordedSpeed = Math.max(this.maxRecordedSpeed || 0, speedKmh);
+
+    // Update Level Indicator
+    this.hudLevel.textContent = `LV ${this.gameState.difficultyLevel || 1}`;
 
     // Update Distance
     if (this.gameState.distance >= 1000) {
@@ -461,20 +606,55 @@ export class HUD {
     this.hudSpeedNum.textContent = roundedSpeed;
 
     // Speedometer dial fill (SVG stroke dashoffset from 0 to 240 km/h)
-    // Full circumference for r=68 is ~427. 3/4 gauge arc is ~320.
     const maxSpeed = 240;
     const ratio = Math.min(1.0, speedKmh / maxSpeed);
     const strokeLength = 320;
     const offset = strokeLength - (ratio * strokeLength);
     this.speedoFill.style.strokeDashoffset = offset;
 
-    // Dial color transitions from cyan to fiery red/orange at top speeds
+    // Dial color transitions from neutral to fiery crimson at top speeds
     if (speedKmh > 190) {
       this.speedoFill.style.stroke = '#ff2a44';
     } else if (speedKmh > 130) {
       this.speedoFill.style.stroke = '#ff9900';
     } else {
       this.speedoFill.style.stroke = '#eee9d8';
+    }
+
+    // Gear & Nitro Telemetry
+    if (playerCar) {
+      const gear = playerCar.gear || 'D';
+      this.hudGear.textContent = gear;
+      if (gear === 'R') {
+        this.hudGear.classList.add('gear-reverse');
+      } else {
+        this.hudGear.classList.remove('gear-reverse');
+      }
+      if (this.touchGearVal) this.touchGearVal.textContent = gear;
+
+      const nitroVal = Math.max(0, Math.min(100, playerCar.nitro || 100));
+      this.hudNitroFill.style.width = `${nitroVal.toFixed(0)}%`;
+      this.hudNitroPct.textContent = `${Math.round(nitroVal)}%`;
+      if (playerCar.isNitroActive) {
+        this.hudNitroFill.classList.add('nitro-active');
+      } else {
+        this.hudNitroFill.classList.remove('nitro-active');
+      }
+
+      // Wrong Way Alert Banner
+      if (playerCar.isWrongWay) {
+        this.wrongWayBanner.classList.remove('hidden');
+      } else {
+        this.wrongWayBanner.classList.add('hidden');
+      }
+
+      // Drift Alert Popup
+      if (playerCar.isDrifting && speedKmh > 25) {
+        this.driftPopup.classList.remove('hidden');
+        this.driftPts.textContent = `+${Math.round(this.gameState.driftScore || 0)} PTS`;
+      } else {
+        this.driftPopup.classList.add('hidden');
+      }
     }
   }
 }

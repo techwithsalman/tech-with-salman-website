@@ -34,9 +34,9 @@ export class SceneManager {
     this.onResize = this.onResize.bind(this);
     window.addEventListener('resize',this.onResize);
   }
-  update(z) {
-    this.sunLight.position.set(-42,65,z - 32);
-    this.sunLight.target.position.set(0,0,z + 15);
+  update(z, x = 0) {
+    this.sunLight.position.set(x - 42, 65, z - 32);
+    this.sunLight.target.position.set(x, 0, z + 15);
     this.sunLight.target.updateMatrixWorld();
   }
   onResize() {

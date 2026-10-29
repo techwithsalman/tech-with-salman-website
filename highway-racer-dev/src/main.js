@@ -28,16 +28,18 @@ class GameApp {
     this.cameraController = new CameraController(this.sceneManager.camera);
     this.environment = new HighwayEnvironment(this.sceneManager.scene, assets);
     this.playerCar = new PlayerCar(this.sceneManager.scene, assets.car);
-    this.trafficManager = new TrafficManager(this.sceneManager.scene, this.gameState, assets.traffic);
+    this.trafficManager = new TrafficManager(this.sceneManager.scene, this.gameState, assets.traffic, this.environment.spline);
 
     // 3. Physics & UI
     this.collisionSystem = new CollisionSystem(this.gameState, this.audio, this.cameraController);
     this.hud = new HUD(this.uiContainer, this.gameState, this.input, this.audio);
     this.hud.onSwitchCamera = () => this.cameraController.switchMode(this.playerCar.hasInterior);
+    this.hud.onGearToggle = () => this.playerCar.toggleGear();
     this.cameraController.onModeChanged = name => this.hud.setCameraMode(name);
     this.input.onRestartRequested = () => {
       if (!this.gameState.isMenu()) this.startNewRace();
     };
+    this.input.onGearToggleRequested = () => this.playerCar.toggleGear();
     this.gameState.on('stateChanged', ({to}) => {
       if (to !== STATES.PLAYING) {
         this.input.resetInputs();
@@ -83,9 +85,10 @@ class GameApp {
     this.hud.onMainMenu = () => {
       this.audio.updateEngine(0, 0, false, false);
       this.playerCar.reset();
-      this.trafficManager.reset();
       this.environment.reset();
-      this.sceneManager.update(0);
+      this.trafficManager.setSpline(this.environment.spline);
+      this.trafficManager.reset();
+      this.sceneManager.update(this.playerCar.position.z, this.playerCar.position.x);
       this.cameraController.setMenuMode();
       this.cameraController.reset(this.playerCar.position);
       this.gameState.setState(STATES.MENU);
@@ -113,8 +116,9 @@ class GameApp {
     this.input.resetInputs();
     this.hud.maxRecordedSpeed = 0;
     this.environment.reset();
+    this.trafficManager.setSpline(this.environment.spline);
     this.playerCar.reset();
-    this.sceneManager.update(0);
+    this.sceneManager.update(this.playerCar.position.z, this.playerCar.position.x);
     this.trafficManager.reset(true);
     this.cameraController.reset(this.playerCar.position);
     this.gameState.setState(STATES.PLAYING);
@@ -146,16 +150,22 @@ class GameApp {
       let carResult;
       for (let i = 0; i < steps && this.gameState.isPlaying(); i++) {
         this.gameState.update(step);
-        carResult = this.playerCar.update(step, this.input);
+        carResult = this.playerCar.update(step, this.input, this.environment.spline);
         this.gameState.speedKmh = carResult.speedKmh;
         this.gameState.addDistance(carResult.distanceDelta);
-        this.trafficManager.update(this.playerCar.position.z, step);
+        if (carResult.isWrongWay) {
+          this.gameState.addWrongWayBonus(step);
+        }
+        if (carResult.isSkidding) {
+          this.gameState.addDriftBonus(step);
+        }
+        this.trafficManager.update(this.playerCar.currentS, step);
         this.collisionSystem.checkCollisions(this.playerCar, this.trafficManager, step);
       }
 
       // 3. Procedural world recycling ahead of player & sunlight follow
-      this.environment.update(this.playerCar.position.z);
-      this.sceneManager.update(this.playerCar.position.z);
+      this.environment.update(this.playerCar.currentS, this.gameState.difficultyLevel);
+      this.sceneManager.update(this.playerCar.position.z, this.playerCar.position.x);
 
       // 6. Dynamic chase camera
       this.cameraController.updateChase(
@@ -181,7 +191,7 @@ class GameApp {
     }
 
     // Update HUD gauges & telemetry
-    this.hud.update(this.playerCar.speedKmh);
+    this.hud.update(this.playerCar.speedKmh, this.playerCar);
     this.trafficManager.updateVisuals(this.sceneManager.camera);
 
     // Render WebGL frame

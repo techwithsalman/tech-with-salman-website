@@ -249,13 +249,252 @@ html, body {
   font-family: var(--font-mono);
 }
 
-/* Speedometer Dial (Bottom Right) */
-.hud-speedometer-box {
+/* Wrong-Way Warning Banner */
+.hud-wrong-way-banner {
+  position: absolute;
+  top: 78px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, rgba(160, 10, 26, 0.94) 0%, rgba(90, 8, 16, 0.96) 100%);
+  border: 1.5px solid #ff2a44;
+  box-shadow: 0 0 24px rgba(255, 42, 68, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  padding: 10px 22px;
+  z-index: 50;
+  pointer-events: none;
+  animation: wrongWayFlash 0.7s infinite alternate ease-in-out;
+}
+
+@keyframes wrongWayFlash {
+  0% { transform: translateX(-50%) scale(0.97); box-shadow: 0 0 16px rgba(255, 42, 68, 0.5); }
+  100% { transform: translateX(-50%) scale(1.03); box-shadow: 0 0 35px rgba(255, 42, 68, 0.9); }
+}
+
+.wrong-way-flash {
+  font-size: 26px;
+  color: #ffde59;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.8));
+}
+
+.wrong-way-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.wrong-way-title {
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+}
+
+.wrong-way-sub {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: #ffccd2;
+  text-transform: uppercase;
+}
+
+/* Level-Up Notification Toast */
+.hud-level-up-popup {
+  position: absolute;
+  top: 130px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: rgba(14, 20, 28, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1.5px solid rgba(255, 190, 11, 0.65);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 190, 11, 0.35);
+  border-radius: 14px;
+  padding: 14px 28px;
+  z-index: 55;
+  pointer-events: none;
+}
+
+.level-up-eyebrow {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  color: var(--accent-gold);
+  text-transform: uppercase;
+}
+
+.level-up-title {
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  color: #ffffff;
+  margin: 4px 0 2px 0;
+  text-shadow: 0 0 15px rgba(255, 190, 11, 0.5);
+}
+
+.level-up-sub {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #d1d9e2;
+}
+
+/* Floating Drift Alert Toast */
+.hud-drift-popup {
+  position: absolute;
+  right: 28px;
+  bottom: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  background: rgba(10, 24, 34, 0.88);
+  border: 1.2px solid rgba(77, 238, 234, 0.5);
+  border-radius: 10px;
+  padding: 6px 14px;
+  box-shadow: 0 4px 20px rgba(0, 240, 255, 0.25);
+  pointer-events: none;
+  z-index: 35;
+}
+
+.drift-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #4deeea;
+}
+
+.drift-pts {
+  font-size: 16px;
+  font-weight: 900;
+  font-family: var(--font-mono);
+  color: #ffffff;
+}
+
+/* Telemetry Cluster (Speedometer, Gear, Nitro) */
+.hud-telemetry-cluster {
   position: absolute;
   bottom: 24px;
   right: 24px;
-  width: 140px;
-  height: 140px;
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  pointer-events: auto;
+  z-index: 30;
+}
+
+.hud-gear-and-nos {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.hud-gear-pill {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(18, 24, 34, 0.85);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  transition: all 0.15s ease;
+}
+
+.hud-gear-pill:hover {
+  transform: scale(1.05);
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.hud-gear-pill.gear-reverse {
+  background: linear-gradient(135deg, rgba(200, 20, 40, 0.9) 0%, rgba(120, 10, 20, 0.95) 100%);
+  border-color: #ff334b;
+  color: #fff;
+  box-shadow: 0 0 16px rgba(255, 51, 75, 0.6);
+  animation: gearBlink 0.8s infinite alternate;
+}
+
+@keyframes gearBlink {
+  0% { box-shadow: 0 0 8px rgba(255, 51, 75, 0.4); }
+  100% { box-shadow: 0 0 20px rgba(255, 51, 75, 0.8); }
+}
+
+.hud-nitro-gauge {
+  background: rgba(16, 22, 32, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 6px 10px;
+  width: 95px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+}
+
+.nitro-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.nitro-label {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #4deeea;
+}
+
+.nitro-pct {
+  font-size: 9px;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: #d1d9e2;
+}
+
+.nitro-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.nitro-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00b4d8, #4deeea);
+  border-radius: 3px;
+  transition: width 0.08s linear;
+}
+
+.nitro-fill.nitro-active {
+  background: linear-gradient(90deg, #ff0055, #ff9900);
+  box-shadow: 0 0 10px #ff3300;
+  animation: nitroPulse 0.15s infinite alternate;
+}
+
+@keyframes nitroPulse {
+  0% { filter: brightness(1); }
+  100% { filter: brightness(1.4); }
+}
+
+/* Speedometer Dial (Bottom Right) */
+.hud-speedometer-box {
+  position: relative;
+  width: 130px;
+  height: 130px;
   pointer-events: none;
 }
 
@@ -339,11 +578,90 @@ html, body {
   }
 }
 
-.mobile-left-cluster, .mobile-right-cluster {
+.mobile-left-cluster {
   display: flex;
   align-items: flex-end;
   gap: 12px;
   pointer-events: auto;
+}
+
+.mobile-right-cluster {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+.mobile-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.touch-action-btn {
+  background: rgba(16, 24, 34, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1.2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  height: 38px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: #fff;
+  cursor: pointer;
+  touch-action: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  transition: transform 0.08s ease, background 0.08s ease;
+}
+
+.touch-action-btn:active, .touch-action-btn.active {
+  transform: scale(0.92);
+}
+
+.gear-action-btn {
+  min-width: 48px;
+}
+
+.gear-action-btn .action-label {
+  font-size: 8px;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+.gear-action-btn .action-val {
+  font-size: 14px;
+  font-weight: 900;
+  font-family: var(--font-mono);
+  color: #fff;
+}
+
+.drift-action-btn {
+  border-color: rgba(255, 190, 11, 0.45);
+  color: #ffbe0b;
+}
+
+.drift-action-btn:active, .drift-action-btn.active {
+  background: rgba(255, 190, 11, 0.3);
+  box-shadow: 0 0 15px rgba(255, 190, 11, 0.6);
+}
+
+.nitro-action-btn {
+  border-color: rgba(77, 238, 234, 0.45);
+  color: #4deeea;
+}
+
+.nitro-action-btn:active, .nitro-action-btn.active {
+  background: rgba(77, 238, 234, 0.35);
+  box-shadow: 0 0 18px rgba(77, 238, 234, 0.7);
+}
+
+.mobile-pedals-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
 }
 
 .touch-btn {
@@ -787,19 +1105,57 @@ html, body {
     min-width: 90px;
   }
 
+  .hud-telemetry-cluster {
+    bottom: calc(184px + env(safe-area-inset-bottom, 0px));
+    right: calc(12px + env(safe-area-inset-right, 0px));
+    gap: 8px;
+  }
+
   .hud-speedometer-box {
-    bottom: calc(118px + env(safe-area-inset-bottom, 0px));
-    right: calc(16px + env(safe-area-inset-right, 0px));
-    width: 92px;
-    height: 92px;
+    width: 86px;
+    height: 86px;
   }
 
   .speedo-number {
-    font-size: 24px;
+    font-size: 22px;
   }
 
   .speedo-unit {
-    font-size: 9px;
+    font-size: 8px;
+  }
+
+  .hud-gear-pill {
+    width: 34px;
+    height: 34px;
+    font-size: 16px;
+  }
+
+  .hud-nitro-gauge {
+    width: 74px;
+    padding: 4px 6px;
+  }
+
+  .hud-wrong-way-banner {
+    top: 64px;
+    padding: 6px 14px;
+    gap: 8px;
+  }
+
+  .wrong-way-title {
+    font-size: 13px;
+  }
+
+  .wrong-way-flash {
+    font-size: 20px;
+  }
+
+  .hud-level-up-popup {
+    top: 105px;
+    padding: 8px 16px;
+  }
+
+  .level-up-title {
+    font-size: 20px;
   }
 
   .menu-card {
@@ -835,6 +1191,17 @@ html, body {
 @media (max-height:600px) and (orientation:landscape) {
   .menu-card { max-height:94dvh;overflow-y:auto;padding:18px 24px;gap:12px; }
   .controls-guide { display:none; }
-  .hud-speedometer-box { width:82px;height:82px;bottom:calc(116px + env(safe-area-inset-bottom, 0px));right:calc(16px + env(safe-area-inset-right, 0px)); }
+  .hud-telemetry-cluster {
+    bottom: calc(142px + env(safe-area-inset-bottom, 0px));
+    right: calc(16px + env(safe-area-inset-right, 0px));
+    gap: 8px;
+  }
+  .hud-speedometer-box { width:78px;height:78px; }
+  .speedo-number { font-size: 20px; }
+  .hud-gear-pill { width: 32px; height: 32px; font-size: 15px; }
+  .hud-nitro-gauge { width: 68px; padding: 3px 6px; }
+  .pedal-gas { height: 76px; width: 44px; }
+  .pedal-brake { height: 68px; width: 54px; }
+  .touch-action-btn { height: 32px; padding: 0 8px; font-size: 11px; }
   .route-caption { display:none; }
 }

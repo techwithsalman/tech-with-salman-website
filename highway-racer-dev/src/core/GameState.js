@@ -1,4 +1,4 @@
-// Highway Racer 3D - Game State Manager
+// Highway Racer 3D - Game State Manager with Progressive Levels & Scoring
 
 export const STATES = {
   MENU: 'MENU',
@@ -24,6 +24,14 @@ export class GameState {
     this.combo = 1;
     this.comboTimer = 0;
     this.timeElapsed = 0;
+
+    // Progressive Difficulty & Level System
+    this.difficultyLevel = 1;
+    this.levelThresholds = [0, 450, 1100, 2000, 3200]; // Meters to reach Level 1, 2, 3, 4, 5
+
+    // Drift & Wrong Way Bonus Tracking
+    this.driftScore = 0;
+    this.wrongWayScore = 0;
     
     // Persistent metrics
     this.highScore = this.loadNumber(HIGH_SCORE_KEY, 0);
@@ -113,6 +121,9 @@ export class GameState {
     this.combo = 1;
     this.comboTimer = 0;
     this.timeElapsed = 0;
+    this.difficultyLevel = 1;
+    this.driftScore = 0;
+    this.wrongWayScore = 0;
     this.emit('reset');
   }
 
@@ -126,16 +137,46 @@ export class GameState {
       pointGain += (this.speedKmh - 120) * 0.05 * deltaMeters;
     }
     this.score += pointGain * this.combo;
+
+    // Check level progression
+    const prevLevel = this.difficultyLevel;
+    let newLevel = 1;
+    for (let i = this.levelThresholds.length - 1; i >= 0; i--) {
+      if (this.distance >= this.levelThresholds[i]) {
+        newLevel = i + 1;
+        break;
+      }
+    }
+
+    if (newLevel > prevLevel) {
+      this.difficultyLevel = newLevel;
+      this.score += 500 * newLevel; // Level up bonus!
+      this.emit('levelUp', { level: newLevel, distance: Math.round(this.distance) });
+    }
   }
 
   addNearMiss(bonusPoints = 250) {
     if (!this.isPlaying()) return;
     this.nearMisses++;
     this.combo = Math.min(this.combo + 1, 8); // Max 8x combo
-    this.comboTimer = 3.5; // Combo expires in 3.5s
+    this.comboTimer = 3.8;
     const earned = bonusPoints * this.combo;
     this.score += earned;
     this.emit('nearMiss', { nearMisses: this.nearMisses, combo: this.combo, earned });
+  }
+
+  addWrongWayBonus(dt) {
+    if (!this.isPlaying()) return;
+    const pts = Math.round(Math.max(10, this.speedKmh * 0.6) * 12 * dt);
+    this.wrongWayScore += pts;
+    this.score += pts;
+  }
+
+  addDriftBonus(dt) {
+    if (!this.isPlaying()) return;
+    const pts = Math.round(Math.max(10, this.speedKmh * 0.4) * 8 * dt);
+    this.driftScore += pts;
+    this.score += pts;
   }
 
   update(delta) {

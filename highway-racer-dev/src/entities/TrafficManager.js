@@ -1,107 +1,115 @@
-// Highway Racer 3D - AI Traffic Manager (Spawning, lane routing, speed regulation, lifecycle)
+// Highway Racer 3D - AI Traffic Manager on Curved Highway & Dual Carriageway
 
 import * as THREE from 'three';
 import { CONSTANTS } from '../utils/constants.js';
 import { VehicleFactory } from './VehicleFactory.js';
 
 export class TrafficManager {
-  constructor(scene, gameState, assets) {
+  constructor(scene, gameState, assets, spline) {
     this.scene = scene;
     this.gameState = gameState;
     this.factory = new VehicleFactory(assets);
+    this.spline = spline;
 
     this.activeVehicles = [];
     this.spawnTimer = 0;
 
-    this.laneCenters = CONSTANTS.LANE_CENTERS; // [-5.7, -1.9, 1.9, 5.7]
+    // Dual carriageway lanes:
+    // Forward lanes (Right side): u = 3.5m (inner), u = 6.8m (outer)
+    // Oncoming lanes (Left side / Wrong-way): u = -3.5m (inner), u = -6.8m (outer)
+    this.forwardLanes = [3.5, 6.8];
+    this.oncomingLanes = [-3.5, -6.8];
+  }
+
+  setSpline(spline) {
+    this.spline = spline;
   }
 
   getSpawnInterval() {
-    // Difficulty ramps up over 2 minutes: spawn rate from 1.8s down to 0.7s
-    const progress = Math.min(1.0, this.gameState.timeElapsed / CONSTANTS.TRAFFIC.DIFFICULTY_RAMP_TIME);
-    return CONSTANTS.TRAFFIC.INITIAL_SPAWN_RATE - (progress * (CONSTANTS.TRAFFIC.INITIAL_SPAWN_RATE - CONSTANTS.TRAFFIC.MIN_SPAWN_RATE));
+    const level = this.gameState.difficultyLevel || 1;
+    // Spawn rate ramps up with difficulty: 2.0s down to 0.7s
+    return Math.max(0.7, 2.0 - (level - 1) * 0.28);
   }
 
-  spawnVehicle(playerZ) {
-    if (this.activeVehicles.length >= CONSTANTS.TRAFFIC.MAX_ACTIVE_CARS) return;
+  spawnVehicle(playerS, forceOncoming = false) {
+    if (this.activeVehicles.length >= (CONSTANTS.TRAFFIC.MAX_ACTIVE_CARS || 14)) return;
 
-    // Pick a randomized lane
-    const availableLanes = [...this.laneCenters];
-    // Shuffle lanes
-    for (let i = availableLanes.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [availableLanes[i], availableLanes[j]] = [availableLanes[j], availableLanes[i]];
-    }
+    // 70% forward traffic on right carriageway, 30% oncoming traffic on left carriageway
+    // (Or 50/50 if player is driving wrong way!)
+    const isOncoming = forceOncoming || Math.random() < 0.35;
+    const laneOptions = isOncoming ? this.oncomingLanes : this.forwardLanes;
+    const targetU = laneOptions[Math.floor(Math.random() * laneOptions.length)];
 
-    const spawnDist = CONSTANTS.TRAFFIC.MIN_SPAWN_DIST + (Math.random() * (CONSTANTS.TRAFFIC.MAX_SPAWN_DIST - CONSTANTS.TRAFFIC.MIN_SPAWN_DIST));
-    const targetZ = playerZ + spawnDist;
+    // Spawn distance: 100m to 250m ahead along road spline
+    const spawnDist = 95 + Math.random() * 150;
+    const targetS = playerS + spawnDist;
 
-    // Find a lane without a car too close to targetZ
-    let selectedLaneX = null;
-    for (const laneX of availableLanes) {
-      let isClear = true;
-      for (const v of this.activeVehicles) {
-        if (Math.abs(v.mesh.position.x - laneX) < 1.0 && Math.abs(v.mesh.position.z - targetZ) < 35.0) {
-          isClear = false;
-          break;
-        }
-      }
-      if (isClear) {
-        selectedLaneX = laneX;
-        break;
+    // Ensure no other car is too close to targetS in same lane
+    for (const v of this.activeVehicles) {
+      if (Math.abs(v.u - targetU) < 1.0 && Math.abs(v.s - targetS) < 32.0) {
+        return; // Lane occupied
       }
     }
-
-    if (selectedLaneX === null) return; // All candidate positions currently occupied
 
     const vehicleData = this.factory.createVehicle();
-    vehicleData.mesh.position.set(selectedLaneX, 0, targetZ);
+    vehicleData.s = targetS;
+    vehicleData.u = targetU;
+    vehicleData.isOncoming = isOncoming;
     vehicleData.speedMs = vehicleData.baseSpeedKmh / 3.6;
     vehicleData.nearMissChecked = false;
+
+    // Position & heading from spline
+    const frame = this.spline.getFrameAt(targetS);
+    const pos = this.spline.getPointAt(targetS, targetU, 0);
+    vehicleData.mesh.position.copy(pos);
+    vehicleData.mesh.rotation.y = frame.heading + (isOncoming ? Math.PI : 0);
 
     this.scene.add(vehicleData.mesh);
     this.activeVehicles.push(vehicleData);
   }
 
-  update(playerZ, delta) {
-    // 1. Spawning timer
+  update(playerS, delta) {
+    // 1. Spawning
     this.spawnTimer += delta;
     if (this.spawnTimer >= this.getSpawnInterval()) {
       this.spawnTimer = 0;
-      this.spawnVehicle(playerZ);
+      this.spawnVehicle(playerS);
     }
 
-    // 2. Update active traffic positions & wheel rotations
-    const despawnZ = playerZ - CONSTANTS.TRAFFIC.DESPAWN_BEHIND_DIST;
+    // 2. Lifecycle & Movement along spline
+    const despawnBehindS = playerS - 60;
+    const despawnAheadS = playerS + 320;
 
     for (let i = this.activeVehicles.length - 1; i >= 0; i--) {
       const v = this.activeVehicles[i];
 
-      // Keep each assigned lane, with a smooth headway response to slower traffic.
-      let targetSpeed = v.preferredSpeedMs;
-      let closestGap = Infinity;
-      let leader = null;
-      for (const other of this.activeVehicles) {
-        if (other === v || Math.abs(other.mesh.position.x - v.mesh.position.x) > 1) continue;
-        const forward = other.mesh.position.z - v.mesh.position.z;
-        if (forward <= 0) continue;
-        const gap = forward - (other.length + v.length) / 2;
-        if (gap < closestGap) { closestGap = gap; leader = other; }
+      // Forward traffic travels along +s; Oncoming traffic travels along -s
+      if (v.isOncoming) {
+        v.s -= v.speedMs * delta;
+      } else {
+        // Forward traffic: simple headway slowing behind other cars
+        let targetSpeed = v.preferredSpeedMs || v.speedMs;
+        for (const other of this.activeVehicles) {
+          if (other === v || other.isOncoming || Math.abs(other.u - v.u) > 1.2) continue;
+          const forwardGap = other.s - v.s;
+          if (forwardGap > 0 && forwardGap < 25) {
+            targetSpeed = Math.min(targetSpeed, other.speedMs * 0.95);
+          }
+        }
+        v.speedMs += (targetSpeed - v.speedMs) * Math.min(1.0, delta * 2.0);
+        v.s += v.speedMs * delta;
       }
-      if (leader) targetSpeed = Math.min(targetSpeed, Math.max(0, leader.speedMs + (closestGap - (7 + v.speedMs * 0.8)) * 0.65));
-      const change = THREE.MathUtils.clamp(targetSpeed - v.speedMs, -7 * delta, 2 * delta);
-      v.braking = change < -0.02 * delta;
-      v.speedMs = Math.max(0, v.speedMs + change);
 
-      // Forward movement
-      v.mesh.position.z += v.speedMs * delta;
+      // Update 3D World Transformation from Spline
+      const frame = this.spline.getFrameAt(v.s);
+      const pos = this.spline.getPointAt(v.s, v.u, 0);
+      v.mesh.position.copy(pos);
+      v.mesh.rotation.y = frame.heading + (v.isOncoming ? Math.PI : 0);
 
-      // Wheel rotation
-      const dist = v.speedMs * delta;
-      v.wheelDistance += dist;
+      v.wheelDistance = (v.wheelDistance || 0) + v.speedMs * delta;
 
-      // Check despawn
-      if (v.mesh.position.z < despawnZ || v.mesh.position.z > (playerZ + CONSTANTS.TRAFFIC.MAX_SPAWN_DIST + 80)) {
+      // Despawn check
+      if (v.s < despawnBehindS || v.s > despawnAheadS) {
         this.scene.remove(v.mesh);
         this.factory.release(v);
         this.activeVehicles.splice(i, 1);
@@ -110,7 +118,9 @@ export class TrafficManager {
   }
 
   updateVisuals(camera) {
-    for (const vehicle of this.activeVehicles) this.factory.updateVisual(vehicle, camera);
+    for (const vehicle of this.activeVehicles) {
+      this.factory.updateVisual(vehicle, camera);
+    }
   }
 
   reset(seedTraffic = false) {
@@ -120,12 +130,12 @@ export class TrafficManager {
     }
     this.activeVehicles = [];
     this.spawnTimer = 0;
+
     if (seedTraffic) {
-      for (let i = 0; i < 3; i++) {
-        this.spawnVehicle(0);
-        const v = this.activeVehicles[i];
-        if (v) v.mesh.position.set([5.7,-5.7,1.9][i],0,[48,85,125][i]);
-      }
+      // Seed initial forward and oncoming traffic
+      this.spawnVehicle(0, false);
+      this.spawnVehicle(0, true);
+      this.spawnVehicle(30, false);
     }
   }
 }

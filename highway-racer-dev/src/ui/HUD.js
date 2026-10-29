@@ -15,6 +15,7 @@ export class HUD {
     this.onMainMenu = null;
     this.onGearToggle = null;
     this.onSwitchCamera = null;
+    this.onToggleHandling = null;
 
     this.popupTimer = null;
     this.levelUpTimer = null;
@@ -67,7 +68,7 @@ export class HUD {
 
         <div class="route-caption">
           <span>M-2 MOTORWAY · NORTHBOUND</span>
-          <b>CURVED HIGHWAY · DUAL CARRIAGEWAY</b>
+          <b>CURVED HIGHWAY · ASSISTED ARCADE</b>
           <small>WASD / ARROWS · STEER &nbsp; SHIFT · NITRO &nbsp; SPACE · DRIFT &nbsp; G · GEAR &nbsp; C · CAMERA &nbsp; R · RESTART</small>
         </div>
 
@@ -204,7 +205,7 @@ export class HUD {
           <div class="menu-header">
             <div class="brand-tag">TECH WITH SALMAN / MOTORSPORT</div>
             <h1 class="game-title">HIGHWAY RACER <span class="accent-3d">3D</span></h1>
-            <p class="game-subtitle">Open road curved highway. Dual carriageway. Free steering physics.</p>
+            <p class="game-subtitle">Curved highway. Dual carriageway. Assisted arcade driving.</p>
           </div>
 
           <div class="menu-stats-row">
@@ -224,6 +225,9 @@ export class HUD {
               <span class="btn-text">START RACE</span>
               <span class="btn-arrow">→</span>
             </button>
+            <button id="btn-toggle-handling" class="btn-secondary-race" style="margin-top: 8px; font-size: 12px; padding: 10px 18px; border-color: rgba(77, 238, 234, 0.4);">
+              HANDLING: ASSISTED ARCADE (RECOMMENDED)
+            </button>
           </div>
 
           <!-- Controls hint -->
@@ -231,7 +235,7 @@ export class HUD {
             <div class="guide-col">
               <span class="guide-title">DESKTOP CONTROLS</span>
               <span class="guide-key"><b>W / ▲</b> Accelerate &nbsp; <b>S / ▼</b> Brake / Reverse</span>
-              <span class="guide-key"><b>A / D / ◄ / ►</b> Free Steering (360° heading)</span>
+              <span class="guide-key"><b>A / D / ◄ / ►</b> Smooth Lane Steer (Auto-centers)</span>
               <span class="guide-key"><b>SHIFT / N</b> Nitro Boost &nbsp; <b>SPACE</b> Handbrake Drift</span>
               <span class="guide-key"><b>G</b> Shift Gear (D/R) &nbsp; <b>C</b> Camera &nbsp; <b>R</b> Restart</span>
             </div>
@@ -354,6 +358,22 @@ export class HUD {
 
   bindEvents() {
     document.getElementById('btn-hud-camera').addEventListener('click', () => this.onSwitchCamera?.());
+
+    const toggleHandlingBtn = document.getElementById('btn-toggle-handling');
+    if (toggleHandlingBtn) {
+      toggleHandlingBtn.addEventListener('click', () => {
+        this.audio.playButtonClick();
+        if (this.onToggleHandling) {
+          const newMode = this.onToggleHandling();
+          toggleHandlingBtn.textContent = newMode === 'ARCADE'
+            ? 'HANDLING: ASSISTED ARCADE (RECOMMENDED)'
+            : 'HANDLING: ADVANCED FREESTYLE (360°)';
+          toggleHandlingBtn.style.borderColor = newMode === 'ARCADE'
+            ? 'rgba(77, 238, 234, 0.4)'
+            : 'rgba(255, 190, 11, 0.6)';
+        }
+      });
+    }
 
     // Gear Shift Buttons (HUD pill & Mobile button)
     this.hudGear.addEventListener('click', () => this.onGearToggle?.());

@@ -3,33 +3,39 @@ import { CONSTANTS } from '../utils/constants.js';
 
 const damp = (a, b, rate, dt) => THREE.MathUtils.damp(a, b, rate, dt);
 
-// Ferrari 458 Italia by vicent091036, CC BY 4.0.
+// Ferrari 458 Italia - High-Performance Sports Car with Assisted Arcade Driving
 export class PlayerCar {
   constructor(scene, source) {
-    this.position = new THREE.Vector3(3.8, 0, 10); // Start in right carriageway forward lane
+    // Driving Mode: 'ARCADE' (Assisted Arcade Driving - DEFAULT) or 'ADVANCED' (Freestyle 360°)
+    this.driveMode = 'ARCADE';
+
+    // Position along road spline
+    // Right carriageway forward lanes: inner lane u = 3.5m, outer lane u = 6.8m
+    this.currentS = 10;
+    this.currentU = 4.8; // Centered in right carriageway forward lanes
+    this.position = new THREE.Vector3(4.8, 0, 10);
     this.velocity = new THREE.Vector3();
-    this.heading = 0; // Yaw angle in radians (0 = facing +Z)
+    this.lateralVelocity = 0; // Lateral velocity for smooth lane changes
+
+    // Forward physics
     this.speed = 0; // Signed forward speed in m/s (positive = forward, negative = reverse)
     this.speedKmh = 0;
     this.gear = 'D'; // 'D' (Drive) or 'R' (Reverse)
     this.steerAngle = 0;
-    this.wheelbase = 2.65;
-    this.lateralSlip = 0; // Lateral slide velocity during drift
+    this.heading = 0; // World yaw angle in radians
 
     // Nitro & Drift
-    this.nitro = 100; // 0 to 100%
+    this.nitro = 100;
     this.isNitroActive = false;
     this.isDrifting = false;
     this.driftScore = 0;
-    this.driftTimer = 0;
 
-    // Road Spline Tracking & Wrong Way
-    this.currentS = 10;
-    this.currentU = 3.8;
+    // Advanced mode tracking
+    this.wheelbase = 2.65;
     this.isWrongWay = false;
     this.wrongWayTimer = 0;
 
-    // Body dynamics
+    // Body dynamics (roll & pitch)
     this.rollAngle = this.pitchAngle = 0;
     this.rollVelocity = this.pitchVelocity = this.elapsed = 0;
 
@@ -112,6 +118,15 @@ export class PlayerCar {
     scene.add(this.group);
   }
 
+  setDriveMode(mode) {
+    this.driveMode = mode;
+  }
+
+  toggleDriveMode() {
+    this.driveMode = this.driveMode === 'ARCADE' ? 'ADVANCED' : 'ARCADE';
+    return this.driveMode;
+  }
+
   toggleGear() {
     if (Math.abs(this.speed) < 12 / 3.6) {
       this.gear = this.gear === 'D' ? 'R' : 'D';
@@ -123,18 +138,7 @@ export class PlayerCar {
     const p = CONSTANTS.PLAYER;
     this.elapsed += dt;
 
-    // 1. Steering sensitivity based on speed:
-    //    Full lock (0.65 rad / ~37 deg) at low speeds allows agile U-turns!
-    //    Smoothly tapers at 200+ km/h for high-speed highway stability.
-    const speedAbs = Math.abs(this.speed);
-    const speedRatio = Math.min(1.0, speedAbs / (230 / 3.6));
-    const maxSteerLimit = 0.65 - speedRatio * 0.43; // 0.65 rad down to 0.22 rad
-    const targetSteerAngle = input.steer * maxSteerLimit;
-
-    const steerSmoothing = input.steer === 0 ? 15.0 : 10.0;
-    this.steerAngle += (targetSteerAngle - this.steerAngle) * Math.min(1.0, dt * steerSmoothing);
-
-    // 2. Nitro Management
+    // 1. Nitro Boost System
     this.isNitroActive = false;
     let nitroThrust = 0;
     if (input.nitro > 0.5 && this.nitro > 5 && this.gear === 'D' && this.speed > 5) {
@@ -142,159 +146,194 @@ export class PlayerCar {
       this.nitro = Math.max(0, this.nitro - 25.0 * dt);
       nitroThrust = 16.0;
     } else {
-      this.nitro = Math.min(100, this.nitro + 4.5 * dt);
+      this.nitro = Math.min(100, this.nitro + 5.0 * dt);
     }
 
-    // 3. Acceleration, Braking and Gear Shift (Automatic Drive / Reverse)
+    // 2. Forward / Reverse Speed & Transmission
     const isBraking = input.brake > 0.05;
     const isHandbraking = input.handbrake > 0.1;
     const topForwardSpeed = (this.isNitroActive ? 260 : p.MAX_SPEED_KMH) / 3.6;
-    const topReverseSpeed = 65 / 3.6;
+    const topReverseSpeed = 48 / 3.6;
+    const speedRatio = THREE.MathUtils.clamp(Math.abs(this.speed) / (p.MAX_SPEED_KMH / 3.6), 0, 1);
 
     if (this.gear === 'D') {
       if (input.throttle > 0.05) {
-        const engineTorque = input.throttle * (p.ACCELERATION + nitroThrust) * (1 - 0.42 * (this.speed / topForwardSpeed));
+        const engineTorque = input.throttle * (p.ACCELERATION + nitroThrust) * (1 - 0.45 * speedRatio);
         this.speed = Math.min(topForwardSpeed, this.speed + engineTorque * dt);
       } else if (isBraking) {
         if (this.speed > 0.6) {
           this.speed = Math.max(0, this.speed - input.brake * p.BRAKING * dt);
         } else {
-          // Automatic shift to Reverse when stopped and brake held
+          // Holding brake when stopped automatically engages Reverse gear!
           this.gear = 'R';
-          this.speed = 0;
+          this.speed = -0.5;
         }
       } else {
-        // Natural rolling friction & aerodynamic drag
-        const drag = 0.8 + 0.0006 * this.speed ** 2;
+        // Natural aerodynamic rolling resistance
+        const drag = 0.8 + 0.00065 * (this.speed ** 2);
         this.speed = Math.max(0, this.speed - drag * dt);
       }
-    } else if (this.gear === 'R') {
-      if (isBraking) {
-        // Reverse throttle
-        const revThrust = input.brake * 9.5 * (1 - 0.4 * (Math.abs(this.speed) / topReverseSpeed));
-        this.speed = Math.max(-topReverseSpeed, this.speed - revThrust * dt);
-      } else if (input.throttle > 0.05) {
-        if (this.speed < -0.6) {
-          this.speed = Math.min(0, this.speed + input.throttle * p.BRAKING * dt);
-        } else {
-          // Automatic shift back to Drive
-          this.gear = 'D';
-          this.speed = 0;
-        }
+
+      if (isHandbraking) {
+        this.speed = Math.max(0, this.speed - p.HANDBRAKE_DECEL * dt);
+      }
+    } else {
+      // Reverse gear transmission
+      if (input.throttle > 0.1 && Math.abs(this.speed) < 1.0) {
+        // Holding gas when stopped in reverse smoothly shifts back into Drive!
+        this.gear = 'D';
+        this.speed = 0.5;
+      } else if (isBraking || input.throttle < 0.05) {
+        // In reverse, pressing brake / down accelerates backwards
+        const revAcc = (input.brake > 0.05 ? input.brake : 0.8) * 8.5;
+        this.speed = Math.max(-topReverseSpeed, this.speed - revAcc * dt);
       } else {
-        this.speed = Math.min(0, this.speed + 4.0 * dt);
+        this.speed = Math.min(0, this.speed + 12.0 * dt);
       }
     }
-
-    if (isHandbraking && speedAbs > 1) {
-      this.speed = Math.sign(this.speed) * Math.max(0, speedAbs - p.HANDBRAKE_DECEL * dt);
-    }
-
     this.speedKmh = this.speed * 3.6;
 
-    // 4. Free-Steering Heading & Slip Dynamics
-    // Kinematic bicycle yaw rate: omega = (v / L) * tan(delta)
-    let gripFactor = THREE.MathUtils.smoothstep(speedAbs, 0, 8);
-    let driftMultiplier = 1.0;
+    let distanceDelta = this.speed * dt;
 
-    this.isDrifting = false;
-    if (isHandbraking && speedAbs > 12) {
-      this.isDrifting = true;
-      driftMultiplier = 1.85; // Tail kicks out into slide
-      this.driftTimer += dt;
-      this.driftScore += Math.floor(speedAbs * 12 * dt);
-    } else {
-      this.driftTimer = Math.max(0, this.driftTimer - dt * 2);
-    }
+    // 3. STEERING & LATERAL KINEMATICS
+    if (this.driveMode === 'ARCADE' || !spline) {
+      // =========================================================================
+      // ASSISTED ARCADE DRIVING (DEFAULT)
+      // Intuitive, stable handling from previous production build:
+      // - Left/Right provides smooth, predictable lane changes
+      // - Auto-follows highway curvature with ZERO user effort
+      // - Releasing steering instantly stabilizes the car in its current lane
+      // - Steering sensitivity automatically tapers at high speeds
+      // - Strictly clamped to drivable roadway surface (cannot enter grass)
+      // =========================================================================
+      const grip = THREE.MathUtils.smoothstep(Math.abs(this.speedKmh), 0, 32);
 
-    if (speedAbs > 0.1) {
-      const yawRate = (this.speed / this.wheelbase) * Math.tan(this.steerAngle) * gripFactor * driftMultiplier;
-      this.heading += yawRate * dt;
-    }
+      // Target lateral speed:
+      // Left input (steer > 0): shifts car LEFT (decreases u towards inner lane)
+      // Right input (steer < 0): shifts car RIGHT (increases u towards outer lane)
+      // Sensitivity decreases with speed for rock-solid highway stability
+      const steerSpeed = (p.STEER_SPEED - speedRatio * 2.2) * grip;
+      const targetLateralVel = -input.steer * steerSpeed;
 
-    // Keep heading in [-PI, PI]
-    this.heading = (this.heading + Math.PI) % (2 * Math.PI) - Math.PI;
+      // Fast auto-center damping when steering is released (steer === 0)
+      const lateralDamping = input.steer === 0 ? 10.0 : 7.2;
+      this.lateralVelocity = damp(this.lateralVelocity, targetLateralVel, lateralDamping, dt);
 
-    // 5. Position Integration (World Coordinates)
-    // Forward unit vector in Three.js coordinate system (facing -Z when yaw=0? Or facing +Z?)
-    // In our verified system: forward is (+Z), Left is (+X), Right is (-X).
-    // Vector for heading:
-    const fwdX = -Math.sin(this.heading);
-    const fwdZ = Math.cos(this.heading);
+      // Handbrake drift responsiveness
+      this.isDrifting = isHandbraking && Math.abs(this.speedKmh) > 45 && Math.abs(input.steer) > 0.2;
+      if (this.isDrifting) {
+        this.lateralVelocity *= 1.15;
+      }
 
-    const distanceDelta = this.speed * dt;
-    this.position.x += fwdX * distanceDelta;
-    this.position.z += fwdZ * distanceDelta;
+      // Integrate lateral position across road
+      this.currentU += this.lateralVelocity * dt;
 
-    // 6. Spline Projection, Wrong-Way Logic & Barrier Collisions
-    if (spline) {
-      const proj = spline.project(this.position, this.currentS);
-      this.currentS = proj.s;
-      this.currentU = proj.u;
+      // Strict road boundary enforcement:
+      // Right carriageway forward lanes:
+      // Center median curb is at u = 1.8m, Outer guardrail is at u = 8.6m.
+      const minU = 1.8;
+      const maxU = 8.6;
 
-      const frame = proj.frame;
-      if (frame) {
-        // Wrong-way check:
-        // Forward road tangent heading
-        const roadHeading = frame.heading;
-        let headingDiff = Math.abs(this.heading - roadHeading);
-        if (headingDiff > Math.PI) headingDiff = 2 * Math.PI - headingDiff;
-
-        // On right carriageway (u > 0), player should be driving in road heading direction (diff < 90 deg)
-        // On left carriageway (u < 0), oncoming traffic flows opposite (diff > 90 deg is normal for oncoming, but diff < 90 deg is driving against oncoming traffic!)
-        if (proj.u > 0.8 && headingDiff > Math.PI * 0.55 && speedAbs > 4) {
-          this.isWrongWay = true;
-          this.wrongWayTimer += dt;
-        } else if (proj.u < -0.8 && headingDiff < Math.PI * 0.45 && speedAbs > 4) {
-          // Driving forward in opposite carriageway into oncoming traffic!
-          this.isWrongWay = true;
-          this.wrongWayTimer += dt;
-        } else {
-          this.isWrongWay = false;
+      if (this.currentU > maxU) {
+        this.currentU = maxU;
+        if (this.lateralVelocity > 0) {
+          // Elastic rebound keeping car safely within drivable road surface
+          this.lateralVelocity = -Math.min(Math.abs(this.lateralVelocity) * 0.4 + 0.6, 2.0);
+          this.speed = Math.max(0, this.speed - 6.0 * dt);
+          this.rollVelocity += 1.6;
         }
-
-        // Road Boundary & Barrier Collisions:
-        // Outer Guardrails at |u| = 10.1m
-        const maxRoadU = 10.05;
-        if (Math.abs(proj.u) > maxRoadU) {
-          const side = Math.sign(proj.u);
-          const clampedPos = spline.getPointAt(proj.s, side * maxRoadU, this.position.y);
-          this.position.copy(clampedPos);
-          // Elastic bounce inward
-          this.speed *= 0.82;
-          this.rollVelocity += side * 2.2;
-        }
-
-        // Center Median Barrier:
-        // Median is from u = -0.5m to +0.5m.
-        // If frame.isMedianOpen is FALSE: solid concrete barrier blocks crossing!
-        if (!frame.isMedianOpen && Math.abs(proj.u) < 0.6) {
-          const side = proj.u >= 0 ? 1 : -1;
-          const clampedPos = spline.getPointAt(proj.s, side * 0.75, this.position.y);
-          this.position.copy(clampedPos);
-          this.speed *= 0.85;
-          this.rollVelocity -= side * 2.0;
+      } else if (this.currentU < minU) {
+        this.currentU = minU;
+        if (this.lateralVelocity < 0) {
+          // Elastic rebound keeping car safely within drivable road surface
+          this.lateralVelocity = Math.min(Math.abs(this.lateralVelocity) * 0.4 + 0.6, 2.0);
+          this.speed = Math.max(0, this.speed - 6.0 * dt);
+          this.rollVelocity -= 1.6;
         }
       }
+
+      // Advance along road spline
+      this.currentS = Math.max(0, this.currentS + distanceDelta);
+
+      // Compute 3D World Transformation from Road Spline
+      let frame;
+      if (spline) {
+        frame = spline.getFrameAt(this.currentS);
+        const worldPos = spline.getPointAt(this.currentS, this.currentU, 0);
+        this.position.copy(worldPos);
+
+        // Visual steering yaw: gentle tilt during lane changes (returns to 0 when released)
+        const visualYaw = Math.atan2(-this.lateralVelocity, Math.max(16, Math.abs(this.speed))) * 0.45;
+        this.heading = frame.heading + visualYaw;
+      } else {
+        this.position.set(this.currentU, 0, this.currentS);
+        this.heading = 0;
+      }
+
+      this.isWrongWay = false;
+
+      // Wheel turn angle (for visual front wheels)
+      this.steerAngle = damp(this.steerAngle, input.steer * p.MAX_STEER_ANGLE * grip / (1 + speedRatio * 1.5), 14, dt);
+
+      // Centrifugal curve roll & steering roll
+      const curveRoll = THREE.MathUtils.clamp((this.speed ** 2) * (frame?.curvature || 0) * -0.003, -0.05, 0.05);
+      const steerRoll = THREE.MathUtils.clamp(-this.lateralVelocity * 0.008, -0.04, 0.04);
+      this.rollAngle = damp(this.rollAngle, curveRoll + steerRoll, 8, dt);
+
+      // Pitch dynamics (acceleration squat, brake dive)
+      const targetPitch = THREE.MathUtils.clamp(isBraking ? 0.04 : (input.throttle ? -0.025 : 0), -0.035, 0.05);
+      this.pitchAngle = damp(this.pitchAngle, targetPitch, 8, dt);
+
+    } else {
+      // =========================================================================
+      // OPTIONAL ADVANCED / FREESTYLE MODE (Bicycle Kinematics, 360° Heading)
+      // For optional freestyle U-turns and wrong-way driving
+      // =========================================================================
+      const speedAbs = Math.abs(this.speed);
+      const maxSteerLimit = 0.55 - speedRatio * 0.35;
+      const targetSteerAngle = input.steer * maxSteerLimit;
+      this.steerAngle = damp(this.steerAngle, targetSteerAngle, input.steer === 0 ? 14.0 : 9.0, dt);
+
+      const yawRate = (this.speed / this.wheelbase) * Math.tan(this.steerAngle);
+      this.heading += yawRate * dt;
+
+      const fwdX = -Math.sin(this.heading);
+      const fwdZ = Math.cos(this.heading);
+      this.position.x += fwdX * distanceDelta;
+      this.position.z += fwdZ * distanceDelta;
+
+      if (spline) {
+        const proj = spline.project(this.position, this.currentS);
+        this.currentS = proj.s;
+        this.currentU = proj.u;
+
+        // Boundary clamp
+        if (Math.abs(proj.u) > 10.05) {
+          const side = Math.sign(proj.u);
+          this.position.copy(spline.getPointAt(proj.s, side * 10.05, 0));
+          this.speed *= 0.85;
+        }
+
+        const frame = spline.getFrameAt(this.currentS);
+        let headingDiff = Math.abs(this.heading - frame.heading);
+        if (headingDiff > Math.PI) headingDiff = 2 * Math.PI - headingDiff;
+        this.isWrongWay = (proj.u > 0.8 && headingDiff > Math.PI * 0.55 && speedAbs > 6) ||
+                          (proj.u < -0.8 && headingDiff < Math.PI * 0.45 && speedAbs > 6);
+      }
+
+      this.isDrifting = isHandbraking && speedAbs > 12;
+      this.rollAngle = damp(this.rollAngle, THREE.MathUtils.clamp(-yawRate * 0.05, -0.065, 0.065), 8, dt);
+      this.pitchAngle = damp(this.pitchAngle, THREE.MathUtils.clamp(isBraking ? 0.04 : -0.02, -0.035, 0.05), 8, dt);
     }
 
-    // 7. Update 3D Transformations
+    // 4. Update 3D Transformations
     this.group.position.copy(this.position);
     this.group.rotation.y = this.heading;
+    this.carBodyGroup.rotation.set(this.pitchAngle, 0, this.rollAngle);
 
-    // Wheel animation
+    // Wheel spin & steer rotations
     for (const wheel of this.wheels) wheel.rotation.x += distanceDelta / 0.345;
     for (const holder of this.frontWheelHolders) holder.rotation.y = this.steerAngle;
-
-    // Body roll (centrifugal tilt into turns) & pitch (acceleration squat, brake dive)
-    const lateralAccel = (speedAbs * (this.speed / this.wheelbase) * Math.tan(this.steerAngle));
-    const targetRoll = THREE.MathUtils.clamp(-lateralAccel * 0.003, -0.065, 0.065);
-    const accelForward = (distanceDelta / Math.max(dt, 0.001));
-    const targetPitch = THREE.MathUtils.clamp(this.gear === 'D' ? (input.throttle ? -0.025 : isBraking ? 0.045 : 0) : (isBraking ? -0.025 : 0.02), -0.04, 0.05);
-
-    this.rollAngle = damp(this.rollAngle, targetRoll, 8, dt);
-    this.pitchAngle = damp(this.pitchAngle, targetPitch, 8, dt);
-    this.carBodyGroup.rotation.set(this.pitchAngle, 0, this.rollAngle);
 
     // Interior steering wheel rotation
     if (this.steeringWheel) {
@@ -322,17 +361,20 @@ export class PlayerCar {
   }
 
   reset() {
-    this.position.set(3.8, 0, 10);
+    this.currentS = 10;
+    this.currentU = 4.8;
+    this.position.set(4.8, 0, 10);
     this.velocity.set(0, 0, 0);
+    this.lateralVelocity = 0;
     this.heading = 0;
     this.speed = 0;
     this.speedKmh = 0;
     this.gear = 'D';
     this.steerAngle = 0;
     this.nitro = 100;
+    this.isNitroActive = false;
+    this.isDrifting = false;
     this.driftScore = 0;
-    this.currentS = 10;
-    this.currentU = 3.8;
     this.isWrongWay = false;
     this.wrongWayTimer = 0;
     this.group.position.copy(this.position);

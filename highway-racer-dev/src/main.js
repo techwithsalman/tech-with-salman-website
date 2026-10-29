@@ -35,6 +35,7 @@ class GameApp {
     this.hud = new HUD(this.uiContainer, this.gameState, this.input, this.audio);
     this.hud.onSwitchCamera = () => this.cameraController.switchMode(this.playerCar.hasInterior);
     this.hud.onGearToggle = () => this.playerCar.toggleGear();
+    this.hud.onToggleHandling = () => this.playerCar.toggleDriveMode();
     this.cameraController.onModeChanged = name => this.hud.setCameraMode(name);
     this.input.onRestartRequested = () => {
       if (!this.gameState.isMenu()) this.startNewRace();
@@ -90,7 +91,7 @@ class GameApp {
       this.trafficManager.reset();
       this.sceneManager.update(this.playerCar.position.z, this.playerCar.position.x);
       this.cameraController.setMenuMode();
-      this.cameraController.reset(this.playerCar.position);
+      this.cameraController.reset(this.playerCar.position, this.playerCar.heading);
       this.gameState.setState(STATES.MENU);
     };
   }
@@ -120,7 +121,7 @@ class GameApp {
     this.playerCar.reset();
     this.sceneManager.update(this.playerCar.position.z, this.playerCar.position.x);
     this.trafficManager.reset(true);
-    this.cameraController.reset(this.playerCar.position);
+    this.cameraController.reset(this.playerCar.position, this.playerCar.heading);
     this.gameState.setState(STATES.PLAYING);
   }
 

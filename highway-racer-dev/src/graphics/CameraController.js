@@ -121,10 +121,13 @@ export class CameraController {
   reset(p, heading = 0) {
     const fwdX = -Math.sin(heading);
     const fwdZ = Math.cos(heading);
-    this.currentPos.set(p.x - fwdX * 7.1, 2.6, p.z - fwdZ * 7.1);
-    this.currentLookAt.set(p.x + fwdX * 11, 0.95, p.z + fwdZ * 11);
+    this.currentPos.set(p.x - fwdX * 7.2, 2.6, p.z - fwdZ * 7.2);
+    this.currentLookAt.set(p.x + fwdX * 12, 0.95, p.z + fwdZ * 12);
+    this.targetPos.copy(this.currentPos);
+    this.targetLook.copy(this.currentLookAt);
     this.camera.position.copy(this.currentPos);
     this.camera.lookAt(this.currentLookAt);
     this.shakeIntensity = this.elapsed = 0;
+    this.transitionRemaining = 0.65;
   }
 }

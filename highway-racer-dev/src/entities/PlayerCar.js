@@ -28,7 +28,8 @@ export class PlayerCar {
     // The source body mesh includes mirrors; retain the established body collider.
     this.width = CONSTANTS.PLAYER.WIDTH;
     this.height = size.y; this.length = size.z;
-    this.maxLateralX = CONSTANTS.ROAD_WIDTH / 2 + CONSTANTS.SHOULDER_WIDTH - this.width / 2 - 0.35;
+    // Keep car strictly within drivable highway surface (outer edge line is at 7.45m)
+    this.maxLateralX = 7.35;
     this.wheels = [];
     this.frontWheelHolders = [];
     this.paintMat = new THREE.MeshPhysicalMaterial({
@@ -94,8 +95,27 @@ export class PlayerCar {
     const grip = THREE.MathUtils.smoothstep(this.speedKmh,0,35);
     this.velocity.x = damp(this.velocity.x, input.steer * (p.STEER_SPEED - speedRatio * 1.8) * grip,
       input.handbrake > 0.1 ? 3 : 6.5, dt);
-    this.position.x = THREE.MathUtils.clamp(this.position.x + this.velocity.x * dt,-this.maxLateralX,this.maxLateralX);
-    if (Math.abs(this.position.x) >= this.maxLateralX) this.velocity.x = 0;
+    
+    // Position integration with strict road boundary constraint
+    this.position.x += this.velocity.x * dt;
+    if (this.position.x > this.maxLateralX) {
+      this.position.x = this.maxLateralX;
+      if (this.velocity.x > 0) {
+        // Elastic rebound keeping car safely within drivable road surface
+        this.velocity.x = -Math.min(Math.abs(this.velocity.x) * 0.45 + 0.8, 2.5);
+        this.velocity.z = Math.max(0, this.velocity.z - 5.5 * dt);
+        this.rollVelocity += 1.6;
+      }
+    } else if (this.position.x < -this.maxLateralX) {
+      this.position.x = -this.maxLateralX;
+      if (this.velocity.x < 0) {
+        // Elastic rebound keeping car safely within drivable road surface
+        this.velocity.x = Math.min(Math.abs(this.velocity.x) * 0.45 + 0.8, 2.5);
+        this.velocity.z = Math.max(0, this.velocity.z - 5.5 * dt);
+        this.rollVelocity -= 1.6;
+      }
+    }
+
     const distanceDelta = this.velocity.z * dt;
     this.position.z += distanceDelta;
     this.group.position.copy(this.position);

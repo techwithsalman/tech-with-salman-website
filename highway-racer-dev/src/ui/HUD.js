@@ -79,12 +79,49 @@ export class HUD {
         <!-- Mobile Touch Controls -->
         <div id="hud-mobile-controls" class="hud-mobile-controls">
           <div class="mobile-left-cluster">
-            <button id="touch-left" class="touch-btn steer-btn" aria-label="Steer Left">◀</button>
-            <button id="touch-right" class="touch-btn steer-btn" aria-label="Steer Right">▶</button>
+            <button id="touch-left" class="touch-btn steer-btn" aria-label="Steer Left">
+              <svg viewBox="0 0 44 44" class="touch-icon steer-icon" aria-hidden="true">
+                <path d="M 27 10 L 15 22 L 27 34" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M 33 14 L 23 22 L 33 30" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+              </svg>
+            </button>
+            <button id="touch-right" class="touch-btn steer-btn" aria-label="Steer Right">
+              <svg viewBox="0 0 44 44" class="touch-icon steer-icon" aria-hidden="true">
+                <path d="M 17 10 L 29 22 L 17 34" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M 11 14 L 21 22 L 11 30" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+              </svg>
+            </button>
           </div>
           <div class="mobile-right-cluster">
-            <button id="touch-brake" class="touch-btn pedal-btn pedal-brake" aria-label="Brake">BRAKE</button>
-            <button id="touch-throttle" class="touch-btn pedal-btn pedal-gas" aria-label="Accelerate">GAS</button>
+            <button id="touch-brake" class="touch-btn pedal-btn pedal-brake" aria-label="Brake">
+              <svg viewBox="0 0 60 70" class="touch-icon pedal-icon pedal-brake-icon" aria-hidden="true">
+                <rect x="4" y="4" width="52" height="62" rx="9" fill="rgba(38,12,16,0.92)" stroke="#ef4050" stroke-width="1.8"/>
+                <rect x="8" y="8" width="44" height="54" rx="6" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                <rect x="12" y="15" width="36" height="4.5" rx="2.2" fill="#ef4050" opacity="0.95"/>
+                <rect x="12" y="24" width="36" height="4.5" rx="2.2" fill="#ef4050" opacity="0.95"/>
+                <rect x="12" y="33" width="36" height="4.5" rx="2.2" fill="#ef4050" opacity="0.95"/>
+                <rect x="12" y="42" width="36" height="4.5" rx="2.2" fill="#ef4050" opacity="0.95"/>
+                <circle cx="18" cy="54" r="2.5" fill="#ff6b7a"/>
+                <circle cx="30" cy="54" r="2.5" fill="#ff6b7a"/>
+                <circle cx="42" cy="54" r="2.5" fill="#ff6b7a"/>
+              </svg>
+              <span class="pedal-sub-label">BRAKE</span>
+            </button>
+            <button id="touch-throttle" class="touch-btn pedal-btn pedal-gas" aria-label="Accelerate">
+              <svg viewBox="0 0 50 80" class="touch-icon pedal-icon pedal-gas-icon" aria-hidden="true">
+                <path d="M 7 10 Q 7 5 12 5 L 38 5 Q 43 5 43 10 L 41 70 Q 41 75 36 75 L 14 75 Q 9 75 9 70 Z" fill="rgba(12,30,38,0.92)" stroke="#4deeea" stroke-width="1.8"/>
+                <line x1="16" y1="14" x2="16" y2="65" stroke="#4deeea" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                <line x1="25" y1="12" x2="25" y2="67" stroke="#4deeea" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                <line x1="34" y1="14" x2="34" y2="65" stroke="#4deeea" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                <circle cx="20.5" cy="22" r="1.6" fill="#ffffff" opacity="0.8"/>
+                <circle cx="29.5" cy="22" r="1.6" fill="#ffffff" opacity="0.8"/>
+                <circle cx="20.5" cy="38" r="1.6" fill="#ffffff" opacity="0.8"/>
+                <circle cx="29.5" cy="38" r="1.6" fill="#ffffff" opacity="0.8"/>
+                <circle cx="20.5" cy="54" r="1.6" fill="#ffffff" opacity="0.8"/>
+                <circle cx="29.5" cy="54" r="1.6" fill="#ffffff" opacity="0.8"/>
+              </svg>
+              <span class="pedal-sub-label">GAS</span>
+            </button>
           </div>
         </div>
       </div>

@@ -7,7 +7,7 @@ export const CONSTANTS = {
   get ROAD_WIDTH() {
     return this.LANE_WIDTH * this.LANE_COUNT; // 15.2m
   },
-  SHOULDER_WIDTH: 2.5,
+  SHOULDER_WIDTH: 2.6,
   SEGMENT_LENGTH: 120,
   VISIBLE_SEGMENTS: 8, // ~960m continuous forward view
 
@@ -23,11 +23,11 @@ export const CONSTANTS = {
     HEIGHT: 1.25,
     MAX_SPEED_KMH: 230,
     MIN_SPEED_KMH: 0,
-    ACCELERATION: 18.0, // m/s^2 forward thrust
-    BRAKING: 32.0,      // m/s^2 deceleration
+    ACCELERATION: 11.5, // Torque tapers with speed in PlayerCar.
+    BRAKING: 16.0,
     NATURAL_FRICTION: 4.5,
-    HANDBRAKE_DECEL: 45.0,
-    STEER_SPEED: 14.0,  // Lateral lateral speed in m/s
+    HANDBRAKE_DECEL: 20.0,
+    STEER_SPEED: 7.2,
     MAX_STEER_ANGLE: 0.45, // Wheel turn radians
     BODY_ROLL_FACTOR: 0.12, // Roll lean into turns
     BODY_PITCH_FACTOR: 0.05 // Pitch up on accel, down on brake
@@ -52,19 +52,22 @@ export const CONSTANTS = {
     NEAR_MISS_DISTANCE: 2.3 // meters proximity to trigger near-miss
   },
 
-  // Colors
+  // Colors (Vibrant Daytime Highway Environment)
   COLORS: {
-    ASPHALT: 0x18181c,
-    LANE_MARKING: 0xf5f5f7,
-    SHOULDER: 0x222226,
-    BARRIER: 0x3d3d45,
-    BARRIER_REFLECTOR: 0xff3b30,
-    FOG: 0x0c0d14,
-    SKY_TOP: 0x070913,
-    SKY_BOTTOM: 0x151928,
-    SUNSET_LIGHT: 0xff8c42,
-    HEADLIGHT_BEAM: 0xfffaed,
-    TAILLIGHT_GLOW: 0xff1e27,
-    BRAKE_GLOW: 0xff0808
+    ASPHALT: 0x3d414a,
+    LANE_MARKING: 0xffffff,
+    LANE_YELLOW: 0xffcc00,
+    SHOULDER: 0x4e535c,
+    BARRIER: 0x9ca5b0,
+    BARRIER_POST: 0x6e7682,
+    BARRIER_REFLECTOR: 0xff4d36,
+    FOG: 0xbddbf2,
+    SKY_TOP: 0x1f78e0,
+    SKY_BOTTOM: 0xd6ebfb,
+    SUN_LIGHT: 0xfffaee,
+    GRASS: 0x487532,
+    HEADLIGHT_BEAM: 0xfffcf0,
+    TAILLIGHT_GLOW: 0xff2430,
+    BRAKE_GLOW: 0xff0011
   }
 };

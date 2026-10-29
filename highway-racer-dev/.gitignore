@@ -3,3 +3,4 @@ dist/
 .chrome-*/
 .DS_Store
 *.log
+.asset-sources/

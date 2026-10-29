@@ -9,6 +9,7 @@
     <meta name="description" content="Highway Racer 3D - High-speed 3D endless racing on the highway by Tech With Salman. Dodge traffic, achieve high speeds, and set the high score." />
     <meta name="theme-color" content="#07090e" />
     <title>Highway Racer 3D | Tech With Salman</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23b70924'/%3E%3Cpath d='M10 7v18m12-18v18M16 7v4m0 3v4m0 3v4' stroke='white' stroke-width='2'/%3E%3C/svg%3E" />
     <link rel="stylesheet" href="./src/style.css" />
   </head>
   <body>
@@ -17,6 +18,13 @@
 
     <!-- Overlay UI Layer (HUD, Modals, Touch Controls) -->
     <div id="ui-container"></div>
+    <div id="loading-overlay" role="status">
+      <span class="loading-eyebrow">TECH WITH SALMAN / MOTORSPORT</span>
+      <h1>HIGHWAY RACER <i>3D</i></h1>
+      <div class="loading-track"><span></span></div>
+      <p id="loading-status">Loading car & environment…</p>
+      <button id="loading-retry" hidden onclick="location.reload()">RETRY</button>
+    </div>
 
     <!-- Main Game Script -->
     <script type="module" src="./src/main.js"></script>

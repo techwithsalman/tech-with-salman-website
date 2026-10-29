@@ -1,0 +1,28 @@
+{
+  "phase": "before",
+  "telemetry": {
+    "state": "PLAYING",
+    "speed": 230,
+    "distance": 184.5698464244443,
+    "score": 788.6201209493004,
+    "traffic": 2,
+    "renderer": {
+      "frame": 207,
+      "calls": 3421,
+      "triangles": 129082,
+      "points": 0,
+      "lines": 0
+    }
+  },
+  "errors": [
+    {
+      "status": 404,
+      "url": "http://127.0.0.1:5173/favicon.ico"
+    },
+    {
+      "status": 404,
+      "url": "http://127.0.0.1:5173/favicon.ico"
+    }
+  ],
+  "warnings": []
+}

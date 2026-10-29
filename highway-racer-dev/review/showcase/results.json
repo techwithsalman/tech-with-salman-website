@@ -1,0 +1,254 @@
+{
+  "phase": "after",
+  "telemetry": {
+    "state": "PLAYING",
+    "speed": 153.53527150980418,
+    "distance": 120.40397297642062,
+    "score": 145.62059702728243,
+    "traffic": 5,
+    "renderer": {
+      "frame": 444,
+      "calls": 632,
+      "triangles": 2800500,
+      "points": 0,
+      "lines": 0
+    }
+  },
+  "performance": {
+    "frames": 238,
+    "meanFrameMs": 16.68487394957983,
+    "fps": 59.93452530848653,
+    "p95FrameMs": 16.80000000000291,
+    "drawCalls": 585,
+    "triangles": 2567108,
+    "gpu": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1060 6GB (0x00001C03) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "viewport": [
+      1600,
+      1000
+    ],
+    "gameplay": {
+      "state": "PLAYING",
+      "speed": 172.2448652632092,
+      "traffic": 6
+    }
+  },
+  "checks": [
+    {
+      "name": "Game initialized",
+      "passed": true
+    },
+    {
+      "name": "Keyboard acceleration, score and AI traffic",
+      "passed": true,
+      "details": {
+        "state": "PLAYING",
+        "speed": 153.53527150980418,
+        "distance": 120.40397297642062,
+        "score": 145.62059702728243,
+        "traffic": 5,
+        "renderer": {
+          "frame": 444,
+          "calls": 632,
+          "triangles": 2800500,
+          "points": 0,
+          "lines": 0
+        }
+      }
+    },
+    {
+      "name": "Physical model scale and rolling wheels",
+      "passed": true,
+      "details": {
+        "width": 1.95,
+        "length": 4.527,
+        "height": 1.23421375895416,
+        "wheels": 4,
+        "steering": 2,
+        "interior": true,
+        "rotation": 348.9970231200593
+      }
+    },
+    {
+      "name": "Right steering moves right and turns front wheels",
+      "passed": true,
+      "details": {
+        "x": -0.9630572141241822,
+        "angle": 0.19847214451500977
+      }
+    },
+    {
+      "name": "Left steering moves left",
+      "passed": true,
+      "details": {
+        "left": -2.0214545365034393,
+        "right": -0.9630572141241822
+      }
+    },
+    {
+      "name": "Keyboard brake decelerates",
+      "passed": true,
+      "details": {
+        "beforeBrake": 148.71666541679613,
+        "afterBrake": 101.66299337724008
+      }
+    },
+    {
+      "name": "Pause freezes distance and score",
+      "passed": true,
+      "details": {
+        "paused": {
+          "state": "PAUSED",
+          "z": 190.6741786762014,
+          "score": 283.9092944697808
+        },
+        "still": {
+          "z": 190.6741786762014,
+          "score": 283.9092944697808
+        }
+      }
+    },
+    {
+      "name": "R restarts and clears race stats",
+      "passed": true
+    },
+    {
+      "name": "AI vehicles actually advance",
+      "passed": true,
+      "details": {
+        "trafficBefore": 188.28323713425164,
+        "trafficAfter": 204.32908056611052
+      }
+    },
+    {
+      "name": "Cockpit camera enabled",
+      "passed": true
+    },
+    {
+      "name": "Cockpit screenshot is live gameplay",
+      "passed": true
+    },
+    {
+      "name": "Performance sample captured moving gameplay",
+      "passed": true,
+      "details": {
+        "state": "PLAYING",
+        "speed": 172.2448652632092,
+        "traffic": 6
+      }
+    },
+    {
+      "name": "Cinematic camera enabled",
+      "passed": true
+    },
+    {
+      "name": "Cinematic screenshot is live gameplay",
+      "passed": true
+    },
+    {
+      "name": "Cinematic boom avoids an adjacent truck",
+      "passed": true,
+      "details": {
+        "blocked": false,
+        "side": -1,
+        "y": 2.25
+      }
+    },
+    {
+      "name": "Camera cycles back to chase",
+      "passed": true
+    },
+    {
+      "name": "Near miss awards score and combo",
+      "passed": true,
+      "details": {
+        "state": "PLAYING",
+        "misses": 1,
+        "score": 618,
+        "combo": 2
+      }
+    },
+    {
+      "name": "Collision ends race and persists high score",
+      "passed": true,
+      "details": {
+        "state": "GAMEOVER",
+        "high": 1851,
+        "saved": "1851",
+        "modal": true
+      }
+    },
+    {
+      "name": "Game-over restart works",
+      "passed": true
+    },
+    {
+      "name": "Restart clears combo popup and refreshes best score",
+      "passed": true,
+      "details": {
+        "comboHidden": true,
+        "best": "1,851",
+        "expected": "1,851"
+      }
+    },
+    {
+      "name": "Sound toggle works",
+      "passed": true
+    },
+    {
+      "name": "Audio context",
+      "passed": true,
+      "details": {
+        "state": "running"
+      }
+    },
+    {
+      "name": "Mobile pedals fit portrait screen",
+      "passed": true,
+      "details": {
+        "x": 332,
+        "y": 786,
+        "visible": true
+      }
+    },
+    {
+      "name": "Real touch throttle accelerates",
+      "passed": true,
+      "details": {
+        "mobileSpeed": 39.008174954486485
+      }
+    },
+    {
+      "name": "Mobile camera button works",
+      "passed": true
+    },
+    {
+      "name": "Return to menu works",
+      "passed": true
+    },
+    {
+      "name": "Menu hides instruments and touch pedals",
+      "passed": true
+    },
+    {
+      "name": "5km road recycling preserves continuous road around player",
+      "passed": true,
+      "details": [
+        4920,
+        5040,
+        5160,
+        5280,
+        5400,
+        5520,
+        5640,
+        5760
+      ]
+    },
+    {
+      "name": "No browser exceptions or failed requests",
+      "passed": true,
+      "details": []
+    }
+  ],
+  "errors": [],
+  "warnings": []
+}

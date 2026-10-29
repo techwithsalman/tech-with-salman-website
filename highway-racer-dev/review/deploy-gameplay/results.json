@@ -1,0 +1,48 @@
+{
+  "phase": "smoke",
+  "telemetry": {
+    "state": "PLAYING",
+    "speed": 153.53563317773214,
+    "distance": 120.40582773377893,
+    "score": 145.62747437940948,
+    "traffic": 5,
+    "renderer": {
+      "frame": 442,
+      "calls": 357,
+      "triangles": 1476156,
+      "points": 0,
+      "lines": 0
+    }
+  },
+  "checks": [
+    {
+      "name": "Game initialized",
+      "passed": true
+    },
+    {
+      "name": "Packaged build drives with AI traffic",
+      "passed": true,
+      "details": {
+        "state": "PLAYING",
+        "speed": 153.53563317773214,
+        "distance": 120.40582773377893,
+        "score": 145.62747437940948,
+        "traffic": 5,
+        "renderer": {
+          "frame": 442,
+          "calls": 357,
+          "triangles": 1476156,
+          "points": 0,
+          "lines": 0
+        }
+      }
+    },
+    {
+      "name": "Packaged build has no missing assets or browser exceptions",
+      "passed": true,
+      "details": []
+    }
+  ],
+  "errors": [],
+  "warnings": []
+}

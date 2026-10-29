@@ -8,16 +8,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
-// 1. Simple static HTTP server
+// 1. Static HTTP server
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
   '.js': 'application/javascript; charset=utf-8',
   '.json': 'application/json; charset=utf-8',
-  '.png': 'image/png',
-  '.jpg': 'image/jpeg',
-  '.svg': 'image/svg+xml',
-  '.ico': 'image/x-icon'
+  '.png': 'image/png'
 };
 
 const server = http.createServer((req, res) => {
@@ -28,10 +25,9 @@ const server = http.createServer((req, res) => {
   fs.stat(filePath, (err, stats) => {
     if (err || !stats.isFile()) {
       res.writeHead(404, { 'Content-Type': 'text/plain' });
-      res.end('404 Not Found: ' + reqPath);
+      res.end('404 Not Found');
       return;
     }
-
     const ext = path.extname(filePath).toLowerCase();
     res.writeHead(200, { 'Content-Type': MIME_TYPES[ext] || 'application/octet-stream' });
     fs.createReadStream(filePath).pipe(res);
@@ -41,7 +37,7 @@ const server = http.createServer((req, res) => {
 await new Promise((resolve) => server.listen(8080, '127.0.0.1', resolve));
 console.log('Test HTTP server listening at http://127.0.0.1:8080/');
 
-// 2. Launch Headless Chrome with Remote Debugging
+// 2. Launch Chrome at 1920x1080 High Resolution
 const chromePath = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 const userDataDir = path.join(__dirname, '.chrome-test-profile');
 
@@ -50,7 +46,7 @@ const chromeArgs = [
   '--remote-debugging-port=9222',
   '--use-gl=angle',
   '--enable-webgl',
-  '--window-size=1280,720',
+  '--window-size=1920,1080',
   '--no-first-run',
   '--no-default-browser-check',
   `--user-data-dir=${userDataDir}`,
@@ -58,20 +54,15 @@ const chromeArgs = [
 ];
 
 const chromeProcess = spawn(chromePath, chromeArgs);
-
-// Helper to wait
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 await sleep(1500);
 
 try {
-  // Query CDP targets
   const versionRes = await fetch('http://127.0.0.1:9222/json/list');
   const targets = await versionRes.json();
   const pageTarget = targets.find((t) => t.type === 'page') || targets[0];
-  console.log('Connected to Chrome CDP page target:', pageTarget.id);
 
   const ws = new WebSocket(pageTarget.webSocketDebuggerUrl);
-
   let msgId = 1;
   const pendingRequests = new Map();
 
@@ -94,58 +85,51 @@ try {
     ws.onerror = reject;
   });
 
-  function sendCommand(method, params = {}) {
+  const sendCommand = (method, params = {}) => {
     return new Promise((resolve) => {
       const id = msgId++;
       pendingRequests.set(id, resolve);
       ws.send(JSON.stringify({ id, method, params }));
     });
-  }
+  };
 
-  // Enable Runtime and Page domains
   await sendCommand('Runtime.enable');
   await sendCommand('Page.enable');
+  await sendCommand('Emulation.setDeviceMetricsOverride', {
+    width: 1920,
+    height: 1080,
+    deviceScaleFactor: 1,
+    mobile: false
+  });
 
   console.log('Navigating to http://127.0.0.1:8080/games/highway-racer/ ...');
   await sendCommand('Page.navigate', { url: 'http://127.0.0.1:8080/games/highway-racer/' });
 
-  await sleep(2000);
+  // Wait for 3D start menu scene and car showcase rotation
+  await sleep(2500);
 
-  // Take Start Menu screenshot
+  // Take High-Res Start Menu Screenshot
   const menuSnap = await sendCommand('Page.captureScreenshot', { format: 'png' });
-  const menuSnapBuffer = Buffer.from(menuSnap.result.data, 'base64');
   const menuSnapPath = path.join(rootDir, 'games', 'highway-racer', 'screenshot_menu.png');
-  fs.writeFileSync(menuSnapPath, menuSnapBuffer);
-  console.log('Saved Menu screenshot to:', menuSnapPath);
+  fs.writeFileSync(menuSnapPath, Buffer.from(menuSnap.result.data, 'base64'));
+  console.log('Saved High-Res Menu screenshot to:', menuSnapPath);
 
-  // Click START RACE button
-  console.log('Clicking START RACE button...');
-  const clickRes = await sendCommand('Runtime.evaluate', {
-    expression: `
-      (() => {
-        const btn = document.getElementById('btn-start-game');
-        if (btn) {
-          btn.click();
-          return 'Clicked successfully, state=' + window.highwayRacerGame?.gameState?.currentState;
-        }
-        return 'Button not found!';
-      })()
-    `,
+  // Click START RACE
+  console.log('Starting race...');
+  await sendCommand('Runtime.evaluate', {
+    expression: "document.getElementById('btn-start-game').click();",
     returnByValue: true
   });
-  console.log('Click result:', clickRes.result?.result?.value || clickRes);
 
-  await sleep(1000);
+  await sleep(500);
 
-  // Dispatch KeyDown for ArrowUp (Throttle)
-  console.log('Simulating acceleration & steering keys...');
+  // Accelerate straight down the highway in lane
+  console.log('Driving straight in lane at high speed...');
   await sendCommand('Input.dispatchKeyEvent', { type: 'rawKeyDown', key: 'ArrowUp', code: 'ArrowUp', windowsVirtualKeyCode: 38 });
-  await sendCommand('Input.dispatchKeyEvent', { type: 'rawKeyDown', key: 'ArrowRight', code: 'ArrowRight', windowsVirtualKeyCode: 39 });
 
-  // Drive for 4 seconds
   await sleep(3500);
 
-  // Check in-game state
+  // Check in-game telemetry
   const stateCheck = await sendCommand('Runtime.evaluate', {
     expression: `
       (() => {
@@ -157,9 +141,9 @@ try {
           score: Math.round(game?.gameState?.score || 0),
           trafficCount: game?.trafficManager?.activeVehicles?.length || 0,
           playerPos: {
-            x: game?.playerCar?.position?.x,
-            y: game?.playerCar?.position?.y,
-            z: game?.playerCar?.position?.z
+            x: +game?.playerCar?.position?.x?.toFixed(2),
+            y: +game?.playerCar?.position?.y?.toFixed(2),
+            z: +game?.playerCar?.position?.z?.toFixed(2)
           }
         };
       })()
@@ -167,18 +151,16 @@ try {
     returnByValue: true
   });
 
-  console.log('In-Game Telemetry State:', JSON.stringify(stateCheck.result?.result?.value || stateCheck, null, 2));
+  console.log('In-Game Telemetry State:', JSON.stringify(stateCheck.result?.result?.value, null, 2));
 
-  // Take Gameplay screenshot
+  // Take High-Res Gameplay Screenshot
   const playSnap = await sendCommand('Page.captureScreenshot', { format: 'png' });
-  const playSnapBuffer = Buffer.from(playSnap.result.data, 'base64');
   const playSnapPath = path.join(rootDir, 'games', 'highway-racer', 'screenshot_gameplay.png');
-  fs.writeFileSync(playSnapPath, playSnapBuffer);
-  console.log('Saved Gameplay screenshot to:', playSnapPath);
+  fs.writeFileSync(playSnapPath, Buffer.from(playSnap.result.data, 'base64'));
+  console.log('Saved High-Res Gameplay screenshot to:', playSnapPath);
 
   // Release keys
   await sendCommand('Input.dispatchKeyEvent', { type: 'keyUp', key: 'ArrowUp', code: 'ArrowUp', windowsVirtualKeyCode: 38 });
-  await sendCommand('Input.dispatchKeyEvent', { type: 'keyUp', key: 'ArrowRight', code: 'ArrowRight', windowsVirtualKeyCode: 39 });
 
   ws.close();
 } catch (err) {
@@ -186,7 +168,6 @@ try {
 } finally {
   chromeProcess.kill();
   server.close();
-  // Cleanup test user data dir
   try {
     fs.rmSync(userDataDir, { recursive: true, force: true });
   } catch (e) {}

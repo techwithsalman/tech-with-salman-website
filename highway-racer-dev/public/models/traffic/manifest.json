@@ -1,0 +1,245 @@
+{
+  "license": "CC0-1.0",
+  "author": "Innerscene",
+  "vehicles": [
+    {
+      "id": "sedan",
+      "type": "SEDAN",
+      "title": "Graphite four-door sedan",
+      "slug": "graphite-four-door-sedan-eed96d12",
+      "length": 4.867,
+      "width": 1.9,
+      "author": "Innerscene",
+      "license": "CC0-1.0",
+      "source": "https://www.innerscene.com/tools/library/3d-parts/graphite-four-door-sedan-eed96d12",
+      "visualWidth": 2.192932364335921,
+      "height": 1.5536635380407848,
+      "wheelCount": 4,
+      "wheelRadii": [
+        0.32889465312473476,
+        0.32889465312473476,
+        0.32889465312473476,
+        0.32889465312473476
+      ],
+      "levels": [
+        {
+          "file": "sedan-lod0.glb",
+          "triangles": 55603,
+          "bytes": 898124
+        },
+        {
+          "file": "sedan-lod1.glb",
+          "triangles": 17125,
+          "bytes": 120368
+        },
+        {
+          "file": "sedan-lod2.glb",
+          "triangles": 4937,
+          "bytes": 58084
+        }
+      ],
+      "sourceTriangles": 132082,
+      "sourceSha256": "feb0be31d153ddb42dc15ae52a651e214e85ab67e31bec4282b00f9d47c9b597",
+      "adaptations": [
+        "Reoriented to +Z and centered at ground level",
+        "Original wheel parts regrouped around physical axle centers",
+        "Fixed parts merged by material",
+        "Three mesh LOD tiers and Meshopt compression",
+        "Textures reduced to at most 256px; distant materials use baked mean colors"
+      ]
+    },
+    {
+      "id": "suv",
+      "type": "SUV",
+      "title": "Charcoal five-door crossover SUV",
+      "slug": "charcoal-five-door-crossover-suv-a1996830",
+      "length": 4.786,
+      "width": 1.98,
+      "author": "Innerscene",
+      "license": "CC0-1.0",
+      "source": "https://www.innerscene.com/tools/library/3d-parts/charcoal-five-door-crossover-suv-a1996830",
+      "visualWidth": 2.2477698041179366,
+      "height": 1.8349509297671738,
+      "wheelCount": 4,
+      "wheelRadii": [
+        0.36505375523120165,
+        0.36505375523120165,
+        0.36505375523120165,
+        0.36505375523120165
+      ],
+      "levels": [
+        {
+          "file": "suv-lod0.glb",
+          "triangles": 55072,
+          "bytes": 902424
+        },
+        {
+          "file": "suv-lod1.glb",
+          "triangles": 17246,
+          "bytes": 119740
+        },
+        {
+          "file": "suv-lod2.glb",
+          "triangles": 4895,
+          "bytes": 57524
+        }
+      ],
+      "sourceTriangles": 133178,
+      "sourceSha256": "4c64856d9de12cf713f59e4f5a0a5a1ec49baa3d5c8e0bc6ceb1dfedb7620db4",
+      "adaptations": [
+        "Reoriented to +Z and centered at ground level",
+        "Original wheel parts regrouped around physical axle centers",
+        "Fixed parts merged by material",
+        "Three mesh LOD tiers and Meshopt compression",
+        "Textures reduced to at most 256px; distant materials use baked mean colors"
+      ]
+    },
+    {
+      "id": "sports",
+      "type": "SPORTS",
+      "title": "Generic 1990s Japanese-style sports coupe",
+      "slug": "generic-1990s-japanese-style-sports-coupe-ace64592",
+      "length": 4.493,
+      "width": 1.86,
+      "author": "Innerscene",
+      "license": "CC0-1.0",
+      "source": "https://www.innerscene.com/tools/library/3d-parts/generic-1990s-japanese-style-sports-coupe-ace64592",
+      "visualWidth": 2.091568406475209,
+      "height": 1.2869807753575802,
+      "wheelCount": 4,
+      "wheelRadii": [
+        0.32499510364141315,
+        0.32499510364141315,
+        0.32499510364141315,
+        0.32499510364141315
+      ],
+      "levels": [
+        {
+          "file": "sports-lod0.glb",
+          "triangles": 42867,
+          "bytes": 639712
+        },
+        {
+          "file": "sports-lod1.glb",
+          "triangles": 14711,
+          "bytes": 108208
+        },
+        {
+          "file": "sports-lod2.glb",
+          "triangles": 4804,
+          "bytes": 59860
+        }
+      ],
+      "sourceTriangles": 113490,
+      "sourceSha256": "252adf57839e5ad90fd8281455ff366da9e12b0008ae8bf9f316c0728357c25b",
+      "adaptations": [
+        "Reoriented to +Z and centered at ground level",
+        "Original wheel parts regrouped around physical axle centers",
+        "Fixed parts merged by material",
+        "Three mesh LOD tiers and Meshopt compression",
+        "Textures reduced to at most 256px; distant materials use baked mean colors"
+      ]
+    },
+    {
+      "id": "van",
+      "type": "VAN",
+      "title": "High-roof cargo panel van",
+      "slug": "high-roof-cargo-panel-van-c4d5145f",
+      "length": 5.675,
+      "width": 2.08,
+      "author": "Innerscene",
+      "license": "CC0-1.0",
+      "source": "https://www.innerscene.com/tools/library/3d-parts/high-roof-cargo-panel-van-c4d5145f",
+      "visualWidth": 2.6111169966734273,
+      "height": 2.6374166506968444,
+      "wheelCount": 4,
+      "wheelRadii": [
+        0.38719675061292946,
+        0.38719675061292946,
+        0.38719675061292946,
+        0.38719675061292946
+      ],
+      "levels": [
+        {
+          "file": "van-lod0.glb",
+          "triangles": 60580,
+          "bytes": 1010728
+        },
+        {
+          "file": "van-lod1.glb",
+          "triangles": 17604,
+          "bytes": 125136
+        },
+        {
+          "file": "van-lod2.glb",
+          "triangles": 5901,
+          "bytes": 65312
+        }
+      ],
+      "sourceTriangles": 135896,
+      "sourceSha256": "b0d26a40bdb39c67224259213faafef71f9396c0ba658a1bb68cc1626a34ef36",
+      "adaptations": [
+        "Reoriented to +Z and centered at ground level",
+        "Original wheel parts regrouped around physical axle centers",
+        "Fixed parts merged by material",
+        "Three mesh LOD tiers and Meshopt compression",
+        "Textures reduced to at most 256px; distant materials use baked mean colors"
+      ]
+    },
+    {
+      "id": "truck",
+      "type": "TRUCK",
+      "title": "Semi tractor and box trailer",
+      "slug": "semi-tractor-and-box-trailer-bc0bdac8",
+      "length": 17,
+      "width": 2.5,
+      "author": "Innerscene",
+      "license": "CC0-1.0",
+      "source": "https://www.innerscene.com/tools/library/3d-parts/semi-tractor-and-box-trailer-bc0bdac8",
+      "visualWidth": 3.3258690616985684,
+      "height": 3.9970533318609545,
+      "wheelCount": 12,
+      "wheelRadii": [
+        0.5109015703201294,
+        0.5109015703201294,
+        0.5109015703201294,
+        0.5109015703201294,
+        0.5109015703201294,
+        0.5109015703201294,
+        0.5109015703201294,
+        0.5109015703201294,
+        0.5109015703201294,
+        0.5109015703201294,
+        0.5109015703201294,
+        0.5109015703201294
+      ],
+      "levels": [
+        {
+          "file": "truck-lod0.glb",
+          "triangles": 31260,
+          "bytes": 233388
+        },
+        {
+          "file": "truck-lod1.glb",
+          "triangles": 5730,
+          "bytes": 73008
+        },
+        {
+          "file": "truck-lod2.glb",
+          "triangles": 1674,
+          "bytes": 54568
+        }
+      ],
+      "sourceTriangles": 41472,
+      "sourceSha256": "256082a01b127e469adc932084374fd5fafa46b060facace978010a74c2bc67f",
+      "adaptations": [
+        "Reoriented to +Z and centered at ground level",
+        "Original wheel parts regrouped around physical axle centers",
+        "Fixed parts merged by material",
+        "Three mesh LOD tiers and Meshopt compression",
+        "Textures reduced to at most 256px; distant materials use baked mean colors",
+        "Original landing gear raised for travel"
+      ]
+    }
+  ]
+}

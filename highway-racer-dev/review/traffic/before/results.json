@@ -1,0 +1,86 @@
+{
+  "phase": "before",
+  "checks": [
+    {
+      "name": "Game and assets initialize",
+      "passed": true
+    },
+    {
+      "name": "Fixture contains twelve traffic vehicles",
+      "passed": true
+    },
+    {
+      "name": "Benchmark is live driving 0",
+      "passed": true,
+      "details": {
+        "camera": 0,
+        "fps": 58.52540123084351,
+        "meanFrameMs": 17.086597938144326,
+        "p95FrameMs": 16.80000000000109,
+        "frames": 291,
+        "meanDrawCalls": 985.9319727891157,
+        "maxDrawCalls": 1000,
+        "meanTriangles": 2753647.537414966,
+        "state": "PLAYING",
+        "speed": 78.47190039983231,
+        "traffic": 12,
+        "gpu": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1060 6GB (0x00001C03) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      }
+    },
+    {
+      "name": "Benchmark is live driving 1",
+      "passed": true,
+      "details": {
+        "camera": 1,
+        "fps": 59.33106735584559,
+        "meanFrameMs": 16.85457627118645,
+        "p95FrameMs": 16.799999999999272,
+        "frames": 295,
+        "meanDrawCalls": 953.6845637583892,
+        "maxDrawCalls": 968,
+        "meanTriangles": 2621812.375838926,
+        "state": "PLAYING",
+        "speed": 78.47224816931744,
+        "traffic": 12,
+        "gpu": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1060 6GB (0x00001C03) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      }
+    },
+    {
+      "name": "No browser exceptions or failed asset requests",
+      "passed": true,
+      "details": []
+    }
+  ],
+  "errors": [],
+  "warnings": [],
+  "performance": [
+    {
+      "camera": 0,
+      "fps": 58.52540123084351,
+      "meanFrameMs": 17.086597938144326,
+      "p95FrameMs": 16.80000000000109,
+      "frames": 291,
+      "meanDrawCalls": 985.9319727891157,
+      "maxDrawCalls": 1000,
+      "meanTriangles": 2753647.537414966,
+      "state": "PLAYING",
+      "speed": 78.47190039983231,
+      "traffic": 12,
+      "gpu": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1060 6GB (0x00001C03) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    },
+    {
+      "camera": 1,
+      "fps": 59.33106735584559,
+      "meanFrameMs": 16.85457627118645,
+      "p95FrameMs": 16.799999999999272,
+      "frames": 295,
+      "meanDrawCalls": 953.6845637583892,
+      "maxDrawCalls": 968,
+      "meanTriangles": 2621812.375838926,
+      "state": "PLAYING",
+      "speed": 78.47224816931744,
+      "traffic": 12,
+      "gpu": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1060 6GB (0x00001C03) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    }
+  ]
+}

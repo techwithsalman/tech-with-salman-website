@@ -1,0 +1,415 @@
+{
+  "phase": "after",
+  "checks": [
+    {
+      "name": "Game and assets initialize",
+      "passed": true
+    },
+    {
+      "name": "Fixture contains twelve traffic vehicles",
+      "passed": true
+    },
+    {
+      "name": "Benchmark is live driving 0",
+      "passed": true,
+      "details": {
+        "camera": 0,
+        "fps": 59.933228751860334,
+        "meanFrameMs": 16.68523489932886,
+        "p95FrameMs": 16.800000000000182,
+        "frames": 298,
+        "meanDrawCalls": 553.046511627907,
+        "maxDrawCalls": 560,
+        "meanTriangles": 1638339.8272425248,
+        "state": "PLAYING",
+        "speed": 78.63566538769501,
+        "traffic": 12,
+        "gpu": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1060 6GB (0x00001C03) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      }
+    },
+    {
+      "name": "Benchmark is live driving 1",
+      "passed": true,
+      "details": {
+        "camera": 1,
+        "fps": 59.93443414251524,
+        "meanFrameMs": 16.68489932885906,
+        "p95FrameMs": 16.80000000000109,
+        "frames": 298,
+        "meanDrawCalls": 537.0863787375415,
+        "maxDrawCalls": 545,
+        "meanTriangles": 1593953.5813953488,
+        "state": "PLAYING",
+        "speed": 78.69104447479755,
+        "traffic": 12,
+        "gpu": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1060 6GB (0x00001C03) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      }
+    },
+    {
+      "name": "All five classes use loaded GLB LODs",
+      "passed": true,
+      "details": [
+        {
+          "type": "SEDAN",
+          "title": "Graphite four-door sedan",
+          "levels": 3,
+          "wheels": 4,
+          "length": 4.867,
+          "width": 1.9,
+          "height": 1.5536635380407848,
+          "triangles": [
+            55603,
+            17125,
+            4937
+          ]
+        },
+        {
+          "type": "SUV",
+          "title": "Charcoal five-door crossover SUV",
+          "levels": 3,
+          "wheels": 4,
+          "length": 4.786,
+          "width": 1.98,
+          "height": 1.8349509297671738,
+          "triangles": [
+            55072,
+            17246,
+            4895
+          ]
+        },
+        {
+          "type": "SPORTS",
+          "title": "Generic 1990s Japanese-style sports coupe",
+          "levels": 3,
+          "wheels": 4,
+          "length": 4.493,
+          "width": 1.86,
+          "height": 1.2869807753575802,
+          "triangles": [
+            42867,
+            14711,
+            4804
+          ]
+        },
+        {
+          "type": "VAN",
+          "title": "High-roof cargo panel van",
+          "levels": 3,
+          "wheels": 4,
+          "length": 5.675,
+          "width": 2.08,
+          "height": 2.6374166506968444,
+          "triangles": [
+            60580,
+            17604,
+            5901
+          ]
+        },
+        {
+          "type": "TRUCK",
+          "title": "Semi tractor and box trailer",
+          "levels": 3,
+          "wheels": 12,
+          "length": 17,
+          "width": 2.5,
+          "height": 3.9970533318609545,
+          "triangles": [
+            31260,
+            5730,
+            1674
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Vehicle pool reuses released instances",
+      "passed": true,
+      "details": {
+        "reused": true,
+        "stats": {
+          "created": 12,
+          "reused": 40,
+          "released": 51,
+          "discarded": 0
+        }
+      }
+    },
+    {
+      "name": "SEDAN collision triggers game over",
+      "passed": true,
+      "details": {
+        "state": "GAMEOVER",
+        "width": 1.9,
+        "length": 4.867,
+        "height": 1.5536635380407848
+      }
+    },
+    {
+      "name": "SUV collision triggers game over",
+      "passed": true,
+      "details": {
+        "state": "GAMEOVER",
+        "width": 1.98,
+        "length": 4.786,
+        "height": 1.8349509297671738
+      }
+    },
+    {
+      "name": "SPORTS collision triggers game over",
+      "passed": true,
+      "details": {
+        "state": "GAMEOVER",
+        "width": 1.86,
+        "length": 4.493,
+        "height": 1.2869807753575802
+      }
+    },
+    {
+      "name": "VAN collision triggers game over",
+      "passed": true,
+      "details": {
+        "state": "GAMEOVER",
+        "width": 2.08,
+        "length": 5.675,
+        "height": 2.6374166506968444
+      }
+    },
+    {
+      "name": "TRUCK collision triggers game over",
+      "passed": true,
+      "details": {
+        "state": "GAMEOVER",
+        "width": 2.5,
+        "length": 17,
+        "height": 3.9970533318609545
+      }
+    },
+    {
+      "name": "Near miss scores once and avoids false collision",
+      "passed": true,
+      "details": {
+        "state": "PLAYING",
+        "misses": 1,
+        "score": 574
+      }
+    },
+    {
+      "name": "Distance LOD selects near, medium and far meshes",
+      "passed": true,
+      "details": {
+        "selected": [
+          0,
+          1,
+          2
+        ],
+        "rotations": [
+          30.4048725176674,
+          30.4048725176674,
+          30.4048725176674
+        ],
+        "expected": 30.4048725176674,
+        "fresh": true
+      }
+    },
+    {
+      "name": "All LOD wheel poses roll from tire radius without snapping",
+      "passed": true,
+      "details": {
+        "selected": [
+          0,
+          1,
+          2
+        ],
+        "rotations": [
+          30.4048725176674,
+          30.4048725176674,
+          30.4048725176674
+        ],
+        "expected": 30.4048725176674,
+        "fresh": true
+      }
+    },
+    {
+      "name": "Faster coupe follows a slower semi without overlap or lane changes",
+      "passed": true,
+      "details": {
+        "minimumGap": 18.244541666666773,
+        "rearSpeed": 19.9915042871865,
+        "leaderSpeed": 20,
+        "braking": false,
+        "lane": 5.7
+      }
+    },
+    {
+      "name": "Spawn cap, assigned lanes and 35m clearance remain intact",
+      "passed": true,
+      "details": {
+        "count": 12,
+        "lanes": true,
+        "spacing": true,
+        "despawned": 0,
+        "createdDuringReuse": 0,
+        "pools": [
+          4,
+          3,
+          3,
+          2,
+          2
+        ],
+        "stats": {
+          "created": 15,
+          "reused": 1080,
+          "released": 1095,
+          "discarded": 1
+        }
+      }
+    },
+    {
+      "name": "Despawn releases traffic and the pool stays bounded over 1000 reuses",
+      "passed": true,
+      "details": {
+        "count": 12,
+        "lanes": true,
+        "spacing": true,
+        "despawned": 0,
+        "createdDuringReuse": 0,
+        "pools": [
+          4,
+          3,
+          3,
+          2,
+          2
+        ],
+        "stats": {
+          "created": 15,
+          "reused": 1080,
+          "released": 1095,
+          "discarded": 1
+        }
+      }
+    },
+    {
+      "name": "Actual driving collision ends the race and keeps saved scores",
+      "passed": true,
+      "details": {
+        "state": "GAMEOVER",
+        "distance": 12.055708622018086,
+        "highScore": 1200,
+        "saved": "1200"
+      }
+    },
+    {
+      "name": "Restart reseeds the imported fleet",
+      "passed": true
+    },
+    {
+      "name": "No browser exceptions or failed asset requests",
+      "passed": true,
+      "details": []
+    }
+  ],
+  "errors": [],
+  "warnings": [],
+  "performance": [
+    {
+      "camera": 0,
+      "fps": 59.933228751860334,
+      "meanFrameMs": 16.68523489932886,
+      "p95FrameMs": 16.800000000000182,
+      "frames": 298,
+      "meanDrawCalls": 553.046511627907,
+      "maxDrawCalls": 560,
+      "meanTriangles": 1638339.8272425248,
+      "state": "PLAYING",
+      "speed": 78.63566538769501,
+      "traffic": 12,
+      "gpu": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1060 6GB (0x00001C03) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    },
+    {
+      "camera": 1,
+      "fps": 59.93443414251524,
+      "meanFrameMs": 16.68489932885906,
+      "p95FrameMs": 16.80000000000109,
+      "frames": 298,
+      "meanDrawCalls": 537.0863787375415,
+      "maxDrawCalls": 545,
+      "meanTriangles": 1593953.5813953488,
+      "state": "PLAYING",
+      "speed": 78.69104447479755,
+      "traffic": 12,
+      "gpu": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1060 6GB (0x00001C03) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    }
+  ],
+  "assets": [
+    {
+      "type": "SEDAN",
+      "title": "Graphite four-door sedan",
+      "levels": 3,
+      "wheels": 4,
+      "length": 4.867,
+      "width": 1.9,
+      "height": 1.5536635380407848,
+      "triangles": [
+        55603,
+        17125,
+        4937
+      ]
+    },
+    {
+      "type": "SUV",
+      "title": "Charcoal five-door crossover SUV",
+      "levels": 3,
+      "wheels": 4,
+      "length": 4.786,
+      "width": 1.98,
+      "height": 1.8349509297671738,
+      "triangles": [
+        55072,
+        17246,
+        4895
+      ]
+    },
+    {
+      "type": "SPORTS",
+      "title": "Generic 1990s Japanese-style sports coupe",
+      "levels": 3,
+      "wheels": 4,
+      "length": 4.493,
+      "width": 1.86,
+      "height": 1.2869807753575802,
+      "triangles": [
+        42867,
+        14711,
+        4804
+      ]
+    },
+    {
+      "type": "VAN",
+      "title": "High-roof cargo panel van",
+      "levels": 3,
+      "wheels": 4,
+      "length": 5.675,
+      "width": 2.08,
+      "height": 2.6374166506968444,
+      "triangles": [
+        60580,
+        17604,
+        5901
+      ]
+    },
+    {
+      "type": "TRUCK",
+      "title": "Semi tractor and box trailer",
+      "levels": 3,
+      "wheels": 12,
+      "length": 17,
+      "width": 2.5,
+      "height": 3.9970533318609545,
+      "triangles": [
+        31260,
+        5730,
+        1674
+      ]
+    }
+  ]
+}

@@ -43,6 +43,7 @@ export class HUD {
 
           <!-- Utility buttons -->
           <div class="hud-controls-row">
+            <button id="btn-hud-camera" class="hud-icon-btn camera-button" title="Switch camera (C)" aria-label="Switch camera">C <span id="camera-mode">CHASE</span></button>
             <button id="btn-hud-sound" class="hud-icon-btn" title="Toggle Sound" aria-label="Toggle Sound">
               <span id="sound-icon-on">🔊</span>
               <span id="sound-icon-off" class="hidden">🔇</span>
@@ -52,6 +53,8 @@ export class HUD {
             </button>
           </div>
         </div>
+
+        <div class="route-caption"><span>M-2 / NORTHBOUND</span><b>OPEN ROAD. FULL FOCUS.</b><small>WASD / ARROWS · DRIVE &nbsp; C · CAMERA &nbsp; R · RESTART</small></div>
 
         <!-- Floating Near-Miss Alert Toast -->
         <div id="hud-near-miss-popup" class="hud-near-miss-popup hidden">
@@ -90,9 +93,9 @@ export class HUD {
       <div id="menu-modal" class="menu-modal-overlay">
         <div class="menu-card glass-panel">
           <div class="menu-header">
-            <div class="brand-tag">TECH WITH SALMAN</div>
+            <div class="brand-tag">TECH WITH SALMAN / MOTORSPORT</div>
             <h1 class="game-title">HIGHWAY RACER <span class="accent-3d">3D</span></h1>
-            <p class="game-subtitle">Endless High-Speed Traffic Racing</p>
+            <p class="game-subtitle">The road is yours. Make every gap count.</p>
           </div>
 
           <div class="menu-stats-row">
@@ -123,6 +126,8 @@ export class HUD {
               <span class="guide-key"><b>A / D / ◄ / ►</b> Steer</span>
               <span class="guide-key"><b>SPACE</b> Handbrake</span>
               <span class="guide-key"><b>ESC</b> Pause</span>
+              <span class="guide-key"><b>C</b> Chase / Cockpit / Cinematic</span>
+              <span class="guide-key"><b>R</b> Restart</span>
             </div>
             <div class="guide-col">
               <span class="guide-title">MOBILE / TOUCH</span>
@@ -130,6 +135,7 @@ export class HUD {
               <span class="guide-key"><b>Right Cluster:</b> Gas / Brake</span>
             </div>
           </div>
+          <div class="asset-credit">458 Italia by <a href="https://sketchfab.com/models/57bf6cc56931426e87494f554df1dab6" target="_blank" rel="noopener">vicent091036</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · <a href="./credits.html" target="_blank" rel="noopener">Asset credits</a></div>
         </div>
       </div>
 
@@ -217,6 +223,7 @@ export class HUD {
   }
 
   bindEvents() {
+    document.getElementById('btn-hud-camera').addEventListener('click', () => this.onSwitchCamera?.());
     // Menu buttons
     document.getElementById('btn-start-game').addEventListener('click', () => {
       this.audio.ensureContext();
@@ -293,6 +300,14 @@ export class HUD {
   }
 
   subscribeGameState() {
+    this.gameState.on('reset', () => {
+      this.maxRecordedSpeed = 0;
+      clearTimeout(this.popupTimer);
+      this.nearMissPopup.classList.add('hidden');
+      this.nearMissPopup.classList.remove('pop-anim');
+      this.hudComboBadge.classList.add('hidden');
+      this.updateHighScores();
+    });
     this.gameState.on('stateChanged', ({ to }) => {
       this.handleStateChange(to);
     });
@@ -344,6 +359,11 @@ export class HUD {
       this.soundIconOn.classList.add('hidden');
       this.soundIconOff.classList.remove('hidden');
     }
+  }
+
+  setCameraMode(name) {
+    document.getElementById('camera-mode').textContent = name;
+    document.getElementById('btn-hud-camera').setAttribute('aria-label', `Camera: ${name}. Switch camera`);
   }
 
   updateHighScores() {
@@ -417,7 +437,7 @@ export class HUD {
     } else if (speedKmh > 130) {
       this.speedoFill.style.stroke = '#ff9900';
     } else {
-      this.speedoFill.style.stroke = '#00f0ff';
+      this.speedoFill.style.stroke = '#eee9d8';
     }
   }
 }

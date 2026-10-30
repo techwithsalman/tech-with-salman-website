@@ -224,9 +224,12 @@ export class InputManager {
 
     targetSteer = clamp(targetSteer, -1.0, 1.0);
 
-    // Smooth responsive interpolation
-    const steerSmoothing = targetSteer === 0 ? 14.0 : 10.0;
+    // Smooth responsive interpolation with zero-input snap
+    const steerSmoothing = targetSteer === 0 ? 18.0 : 12.0;
     this.steer += (targetSteer - this.steer) * Math.min(1.0, delta * steerSmoothing);
+    if (targetSteer === 0 && Math.abs(this.steer) < 0.005) {
+      this.steer = 0;
+    }
 
     const pedalSmoothing = 14.0;
     this.throttle += (targetThrottle - this.throttle) * Math.min(1.0, delta * pedalSmoothing);

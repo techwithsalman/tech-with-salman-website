@@ -209,18 +209,25 @@ export class PlayerCar {
       const grip = THREE.MathUtils.smoothstep(Math.abs(this.speedKmh), 0, 32);
 
       // Target lateral speed:
-      // Left input (steer > 0): shifts car LEFT (decreases u towards inner lane)
-      // Right input (steer < 0): shifts car RIGHT (increases u towards outer lane)
+      // In Frenet frame (s, u), road normal N points to driver's LEFT (+X at heading 0).
+      // Left input (steer > 0): shifts car LEFT (increases u towards outer guardrail)
+      // Right input (steer < 0): shifts car RIGHT (decreases u towards inner median)
       // Sensitivity decreases with speed for rock-solid highway stability
       const steerSpeed = (p.STEER_SPEED - speedRatio * 2.2) * grip;
-      const targetLateralVel = -input.steer * steerSpeed;
+      const targetLateralVel = input.steer * steerSpeed;
 
-      // Fast auto-center damping when steering is released (steer === 0)
-      const lateralDamping = input.steer === 0 ? 10.0 : 7.2;
-      this.lateralVelocity = damp(this.lateralVelocity, targetLateralVel, lateralDamping, dt);
+      // Strong lateral damping when steering is released: eliminates residual velocity smoothly without snap
+      if (Math.abs(input.steer) < 0.01) {
+        this.lateralVelocity = damp(this.lateralVelocity, 0, 18.0, dt);
+        if (Math.abs(this.lateralVelocity) < 0.01) {
+          this.lateralVelocity = 0;
+        }
+      } else {
+        this.lateralVelocity = damp(this.lateralVelocity, targetLateralVel, 7.5, dt);
+      }
 
-      // Handbrake drift responsiveness
-      this.isDrifting = isHandbraking && Math.abs(this.speedKmh) > 45 && Math.abs(input.steer) > 0.2;
+      // Handbrake drift responsiveness (Drifting ONLY activates through explicit handbrake input!)
+      this.isDrifting = isHandbraking && Math.abs(this.speedKmh) > 40 && Math.abs(input.steer) > 0.15;
       if (this.isDrifting) {
         this.lateralVelocity *= 1.15;
       }
@@ -228,28 +235,24 @@ export class PlayerCar {
       // Integrate lateral position across road
       this.currentU += this.lateralVelocity * dt;
 
-      // Strict road boundary enforcement:
+      // Strict road boundary enforcement without elastic impulses:
       // Right carriageway forward lanes:
-      // Center median curb is at u = 1.8m, Outer guardrail is at u = 8.6m.
+      // Left outer guardrail is at u = 8.6m, Right inner median curb is at u = 1.8m.
       const minU = 1.8;
       const maxU = 8.6;
 
-      if (this.currentU > maxU) {
+      if (this.currentU >= maxU) {
         this.currentU = maxU;
         if (this.lateralVelocity > 0) {
-          // Elastic rebound keeping car safely within drivable road surface
-          this.lateralVelocity = -Math.min(Math.abs(this.lateralVelocity) * 0.4 + 0.6, 2.0);
-          this.speed = Math.max(0, this.speed - 6.0 * dt);
-          this.rollVelocity += 1.6;
+          this.lateralVelocity = 0; // Immediate halt to outward lateral drift; no elastic bouncing
         }
-      } else if (this.currentU < minU) {
+        this.speed = Math.max(0, this.speed - 4.5 * dt);
+      } else if (this.currentU <= minU) {
         this.currentU = minU;
         if (this.lateralVelocity < 0) {
-          // Elastic rebound keeping car safely within drivable road surface
-          this.lateralVelocity = Math.min(Math.abs(this.lateralVelocity) * 0.4 + 0.6, 2.0);
-          this.speed = Math.max(0, this.speed - 6.0 * dt);
-          this.rollVelocity -= 1.6;
+          this.lateralVelocity = 0; // Immediate halt to inward lateral drift; no elastic bouncing
         }
+        this.speed = Math.max(0, this.speed - 4.5 * dt);
       }
 
       // Advance along road spline
@@ -263,7 +266,9 @@ export class PlayerCar {
         this.position.copy(worldPos);
 
         // Visual steering yaw: gentle tilt during lane changes (returns to 0 when released)
-        const visualYaw = Math.atan2(-this.lateralVelocity, Math.max(16, Math.abs(this.speed))) * 0.45;
+        // Shifting left (lateralVelocity > 0) tilts nose left (negative yaw)
+        // Shifting right (lateralVelocity < 0) tilts nose right (positive yaw)
+        const visualYaw = -Math.atan2(this.lateralVelocity, Math.max(16, Math.abs(this.speed))) * 0.45;
         this.heading = frame.heading + visualYaw;
       } else {
         this.position.set(this.currentU, 0, this.currentS);
@@ -272,12 +277,12 @@ export class PlayerCar {
 
       this.isWrongWay = false;
 
-      // Wheel turn angle (for visual front wheels)
+      // Wheel turn angle (for visual front wheels: steer > 0 turns wheels left)
       this.steerAngle = damp(this.steerAngle, input.steer * p.MAX_STEER_ANGLE * grip / (1 + speedRatio * 1.5), 14, dt);
 
       // Centrifugal curve roll & steering roll
       const curveRoll = THREE.MathUtils.clamp((this.speed ** 2) * (frame?.curvature || 0) * -0.003, -0.05, 0.05);
-      const steerRoll = THREE.MathUtils.clamp(-this.lateralVelocity * 0.008, -0.04, 0.04);
+      const steerRoll = THREE.MathUtils.clamp(this.lateralVelocity * 0.008, -0.04, 0.04);
       this.rollAngle = damp(this.rollAngle, curveRoll + steerRoll, 8, dt);
 
       // Pitch dynamics (acceleration squat, brake dive)
@@ -291,8 +296,8 @@ export class PlayerCar {
       // =========================================================================
       const speedAbs = Math.abs(this.speed);
       const maxSteerLimit = 0.55 - speedRatio * 0.35;
-      const targetSteerAngle = input.steer * maxSteerLimit;
-      this.steerAngle = damp(this.steerAngle, targetSteerAngle, input.steer === 0 ? 14.0 : 9.0, dt);
+      const targetSteerAngle = -input.steer * maxSteerLimit; // Left input turns heading left
+      this.steerAngle = damp(this.steerAngle, targetSteerAngle, Math.abs(input.steer) < 0.01 ? 16.0 : 9.0, dt);
 
       const yawRate = (this.speed / this.wheelbase) * Math.tan(this.steerAngle);
       this.heading += yawRate * dt;
@@ -331,14 +336,15 @@ export class PlayerCar {
     this.group.rotation.y = this.heading;
     this.carBodyGroup.rotation.set(this.pitchAngle, 0, this.rollAngle);
 
-    // Wheel spin & steer rotations
+    // Wheel spin & steer rotations (wheels turn visibly in steering direction)
+    const visualSteerAngle = this.driveMode === 'ARCADE' ? this.steerAngle : -this.steerAngle;
     for (const wheel of this.wheels) wheel.rotation.x += distanceDelta / 0.345;
-    for (const holder of this.frontWheelHolders) holder.rotation.y = this.steerAngle;
+    for (const holder of this.frontWheelHolders) holder.rotation.y = visualSteerAngle;
 
     // Interior steering wheel rotation
     if (this.steeringWheel) {
       this.steeringWheel.quaternion.copy(this.steeringBase);
-      this.steeringWheel.rotateX(-this.steerAngle * 2.2);
+      this.steeringWheel.rotateX(-visualSteerAngle * 2.2);
     }
 
     this.taillightMat.emissiveIntensity = (isBraking || this.gear === 'R') ? 3.2 : 0.65;

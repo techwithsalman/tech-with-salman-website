@@ -73,23 +73,23 @@ export class CameraController {
       );
       fov = 54;
     } else {
-      // Chase View: follows actual car heading through curves, U-turns, and reverse
+      // Chase View: follows actual car heading smoothly through curves, U-turns, and reverse
       const camDist = isReversing ? 6.5 : (7.2 + ratio * 0.55);
       const camHeight = isReversing ? 3.1 : (2.6 - ratio * 0.15);
       const lookDist = isReversing ? -10.0 : (12.0 + ratio * 5.0);
 
-      // Camera stays behind current heading (or flips over rear if in reverse)
+      // Camera stays aligned behind car heading without erratic lateral swing
       const dirMult = isReversing ? -1.0 : 1.0;
       this.targetPos.set(
-        p.x - fwdX * camDist * dirMult - rightX * (steer * 0.65),
+        p.x - fwdX * camDist * dirMult,
         camHeight,
-        p.z - fwdZ * camDist * dirMult - rightZ * (steer * 0.65)
+        p.z - fwdZ * camDist * dirMult
       );
 
       this.targetLook.set(
-        p.x + fwdX * lookDist + rightX * (steer * 0.35),
+        p.x + fwdX * lookDist,
         0.95,
-        p.z + fwdZ * lookDist + rightZ * (steer * 0.35)
+        p.z + fwdZ * lookDist
       );
     }
 

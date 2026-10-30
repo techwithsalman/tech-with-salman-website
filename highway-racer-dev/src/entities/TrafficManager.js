@@ -1,5 +1,4 @@
-// Highway Racer 3D - AI Traffic Manager on Curved Highway & Dual Carriageway
-
+// Highway Racer 3D - AI Traffic Manager on 5-Lane Highway
 import * as THREE from 'three';
 import { CONSTANTS } from '../utils/constants.js';
 import { VehicleFactory } from './VehicleFactory.js';
@@ -14,11 +13,13 @@ export class TrafficManager {
     this.activeVehicles = [];
     this.spawnTimer = 0;
 
-    // Dual carriageway lanes:
-    // Forward lanes (Right side): u = 3.5m (inner), u = 6.8m (outer)
-    // Oncoming lanes (Left side / Wrong-way): u = -3.5m (inner), u = -6.8m (outer)
-    this.forwardLanes = [3.5, 6.8];
-    this.oncomingLanes = [-3.5, -6.8];
+    // 5 clearly marked forward highway lanes:
+    // Lane 1 (Leftmost / Fast): u = +7.4m
+    // Lane 2:                   u = +3.7m
+    // Lane 3 (Center):          u = 0.0m
+    // Lane 4:                   u = -3.7m
+    // Lane 5 (Rightmost / Slow):u = -7.4m
+    this.lanes = [7.4, 3.7, 0.0, -3.7, -7.4];
   }
 
   setSpline(spline) {
@@ -27,42 +28,69 @@ export class TrafficManager {
 
   getSpawnInterval() {
     const level = this.gameState.difficultyLevel || 1;
-    // Spawn rate ramps up with difficulty: 2.0s down to 0.7s
-    return Math.max(0.7, 2.0 - (level - 1) * 0.28);
+    // Level 1: 2.5s, Level 2: 1.9s, Level 3: 1.4s, Level 4: 1.1s, Level 5+: 0.9s
+    return Math.max(0.85, 2.6 - (level - 1) * 0.42);
   }
 
-  spawnVehicle(playerS, forceOncoming = false) {
-    if (this.activeVehicles.length >= (CONSTANTS.TRAFFIC.MAX_ACTIVE_CARS || 14)) return;
+  getMaxActiveVehicles() {
+    const level = this.gameState.difficultyLevel || 1;
+    switch (level) {
+      case 1: return 6;
+      case 2: return 8;
+      case 3: return 11;
+      case 4: return 13;
+      default: return 14;
+    }
+  }
 
-    // 70% forward traffic on right carriageway, 30% oncoming traffic on left carriageway
-    // (Or 50/50 if player is driving wrong way!)
-    const isOncoming = forceOncoming || Math.random() < 0.35;
-    const laneOptions = isOncoming ? this.oncomingLanes : this.forwardLanes;
-    const targetU = laneOptions[Math.floor(Math.random() * laneOptions.length)];
+  getSpeedRangeForLevel() {
+    const level = this.gameState.difficultyLevel || 1;
+    switch (level) {
+      case 1: return { min: 65, max: 85 };  // Easy: slow, relaxed cruising
+      case 2: return { min: 72, max: 100 }; // Normal: standard motorway speeds
+      case 3: return { min: 78, max: 112 }; // Hard: dynamic speed variation
+      case 4: return { min: 82, max: 122 }; // Expert: fast, tight traffic
+      default: return { min: 85, max: 128 }; // Level 5+: high-speed challenge
+    }
+  }
 
-    // Spawn distance: 100m to 250m ahead along road spline
-    const spawnDist = 95 + Math.random() * 150;
+  spawnVehicle(playerS) {
+    if (this.activeVehicles.length >= this.getMaxActiveVehicles()) return;
+
+    // Pick lane randomly with slight bias toward outer lanes (slower traffic on rights, faster on left)
+    const targetU = this.lanes[Math.floor(Math.random() * this.lanes.length)];
+
+    // Spawn distance: 105m to 260m ahead along road spline
+    const spawnDist = 105 + Math.random() * 155;
     const targetS = playerS + spawnDist;
 
-    // Ensure no other car is too close to targetS in same lane
+    // Safety check: ensure at least 38m longitudinal clearance in the same lane
     for (const v of this.activeVehicles) {
-      if (Math.abs(v.u - targetU) < 1.0 && Math.abs(v.s - targetS) < 32.0) {
-        return; // Lane occupied
+      if (Math.abs(v.u - targetU) < 1.8 && Math.abs(v.s - targetS) < 38.0) {
+        return; // Lane temporarily occupied at targetS
       }
     }
 
     const vehicleData = this.factory.createVehicle();
     vehicleData.s = targetS;
     vehicleData.u = targetU;
-    vehicleData.isOncoming = isOncoming;
-    vehicleData.speedMs = vehicleData.baseSpeedKmh / 3.6;
+    vehicleData.targetU = targetU;
+    vehicleData.laneChangeTimer = 0;
+    vehicleData.isOncoming = false; // Strictly one-way forward highway traffic!
+
+    // Speed tuned by difficulty level and lane (Lane 1 fast, Lane 5 slow)
+    const speedRange = this.getSpeedRangeForLevel();
+    const laneSpeedBonus = (targetU / 7.4) * 12; // Far left lane drives up to 12 km/h faster
+    const baseKmh = speedRange.min + Math.random() * (speedRange.max - speedRange.min) + laneSpeedBonus;
+    vehicleData.speedMs = Math.max(50, baseKmh) / 3.6;
+    vehicleData.preferredSpeedMs = vehicleData.speedMs;
     vehicleData.nearMissChecked = false;
 
-    // Position & heading from spline
+    // Position & heading from spline (Three.js makeRotationY(-h) aligns local +Z with RoadSpline tangent)
     const frame = this.spline.getFrameAt(targetS);
     const pos = this.spline.getPointAt(targetS, targetU, 0);
     vehicleData.mesh.position.copy(pos);
-    vehicleData.mesh.rotation.y = frame.heading + (isOncoming ? Math.PI : 0);
+    vehicleData.mesh.rotation.y = -frame.heading; // Forward along road tangent
 
     this.scene.add(vehicleData.mesh);
     this.activeVehicles.push(vehicleData);
@@ -78,34 +106,71 @@ export class TrafficManager {
 
     // 2. Lifecycle & Movement along spline
     const despawnBehindS = playerS - 60;
-    const despawnAheadS = playerS + 320;
+    const despawnAheadS = playerS + 340;
 
     for (let i = this.activeVehicles.length - 1; i >= 0; i--) {
       const v = this.activeVehicles[i];
 
-      // Forward traffic travels along +s; Oncoming traffic travels along -s
-      if (v.isOncoming) {
-        v.s -= v.speedMs * delta;
-      } else {
-        // Forward traffic: simple headway slowing behind other cars
-        let targetSpeed = v.preferredSpeedMs || v.speedMs;
-        for (const other of this.activeVehicles) {
-          if (other === v || other.isOncoming || Math.abs(other.u - v.u) > 1.2) continue;
-          const forwardGap = other.s - v.s;
-          if (forwardGap > 0 && forwardGap < 25) {
-            targetSpeed = Math.min(targetSpeed, other.speedMs * 0.95);
-          }
+      // Safe headway tracking: slow down behind vehicles ahead in same lane
+      let targetSpeed = v.preferredSpeedMs;
+      for (const other of this.activeVehicles) {
+        if (other === v || Math.abs(other.u - v.u) > 1.8) continue;
+        const forwardGap = other.s - v.s;
+        if (forwardGap > 0 && forwardGap < 28) {
+          // Match speed of vehicle ahead
+          targetSpeed = Math.min(targetSpeed, other.speedMs * 0.96);
         }
-        v.speedMs += (targetSpeed - v.speedMs) * Math.min(1.0, delta * 2.0);
-        v.s += v.speedMs * delta;
       }
 
-      // Update 3D World Transformation from Spline
+      // Smooth acceleration / braking
+      v.braking = targetSpeed < v.speedMs - 0.6;
+      v.speedMs += (targetSpeed - v.speedMs) * Math.min(1.0, delta * 2.2);
+      v.s += v.speedMs * delta;
+
+      // Handle smooth lane changes if initiated
+      let laneChangeVel = 0;
+      if (Math.abs(v.u - v.targetU) > 0.05) {
+        const stepU = Math.sign(v.targetU - v.u) * Math.min(Math.abs(v.targetU - v.u), 2.2 * delta);
+        laneChangeVel = delta > 0.0001 ? (stepU / delta) : 0;
+        v.u += stepU;
+      } else {
+        v.u = v.targetU;
+      }
+
+      // Occasional smart lane change if stuck behind a slower car
+      v.laneChangeTimer += delta;
+      if (v.laneChangeTimer > 4.0 && targetSpeed < v.preferredSpeedMs * 0.85) {
+        v.laneChangeTimer = 0;
+        // Try shifting to an adjacent lane
+        const currentLaneIdx = this.lanes.findIndex(l => Math.abs(l - v.u) < 0.8);
+        if (currentLaneIdx !== -1) {
+          const possibleLanes = [];
+          if (currentLaneIdx > 0) possibleLanes.push(this.lanes[currentLaneIdx - 1]);
+          if (currentLaneIdx < this.lanes.length - 1) possibleLanes.push(this.lanes[currentLaneIdx + 1]);
+
+          for (const candU of possibleLanes) {
+            // Check if candidate lane has safe gap
+            const isClear = this.activeVehicles.every(other => {
+              if (other === v || Math.abs(other.u - candU) > 1.8) return true;
+              return Math.abs(other.s - v.s) > 28;
+            });
+            if (isClear) {
+              v.targetU = candU;
+              break;
+            }
+          }
+        }
+      }
+
+      // Update 3D World Transformation from Spline (aligned with road curve)
+      // Three.js makeRotationY(-heading) maps local +Z to (-sin(heading), 0, cos(heading)) = frame.tangent
       const frame = this.spline.getFrameAt(v.s);
       const pos = this.spline.getPointAt(v.s, v.u, 0);
+      const laneYaw = -Math.atan2(laneChangeVel, Math.max(18, v.speedMs)) * 0.25;
       v.mesh.position.copy(pos);
-      v.mesh.rotation.y = frame.heading + (v.isOncoming ? Math.PI : 0);
+      v.mesh.rotation.y = -(frame.heading + laneYaw);
 
+      // Spin wheels
       v.wheelDistance = (v.wheelDistance || 0) + v.speedMs * delta;
 
       // Despawn check
@@ -132,10 +197,10 @@ export class TrafficManager {
     this.spawnTimer = 0;
 
     if (seedTraffic) {
-      // Seed initial forward and oncoming traffic
-      this.spawnVehicle(0, false);
-      this.spawnVehicle(0, true);
-      this.spawnVehicle(30, false);
+      // Seed forward traffic across lanes
+      this.spawnVehicle(0);
+      this.spawnVehicle(40);
+      this.spawnVehicle(80);
     }
   }
 }

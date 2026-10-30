@@ -27,11 +27,17 @@ export class GameState {
 
     // Progressive Difficulty & Level System
     this.difficultyLevel = 1;
-    this.levelThresholds = [0, 450, 1100, 2000, 3200]; // Meters to reach Level 1, 2, 3, 4, 5
+    this.levelThresholds = [0, 500, 1200, 2200, 3500]; // Distance in meters to reach Level 1, 2, 3, 4, 5
+    this.levelNames = {
+      1: 'EASY',
+      2: 'NORMAL',
+      3: 'HARD',
+      4: 'EXPERT',
+      5: 'ENDLESS CHALLENGE'
+    };
 
-    // Drift & Wrong Way Bonus Tracking
+    // Drift Bonus Tracking (Explicit handbrake drift only)
     this.driftScore = 0;
-    this.wrongWayScore = 0;
     
     // Persistent metrics
     this.highScore = this.loadNumber(HIGH_SCORE_KEY, 0);
@@ -113,6 +119,10 @@ export class GameState {
     return this.currentState === STATES.MENU;
   }
 
+  getLevelName() {
+    return this.levelNames[this.difficultyLevel] || `LEVEL ${this.difficultyLevel}`;
+  }
+
   reset() {
     this.score = 0;
     this.distance = 0;
@@ -123,7 +133,6 @@ export class GameState {
     this.timeElapsed = 0;
     this.difficultyLevel = 1;
     this.driftScore = 0;
-    this.wrongWayScore = 0;
     this.emit('reset');
   }
 
@@ -151,7 +160,8 @@ export class GameState {
     if (newLevel > prevLevel) {
       this.difficultyLevel = newLevel;
       this.score += 500 * newLevel; // Level up bonus!
-      this.emit('levelUp', { level: newLevel, distance: Math.round(this.distance) });
+      const levelName = this.levelNames[newLevel] || `LEVEL ${newLevel}`;
+      this.emit('levelUp', { level: newLevel, levelName, distance: Math.round(this.distance) });
     }
   }
 
@@ -163,13 +173,6 @@ export class GameState {
     const earned = bonusPoints * this.combo;
     this.score += earned;
     this.emit('nearMiss', { nearMisses: this.nearMisses, combo: this.combo, earned });
-  }
-
-  addWrongWayBonus(dt) {
-    if (!this.isPlaying()) return;
-    const pts = Math.round(Math.max(10, this.speedKmh * 0.6) * 12 * dt);
-    this.wrongWayScore += pts;
-    this.score += pts;
   }
 
   addDriftBonus(dt) {

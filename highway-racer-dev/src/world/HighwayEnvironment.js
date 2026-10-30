@@ -224,83 +224,54 @@ export class HighwayEnvironment {
     ];
     add(this.createRibbonGeometry(startS, endS, grassProfile, 20), m.grass);
 
-    // 2. Dual Carriageway Asphalt Road Surface (|u| <= 10.2m)
+    // 2. Single Continuous Wide Highway Asphalt Road Surface (|u| <= 11.2m, 22.4m total width)
     const asphaltProfile = [
-      { u: -10.2, y: 0.005, uvU: 0 },
-      { u: 10.2, y: 0.005, uvU: 2.8 }
+      { u: -11.2, y: 0.005, uvU: 0 },
+      { u: 11.2, y: 0.005, uvU: 3.2 }
     ];
     add(this.createRibbonGeometry(startS, endS, asphaltProfile, 24), m.asphalt);
 
-    // 3. Paved Shoulders
+    // 3. Paved Road Shoulders (Left & Right)
     const shoulderLeft = [
-      { u: -10.2, y: 0.008, uvU: 0 },
-      { u: -8.0, y: 0.008, uvU: 0.4 }
+      { u: 9.25, y: 0.008, uvU: 0 },
+      { u: 11.2, y: 0.008, uvU: 0.4 }
     ];
     const shoulderRight = [
-      { u: 8.0, y: 0.008, uvU: 0 },
-      { u: 10.2, y: 0.008, uvU: 0.4 }
+      { u: -11.2, y: 0.008, uvU: 0 },
+      { u: -9.25, y: 0.008, uvU: 0.4 }
     ];
     add(this.createRibbonGeometry(startS, endS, shoulderLeft, 20), m.shoulder);
     add(this.createRibbonGeometry(startS, endS, shoulderRight, 20), m.shoulder);
 
     // 4. Road Markings along the curve:
-    // Outer Solid lines (Yellow left at u = -8.0, White right at u = +8.0)
-    const lineYellowLeft = [
-      { u: -8.08, y: 0.015, uvU: 0 },
-      { u: -7.92, y: 0.015, uvU: 1 }
+    // Outer Solid Boundary lines at u = -9.25m and u = +9.25m
+    const lineWhiteLeft = [
+      { u: 9.17, y: 0.015, uvU: 0 },
+      { u: 9.33, y: 0.015, uvU: 1 }
     ];
     const lineWhiteRight = [
-      { u: 7.92, y: 0.015, uvU: 0 },
-      { u: 8.08, y: 0.015, uvU: 1 }
+      { u: -9.33, y: 0.015, uvU: 0 },
+      { u: -9.17, y: 0.015, uvU: 1 }
     ];
-    add(this.createRibbonGeometry(startS, endS, lineYellowLeft, 20), m.yellow);
+    add(this.createRibbonGeometry(startS, endS, lineWhiteLeft, 20), m.white);
     add(this.createRibbonGeometry(startS, endS, lineWhiteRight, 20), m.white);
 
-    // Broken Lane Dividers (Dashes every 15m)
-    for (let s = startS; s < endS; s += 15) {
-      for (const u of [-4.6, 4.6]) {
+    // 5. Four Broken White Lane Dividers (Dashes every 14m separating 5 clearly marked lanes)
+    // Lanes: Lane 1 (u=7.4), Lane 2 (u=3.7), Lane 3 (u=0.0), Lane 4 (u=-3.7), Lane 5 (u=-7.4)
+    // Dividers are at u = -5.55, -1.85, 1.85, 5.55
+    for (let s = startS; s < endS; s += 14) {
+      for (const uDiv of [-5.55, -1.85, 1.85, 5.55]) {
         const dashGeom = this.createRibbonGeometry(s, Math.min(endS, s + 6.0), [
-          { u: u - 0.08, y: 0.016, uvU: 0 },
-          { u: u + 0.08, y: 0.016, uvU: 1 }
+          { u: uDiv - 0.08, y: 0.016, uvU: 0 },
+          { u: uDiv + 0.08, y: 0.016, uvU: 1 }
         ], 3);
         add(dashGeom, m.white);
       }
     }
 
-    // 5. Center Median Barrier or Crossover
-    // If median is open at this stretch, add diagonal crossover lines and NO solid barrier!
-    // If median is closed, add solid concrete barrier down the center (u = 0).
-    const midFrame = this.spline.getFrameAt((startS + endS) / 2);
-    const medianIsOpen = midFrame.isMedianOpen;
-
-    if (!medianIsOpen) {
-      // Solid Concrete Jersey Barrier along center median
-      const barrierSteps = 24;
-      for (let i = 0; i < barrierSteps; i++) {
-        const s = startS + (i / barrierSteps) * (endS - startS);
-        const f = this.spline.getFrameAt(s);
-        const nextF = this.spline.getFrameAt(s + (endS - startS) / barrierSteps);
-
-        const dDist = f.pos.distanceTo(nextF.pos);
-        const bGeom = new THREE.BoxGeometry(0.5, 0.82, dDist);
-        bGeom.translate(f.pos.x, 0.41, f.pos.z);
-        bGeom.rotateY(f.heading);
-        add(bGeom, m.concrete);
-      }
-    } else {
-      // Crossover dashed yellow hazard markings across median opening
-      for (let s = startS; s < endS; s += 8) {
-        const crossGeom = this.createRibbonGeometry(s, Math.min(endS, s + 3.5), [
-          { u: -1.2, y: 0.016, uvU: 0 },
-          { u: 1.2, y: 0.016, uvU: 1 }
-        ], 3);
-        add(crossGeom, m.yellow);
-      }
-    }
-
-    // 6. Outer Steel Guardrails along curve (u = -10.42m and u = +10.42m)
+    // 6. Outer Steel Guardrails along curve (u = -11.6m and u = +11.6m)
     for (const side of [-1, 1]) {
-      const uRail = side * 10.42;
+      const uRail = side * 11.6;
       const railProfile = [
         { u: uRail - 0.05, y: 0.65, uvU: 0 },
         { u: uRail + 0.05, y: 0.65, uvU: 1 }
@@ -308,98 +279,118 @@ export class HighwayEnvironment {
       add(this.createRibbonGeometry(startS, endS, railProfile, 24), m.steel);
 
       // Posts & reflectors every 4m along the curve
+      // IMPORTANT: rotateY(-f.heading) MUST be applied in local space BEFORE translate()!
       for (let s = startS + 2; s < endS; s += 4) {
         const f = this.spline.getFrameAt(s);
-        const postPos = this.spline.getPointAt(s, side * 10.5, 0.45);
+        const postPos = this.spline.getPointAt(s, side * 11.68, 0.45);
         const postGeom = new THREE.BoxGeometry(0.12, 0.9, 0.12);
+        postGeom.rotateY(-f.heading);
         postGeom.translate(postPos.x, postPos.y, postPos.z);
-        postGeom.rotateY(f.heading);
         add(postGeom, m.dark);
 
-        const refPos = this.spline.getPointAt(s, side * 10.35, 0.9);
+        const refPos = this.spline.getPointAt(s, side * 11.53, 0.9);
         const refGeom = new THREE.BoxGeometry(0.08, 0.12, 0.16);
+        refGeom.rotateY(-f.heading);
         refGeom.translate(refPos.x, refPos.y, refPos.z);
-        refGeom.rotateY(f.heading);
         add(refGeom, m.red);
       }
 
       // Streetlights every 60m along curve
       for (let s = startS + 20; s < endS; s += 60) {
         const f = this.spline.getFrameAt(s);
-        const polePos = this.spline.getPointAt(s, side * 11.5, 4.5);
+        const polePos = this.spline.getPointAt(s, side * 12.8, 4.5);
         const poleGeom = new THREE.CylinderGeometry(0.08, 0.08, 9, 8);
+        poleGeom.rotateY(-f.heading);
         poleGeom.translate(polePos.x, polePos.y, polePos.z);
-        poleGeom.rotateY(f.heading);
         add(poleGeom, m.steel);
 
-        const armPos = this.spline.getPointAt(s, side * 10.2, 8.95);
-        const armGeom = new THREE.BoxGeometry(2.6, 0.1, 0.12);
+        const armPos = this.spline.getPointAt(s, side * 11.4, 8.95);
+        const armGeom = new THREE.BoxGeometry(2.8, 0.1, 0.12);
+        armGeom.rotateY(-f.heading);
         armGeom.translate(armPos.x, armPos.y, armPos.z);
-        armGeom.rotateY(f.heading);
         add(armGeom, m.steel);
 
-        const lampPos = this.spline.getPointAt(s, side * 9.0, 8.85);
+        const lampPos = this.spline.getPointAt(s, side * 10.0, 8.85);
         const lampGeom = new THREE.BoxGeometry(0.7, 0.05, 0.24);
+        lampGeom.rotateY(-f.heading);
         lampGeom.translate(lampPos.x, lampPos.y, lampPos.z);
-        lampGeom.rotateY(f.heading);
         add(lampGeom, m.lamp);
       }
     }
 
-    // 7. Buildings along curved roadside
+    // 7. Buildings along curved roadside (Strictly placed at |u| >= 52m to guarantee 0 road obstruction)
+    group.userData.buildings = [];
     for (const side of [-1, 1]) {
       for (let j = 0; j < 3; j++) {
         const s = startS + 15 + j * 38 + r() * 10;
-        const u = side * (38 + r() * 40);
-        const w = 12 + r() * 12, d = 12 + r() * 12, h = 16 + r() * 45;
+        let u = side * (52 + r() * 32); // Minimum 52m away from centerline!
+        const w = 14 + r() * 12, d = 14 + r() * 12, h = 18 + r() * 45;
         const f = this.spline.getFrameAt(s);
-        const bPos = this.spline.getPointAt(s, u, h / 2);
+        let bPos = this.spline.getPointAt(s, u, h / 2);
+
+        // Double-check closest spline projection across curves to ensure >= 48m centerline offset everywhere
+        const proj = this.spline.project(bPos, s);
+        if (Math.abs(proj.u) < 48) {
+          u = side * (Math.abs(u) + (50 - Math.abs(proj.u)));
+          bPos = this.spline.getPointAt(s, u, h / 2);
+        }
+
         const facade = m.facades[(segIndex + j + (side > 0 ? 2 : 0)) % 4];
 
         const bldGeom = new THREE.BoxGeometry(w, h, d);
+        bldGeom.rotateY(-f.heading);
         bldGeom.translate(bPos.x, bPos.y, bPos.z);
-        bldGeom.rotateY(f.heading);
         add(bldGeom, facade);
 
         // Ground stone podium
         const podPos = this.spline.getPointAt(s, u, 1.5);
         const podGeom = new THREE.BoxGeometry(w + 2, 3, d + 2);
+        podGeom.rotateY(-f.heading);
         podGeom.translate(podPos.x, podPos.y, podPos.z);
-        podGeom.rotateY(f.heading);
         add(podGeom, m.stone);
+
+        group.userData.buildings.push({
+          x: bPos.x,
+          z: bPos.z,
+          s,
+          u,
+          width: w + 2,
+          depth: d + 2,
+          halfDiag: Math.hypot((w + 2) * 0.5, (d + 2) * 0.5)
+        });
       }
     }
 
-    // 8. Overhead Gantry Sign (every 3 segments)
+    // 8. Overhead Gantry Sign across all 5 lanes (every 3 segments)
     if (segIndex % 3 === 1) {
       const gantryS = startS + 45;
       const f = this.spline.getFrameAt(gantryS);
       for (const side of [-1, 1]) {
-        const pPos = this.spline.getPointAt(gantryS, side * 10.6, 3.8);
-        const postGeom = new THREE.CylinderGeometry(0.15, 0.15, 7.6, 8);
+        const pPos = this.spline.getPointAt(gantryS, side * 12.3, 4.0);
+        const postGeom = new THREE.CylinderGeometry(0.18, 0.18, 8.0, 8);
+        postGeom.rotateY(-f.heading);
         postGeom.translate(pPos.x, pPos.y, pPos.z);
-        postGeom.rotateY(f.heading);
         add(postGeom, m.steel);
       }
 
-      const beamPos = this.spline.getPointAt(gantryS, 0, 7.5);
-      const beamGeom = new THREE.BoxGeometry(21.5, 0.24, 0.24);
+      const beamPos = this.spline.getPointAt(gantryS, 0, 7.8);
+      const beamGeom = new THREE.BoxGeometry(25.0, 0.28, 0.28);
+      beamGeom.rotateY(-f.heading);
       beamGeom.translate(beamPos.x, beamPos.y, beamPos.z);
-      beamGeom.rotateY(f.heading);
       add(beamGeom, m.steel);
 
-      const signPos = this.spline.getPointAt(gantryS, 0, 6.2);
+      const signPos = this.spline.getPointAt(gantryS - 0.22, 0, 6.2);
       const signText = canvasTexture(1024, 256, (ctx, w, h) => {
         ctx.fillStyle = '#175943'; ctx.fillRect(0, 0, w, h);
         ctx.strokeStyle = '#e4e9dc'; ctx.lineWidth = 5; ctx.strokeRect(10, 10, w - 20, h - 20);
-        ctx.fillStyle = '#eff3e5'; ctx.font = 'bold 27px Arial'; ctx.fillText('M-2   /   NORTHBOUND', 35, 54);
-        ctx.font = 'bold 55px Arial'; ctx.fillText(segIndex % 2 ? 'Islamabad' : 'City Centre', 35, 125);
-        ctx.font = '26px Arial'; ctx.fillText('THROUGH LANES', 35, 176); ctx.fillText('2 km', 880, 54);
-        ctx.font = '66px Arial'; ctx.fillText('↓       ↓       ↓', 420, 218);
+        ctx.fillStyle = '#eff3e5'; ctx.font = 'bold 26px Arial'; ctx.fillText('M-2 MOTORWAY  ·  5 LANES NORTHBOUND', 35, 50);
+        ctx.font = 'bold 50px Arial'; ctx.fillText(segIndex % 2 ? 'Islamabad - Rawalpindi' : 'City Centre - Motorway', 35, 118);
+        ctx.font = '24px Arial'; ctx.fillText('ALL LANES ONE-WAY', 35, 168); ctx.fillText('SPEED LIMIT 120', 780, 50);
+        ctx.font = '54px Arial'; ctx.fillText('↓      ↓      ↓      ↓      ↓', 220, 218);
       });
-      const signMesh = new THREE.Mesh(new THREE.PlaneGeometry(13, 3.1), new THREE.MeshStandardMaterial({ map: signText, roughness: 0.75 }));
+      const signMesh = new THREE.Mesh(new THREE.PlaneGeometry(16, 3.2), new THREE.MeshStandardMaterial({ map: signText, roughness: 0.75 }));
       signMesh.position.set(signPos.x, signPos.y, signPos.z);
-      signMesh.rotation.y = f.heading + Math.PI;
+      signMesh.rotation.y = -f.heading + Math.PI;
       group.add(signMesh);
     }
 
@@ -416,26 +407,26 @@ export class HighwayEnvironment {
       }
     }
 
-    // Instanced Trees & Shrubs along the curve
+    // Instanced Trees & Shrubs along the roadside (well outside guardrails)
     const placements = this.treeParts.map(() => []);
     const shrubs = [];
     for (const side of [-1, 1]) {
       for (let j = 0; j < 4; j++) {
         const s = startS + 12 + j * 26 + r() * 8;
-        const u = side * (14 + r() * 12);
+        const u = side * (19 + r() * 16); // Trees placed safely 19m to 35m from centerline
         const f = this.spline.getFrameAt(s);
         const pt = this.spline.getPointAt(s, u, 0);
         placements[j % placements.length].push({
-          x: pt.x, z: pt.z, height: 5 + r() * 5, rotation: f.heading + r() * 0.5
+          x: pt.x, z: pt.z, height: 5 + r() * 5, rotation: -f.heading + r() * 0.5
         });
       }
       for (let j = 0; j < 5; j++) {
         const s = startS + 8 + j * 22 + r() * 6;
-        const u = side * (12 + r() * 5);
+        const u = side * (14.5 + r() * 4); // Shrubs placed neatly 14.5m to 18.5m outside guardrails
         const f = this.spline.getFrameAt(s);
         const pt = this.spline.getPointAt(s, u, 0);
         shrubs.push({
-          x: pt.x, z: pt.z, height: 0.7 + r() * 0.7, rotation: f.heading + r() * 0.5
+          x: pt.x, z: pt.z, height: 0.7 + r() * 0.7, rotation: -f.heading + r() * 0.5
         });
       }
     }

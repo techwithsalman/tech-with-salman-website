@@ -1,4 +1,4 @@
-// Highway Racer 3D - Continuous Parametric Road Spline System
+// Highway Racer 3D - Continuous Parametric Road Spline System (Single Wide Highway)
 import * as THREE from 'three';
 
 export class RoadSpline {
@@ -9,11 +9,6 @@ export class RoadSpline {
     this.seed = 42;
     this.currentHeading = 0; // Starts facing +Z
     this.currentPos = new THREE.Vector3(0, 0, 0);
-
-    // Median openings (intervals in meters where U-turns between carriageways are allowed)
-    // E.g. Opening every 260m, with opening length of 36m
-    this.openingPeriod = 260;
-    this.openingLength = 38;
   }
 
   pseudoRandom() {
@@ -21,15 +16,8 @@ export class RoadSpline {
     return this.seed / 4294967296;
   }
 
-  // Check if median barrier has a designated U-turn crossover opening at arc length s
-  isMedianOpen(s) {
-    if (s < 60) return false; // First 60m is closed start zone
-    const mod = s % this.openingPeriod;
-    return mod < this.openingLength;
-  }
-
   // Initialize or extend the spline ahead of the player
-  generateInitial(length = 2400) {
+  generateInitial(length = 3200) {
     this.points = [];
     this.currentPos.set(0, 0, 0);
     this.currentHeading = 0;
@@ -50,8 +38,7 @@ export class RoadSpline {
         normal,
         heading: 0,
         s: 0,
-        curvature: 0,
-        isMedianOpen: false
+        curvature: 0
       });
     }
 
@@ -59,29 +46,31 @@ export class RoadSpline {
     let targetCurvature = 0;
     let curveRemaining = 0;
 
-    // Difficulty scaling: curves get sharper with level
-    // Level 1: max curvature 0.003 (radius ~330m)
-    // Level 3: max curvature 0.0055 (radius ~180m)
-    // Level 5: max curvature 0.008 (radius ~125m)
-    const maxCurve = 0.0025 + Math.min(0.005, (difficultyLevel - 1) * 0.001);
+    // Difficulty scaling: progressive curve intensity
+    // Level 1: max curvature 0.0018 (radius ~555m, gentle cruising)
+    // Level 2: max curvature 0.0028 (radius ~357m, sweeping curves)
+    // Level 3: max curvature 0.0042 (radius ~238m, dynamic S-curves)
+    // Level 4: max curvature 0.0055 (radius ~180m, challenging high-speed bends)
+    // Level 5+: capped at 0.0065 (radius ~154m, expert racing curves)
+    const maxCurve = Math.min(0.0065, 0.0018 + (difficultyLevel - 1) * 0.0011);
 
     while (s < endS) {
       if (curveRemaining <= 0) {
         const r = this.pseudoRandom();
-        if (s < 120) {
-          // Keep first 120m completely straight for race start
+        if (s < 140) {
+          // Keep first 140m completely straight for clean race start
           targetCurvature = 0;
-          curveRemaining = 120;
+          curveRemaining = 140;
         } else if (r < 0.35) {
-          // Straight stretch
+          // Straight highway stretch
           targetCurvature = 0;
-          curveRemaining = 80 + this.pseudoRandom() * 120;
+          curveRemaining = 90 + this.pseudoRandom() * 110;
         } else {
-          // Curved stretch (left or right)
+          // Curved stretch (sweeping left or right curve / S-bend)
           const sign = this.pseudoRandom() > 0.5 ? 1 : -1;
-          const curveIntensity = 0.4 + this.pseudoRandom() * 0.6;
+          const curveIntensity = 0.45 + this.pseudoRandom() * 0.55;
           targetCurvature = sign * maxCurve * curveIntensity;
-          curveRemaining = 100 + this.pseudoRandom() * 160;
+          curveRemaining = 110 + this.pseudoRandom() * 140;
         }
       }
 
@@ -91,9 +80,9 @@ export class RoadSpline {
       // Update heading smoothly based on curvature
       this.currentHeading += targetCurvature * stepDist;
       
-      // Keep overall highway heading broadly forward (bias back toward Z if turning too extreme)
-      if (Math.abs(this.currentHeading) > 0.95) {
-        this.currentHeading *= 0.97;
+      // Keep overall highway heading broadly forward (+Z biased)
+      if (Math.abs(this.currentHeading) > 0.85) {
+        this.currentHeading *= 0.98;
       }
 
       const step = new THREE.Vector3(
@@ -122,8 +111,7 @@ export class RoadSpline {
         normal,
         heading: this.currentHeading,
         s,
-        curvature: targetCurvature,
-        isMedianOpen: this.isMedianOpen(s)
+        curvature: targetCurvature
       });
     }
 
@@ -136,11 +124,10 @@ export class RoadSpline {
       return {
         pos: new THREE.Vector3(0, 0, s),
         tangent: new THREE.Vector3(0, 0, 1),
-        normal: new THREE.Vector3(-1, 0, 0),
+        normal: new THREE.Vector3(1, 0, 0),
         heading: 0,
         s,
-        curvature: 0,
-        isMedianOpen: false
+        curvature: 0
       };
     }
 
@@ -165,18 +152,17 @@ export class RoadSpline {
       normal,
       heading,
       s,
-      curvature,
-      isMedianOpen: this.isMedianOpen(s)
+      curvature
     };
   }
 
   // Convert World Coordinate (x, y, z) into Road Coordinates (s, u)
   // s = distance along road spline, u = signed lateral distance from road centerline
-  // u > 0 is Right Carriageway (Forward traffic), u < 0 is Left Carriageway (Wrong-way / oncoming traffic)
+  // u > 0 is driver's left, u < 0 is driver's right
   project(worldPos, approxS = 0) {
     if (this.points.length === 0) return { s: worldPos.z, u: worldPos.x, frame: null };
 
-    const searchDist = 70; // Search within +/- 70m of approxS
+    const searchDist = 70;
     const startIdx = Math.max(0, Math.floor((approxS - searchDist) / this.segmentSpacing));
     const endIdx = Math.min(this.points.length - 1, Math.ceil((approxS + searchDist) / this.segmentSpacing));
 

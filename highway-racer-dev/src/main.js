@@ -154,9 +154,6 @@ class GameApp {
         carResult = this.playerCar.update(step, this.input, this.environment.spline);
         this.gameState.speedKmh = carResult.speedKmh;
         this.gameState.addDistance(carResult.distanceDelta);
-        if (carResult.isWrongWay) {
-          this.gameState.addWrongWayBonus(step);
-        }
         if (carResult.isSkidding) {
           this.gameState.addDriftBonus(step);
         }

@@ -10,10 +10,11 @@ export class PlayerCar {
     this.driveMode = 'ARCADE';
 
     // Position along road spline
-    // Right carriageway forward lanes: inner lane u = 3.5m, outer lane u = 6.8m
+    // Single wide 5-lane highway: Center lane is u = 0.0m
+    // Lanes: Lane 1 (u=+7.4m), Lane 2 (u=+3.7m), Lane 3 (u=0.0m), Lane 4 (u=-3.7m), Lane 5 (u=-7.4m)
     this.currentS = 10;
-    this.currentU = 4.8; // Centered in right carriageway forward lanes
-    this.position = new THREE.Vector3(4.8, 0, 10);
+    this.currentU = 0.0; // Centered on highway in Lane 3
+    this.position = new THREE.Vector3(0, 0, 10);
     this.velocity = new THREE.Vector3();
     this.lateralVelocity = 0; // Lateral velocity for smooth lane changes
 
@@ -119,11 +120,12 @@ export class PlayerCar {
   }
 
   setDriveMode(mode) {
-    this.driveMode = mode;
+    this.driveMode = mode === 'ADVANCED' ? 'ADVANCED' : 'ARCADE';
   }
 
   toggleDriveMode() {
-    this.driveMode = this.driveMode === 'ARCADE' ? 'ADVANCED' : 'ARCADE';
+    // Assisted Arcade Driving is permanently active in normal gameplay to prevent 90°/180° sideways spins
+    this.driveMode = 'ARCADE';
     return this.driveMode;
   }
 
@@ -218,8 +220,8 @@ export class PlayerCar {
 
       // Strong lateral damping when steering is released: eliminates residual velocity smoothly without snap
       if (Math.abs(input.steer) < 0.01) {
-        this.lateralVelocity = damp(this.lateralVelocity, 0, 18.0, dt);
-        if (Math.abs(this.lateralVelocity) < 0.01) {
+        this.lateralVelocity = damp(this.lateralVelocity, 0, 24.0, dt);
+        if (Math.abs(this.lateralVelocity) < 0.002) {
           this.lateralVelocity = 0;
         }
       } else {
@@ -236,10 +238,10 @@ export class PlayerCar {
       this.currentU += this.lateralVelocity * dt;
 
       // Strict road boundary enforcement without elastic impulses:
-      // Right carriageway forward lanes:
-      // Left outer guardrail is at u = 8.6m, Right inner median curb is at u = 1.8m.
-      const minU = 1.8;
-      const maxU = 8.6;
+      // Single continuous 5-lane highway with shoulders:
+      // Left boundary: u = +9.8m, Right boundary: u = -9.8m
+      const minU = -9.8;
+      const maxU = 9.8;
 
       if (this.currentU >= maxU) {
         this.currentU = maxU;
@@ -265,10 +267,9 @@ export class PlayerCar {
         const worldPos = spline.getPointAt(this.currentS, this.currentU, 0);
         this.position.copy(worldPos);
 
-        // Visual steering yaw: gentle tilt during lane changes (returns to 0 when released)
-        // Shifting left (lateralVelocity > 0) tilts nose left (negative yaw)
-        // Shifting right (lateralVelocity < 0) tilts nose right (positive yaw)
-        const visualYaw = -Math.atan2(this.lateralVelocity, Math.max(16, Math.abs(this.speed))) * 0.45;
+        // Visual steering yaw: subtle temporary tilt during lane changes (returns to 0 when released)
+        // Never accumulated across frames; aligns strictly with road tangent frame.heading
+        const visualYaw = -Math.atan2(this.lateralVelocity, Math.max(18, Math.abs(this.speed))) * 0.32;
         this.heading = frame.heading + visualYaw;
       } else {
         this.position.set(this.currentU, 0, this.currentS);
@@ -332,8 +333,10 @@ export class PlayerCar {
     }
 
     // 4. Update 3D Transformations
+    // RoadSpline tangent is (-sin(heading), 0, cos(heading)), whereas Three.js makeRotationY(θ)
+    // rotates local +Z (0, 0, 1) to (+sin(θ), 0, cos(θ)). Thus mesh Y-rotation MUST be -this.heading.
     this.group.position.copy(this.position);
-    this.group.rotation.y = this.heading;
+    this.group.rotation.y = -this.heading;
     this.carBodyGroup.rotation.set(this.pitchAngle, 0, this.rollAngle);
 
     // Wheel spin & steer rotations (wheels turn visibly in steering direction)
@@ -368,8 +371,8 @@ export class PlayerCar {
 
   reset() {
     this.currentS = 10;
-    this.currentU = 4.8;
-    this.position.set(4.8, 0, 10);
+    this.currentU = 0.0;
+    this.position.set(0, 0, 10);
     this.velocity.set(0, 0, 0);
     this.lateralVelocity = 0;
     this.heading = 0;

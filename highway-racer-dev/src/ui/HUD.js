@@ -67,18 +67,9 @@ export class HUD {
         </div>
 
         <div class="route-caption">
-          <span>M-2 MOTORWAY · NORTHBOUND</span>
+          <span>M-2 MOTORWAY · 5 LANES NORTHBOUND</span>
           <b>CURVED HIGHWAY · ASSISTED ARCADE</b>
           <small>WASD / ARROWS · STEER &nbsp; SHIFT · NITRO &nbsp; SPACE · DRIFT &nbsp; G · GEAR &nbsp; C · CAMERA &nbsp; R · RESTART</small>
-        </div>
-
-        <!-- Wrong-Way Warning Banner -->
-        <div id="hud-wrong-way-banner" class="hud-wrong-way-banner hidden">
-          <span class="wrong-way-flash">⚠</span>
-          <div class="wrong-way-body">
-            <span class="wrong-way-title">WRONG WAY!</span>
-            <span class="wrong-way-sub">ONCOMING TRAFFIC · +2X DANGER BONUS</span>
-          </div>
         </div>
 
         <!-- Level-Up Notification Toast -->
@@ -205,7 +196,7 @@ export class HUD {
           <div class="menu-header">
             <div class="brand-tag">TECH WITH SALMAN / MOTORSPORT</div>
             <h1 class="game-title">HIGHWAY RACER <span class="accent-3d">3D</span></h1>
-            <p class="game-subtitle">Curved highway. Dual carriageway. Assisted arcade driving.</p>
+            <p class="game-subtitle">Wide 5-lane highway. Dynamic curves. Pro arcade racing.</p>
           </div>
 
           <div class="menu-stats-row">
@@ -225,9 +216,9 @@ export class HUD {
               <span class="btn-text">START RACE</span>
               <span class="btn-arrow">→</span>
             </button>
-            <button id="btn-toggle-handling" class="btn-secondary-race" style="margin-top: 8px; font-size: 12px; padding: 10px 18px; border-color: rgba(77, 238, 234, 0.4);">
-              HANDLING: ASSISTED ARCADE (RECOMMENDED)
-            </button>
+            <div class="btn-secondary-race" style="margin-top: 8px; font-size: 12px; padding: 10px 18px; border-color: rgba(77, 238, 234, 0.35); cursor: default; opacity: 0.9;">
+              HANDLING: ASSISTED ARCADE · 5-LANE ONE-WAY
+            </div>
           </div>
 
           <!-- Controls hint -->
@@ -328,7 +319,6 @@ export class HUD {
     this.hudNitroPct = document.getElementById('hud-nitro-pct');
     this.touchGearVal = document.getElementById('touch-gear-val');
 
-    this.wrongWayBanner = document.getElementById('hud-wrong-way-banner');
     this.levelUpPopup = document.getElementById('hud-level-up-popup');
     this.levelUpTitle = document.getElementById('hud-level-up-title');
     this.levelUpDesc = document.getElementById('hud-level-up-desc');
@@ -475,7 +465,6 @@ export class HUD {
       this.nearMissPopup.classList.remove('pop-anim');
       this.driftPopup.classList.add('hidden');
       this.levelUpPopup.classList.add('hidden');
-      this.wrongWayBanner.classList.add('hidden');
       this.hudComboBadge.classList.add('hidden');
       this.updateHighScores();
     });
@@ -553,7 +542,7 @@ export class HUD {
     this.goLevel.textContent = `LEVEL ${this.gameState.difficultyLevel || 1}`;
     this.goNearMiss.textContent = this.gameState.nearMisses;
     this.goTopSpeed.textContent = `${Math.floor(this.maxRecordedSpeed || 0)} KM/H`;
-    const bonus = Math.floor((this.gameState.driftScore || 0) + (this.gameState.wrongWayScore || 0));
+    const bonus = Math.floor(this.gameState.driftScore || 0);
     this.goBonusPts.textContent = `+${bonus.toLocaleString()} PTS`;
 
     const isNewRecord = this.gameState.score >= this.gameState.highScore && this.gameState.score > 0;
@@ -584,11 +573,11 @@ export class HUD {
   showLevelUpPopup(level) {
     const descs = [
       '',
-      'OPEN HIGHWAY · WARM UP',
-      'CURVES SHARPEN · TRAFFIC EXPANDS',
-      'SERPENTINE S-BENDS · HIGH DENSITY',
-      'MOUNTAIN PASS CURVES · FAST ONCOMING',
-      'EXTREME OVERDRIVE · HYPER TRAFFIC'
+      'EASY · GENTLE CURVES & LIGHT TRAFFIC',
+      'NORMAL · SWEEPING BENDS & CRUISING TRAFFIC',
+      'HARD · DYNAMIC S-CURVES & HIGHER DENSITY',
+      'EXPERT · BUSY 5-LANE EXPRESSWAY',
+      'ENDLESS CHALLENGE · MAXIMUM TRAFFIC & SPEED'
     ];
     this.levelUpTitle.textContent = `LEVEL ${level}`;
     this.levelUpDesc.textContent = descs[level] || 'HIGH SPEED MASTERY';
@@ -659,13 +648,6 @@ export class HUD {
         this.hudNitroFill.classList.add('nitro-active');
       } else {
         this.hudNitroFill.classList.remove('nitro-active');
-      }
-
-      // Wrong Way Alert Banner
-      if (playerCar.isWrongWay) {
-        this.wrongWayBanner.classList.remove('hidden');
-      } else {
-        this.wrongWayBanner.classList.add('hidden');
       }
 
       // Drift Alert Popup

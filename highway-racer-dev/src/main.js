@@ -197,6 +197,24 @@ class GameApp {
   }
 }
 
+// Sync dynamic mobile viewport height to CSS variable --vvh
+function syncMobileViewport() {
+  if (typeof window === 'undefined') return;
+  const vv = window.visualViewport;
+  const h = vv ? vv.height : window.innerHeight;
+  document.documentElement.style.setProperty('--vvh', `${h}px`);
+}
+syncMobileViewport();
+if (typeof window !== 'undefined') {
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', syncMobileViewport);
+  }
+  window.addEventListener('resize', syncMobileViewport);
+  window.addEventListener('orientationchange', () => {
+    setTimeout(syncMobileViewport, 120);
+  });
+}
+
 // Instantiate game once DOM is loaded
 window.addEventListener('DOMContentLoaded', async () => {
   const overlay = document.getElementById('loading-overlay');

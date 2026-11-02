@@ -13,6 +13,13 @@
   --border-subtle: rgba(255, 255, 255, 0.1);
   --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+
+  /* Mobile driving control elevation:
+     Safely clears Android gesture/navigation bars, iOS home indicators,
+     browser address bars, and bottom watermarks (e.g. Netlify badge ~52px tall). */
+  --mobile-ctrl-bottom: calc(max(env(safe-area-inset-bottom, 0px), 18px) + 56px);
+  --mobile-ctrl-side-left: calc(max(env(safe-area-inset-left, 0px), 16px));
+  --mobile-ctrl-side-right: calc(max(env(safe-area-inset-right, 0px), 16px));
 }
 
 /* Motorsport edition: quiet instruments leave the road and bodywork visible. */
@@ -52,6 +59,7 @@
 html, body {
   width: 100%;
   height: 100%;
+  height: var(--vvh, 100dvh);
   overflow: hidden;
   background-color: var(--bg-dark);
   color: var(--text-primary);
@@ -62,20 +70,20 @@ html, body {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: block;
   z-index: 1;
   outline: none;
 }
 
 #ui-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 10;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  height: var(--vvh, 100dvh);
+  z-index: 40;
   pointer-events: none;
   overflow: hidden;
 }
@@ -561,14 +569,14 @@ html, body {
    ========================================================================== */
 .hud-mobile-controls {
   position: absolute;
-  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-  left: calc(16px + env(safe-area-inset-left, 0px));
-  right: calc(16px + env(safe-area-inset-right, 0px));
+  bottom: var(--mobile-ctrl-bottom);
+  left: var(--mobile-ctrl-side-left);
+  right: var(--mobile-ctrl-side-right);
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   pointer-events: none;
-  z-index: 40;
+  z-index: 50;
 }
 
 /* Hide on desktop viewports with mouse pointer */
@@ -1106,8 +1114,8 @@ html, body {
   }
 
   .hud-telemetry-cluster {
-    bottom: calc(184px + env(safe-area-inset-bottom, 0px));
-    right: calc(12px + env(safe-area-inset-right, 0px));
+    bottom: calc(var(--mobile-ctrl-bottom) + 148px);
+    right: var(--mobile-ctrl-side-right);
     gap: 8px;
   }
 
@@ -1188,12 +1196,30 @@ html, body {
   .hud-icon-btn { width:34px;height:36px; }
 }
 @media (pointer:coarse) { .hud-mobile-controls { display:flex; } }
+
+@media (max-width: 900px) and (pointer: coarse) {
+  .hud-telemetry-cluster {
+    bottom: calc(var(--mobile-ctrl-bottom) + 148px);
+    right: var(--mobile-ctrl-side-right);
+  }
+}
+
 @media (max-height:600px) and (orientation:landscape) {
+  :root {
+    --mobile-ctrl-bottom: calc(max(env(safe-area-inset-bottom, 0px), 8px) + 44px);
+    --mobile-ctrl-side-left: calc(max(env(safe-area-inset-left, 0px), 24px));
+    --mobile-ctrl-side-right: calc(max(env(safe-area-inset-right, 0px), 24px));
+  }
   .menu-card { max-height:94dvh;overflow-y:auto;padding:18px 24px;gap:12px; }
   .controls-guide { display:none; }
+  .hud-mobile-controls {
+    bottom: var(--mobile-ctrl-bottom);
+    left: var(--mobile-ctrl-side-left);
+    right: var(--mobile-ctrl-side-right);
+  }
   .hud-telemetry-cluster {
-    bottom: calc(142px + env(safe-area-inset-bottom, 0px));
-    right: calc(16px + env(safe-area-inset-right, 0px));
+    bottom: calc(var(--mobile-ctrl-bottom) + 120px);
+    right: var(--mobile-ctrl-side-right);
     gap: 8px;
   }
   .hud-speedometer-box { width:78px;height:78px; }
@@ -1204,4 +1230,11 @@ html, body {
   .pedal-brake { height: 68px; width: 54px; }
   .touch-action-btn { height: 32px; padding: 0 8px; font-size: 11px; }
   .route-caption { display:none; }
+}
+
+/* Netlify injected HUD badge: keep below game touch controls and modals */
+#nl-badge-frame,
+iframe[title="Powered by Netlify"] {
+  z-index: 25 !important;
+  pointer-events: auto !important;
 }
